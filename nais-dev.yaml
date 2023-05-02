@@ -29,6 +29,7 @@ spec:
     initialDelay: 10
   azure:
     application:
+      tenant: nav.no
       enabled: true
       allowAllUsers: false
       claims:
