@@ -8,6 +8,7 @@ jobs:
     name: Bygg, test og push Docker image
     runs-on: ubuntu-latest
     permissions:
+      packages: read
       contents: read
       id-token: write
     outputs:
