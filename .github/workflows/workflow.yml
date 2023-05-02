@@ -47,9 +47,9 @@ jobs:
       app: ${{ inputs.app }}
     secrets: inherit
 
-    trivy-docker:
-      needs: build-and-publish
-      uses: navikt/flex-github-actions-workflows/.github/workflows/trivy-docker.yml@master
-      with:
-        image: ${{ needs.build-and-publish.outputs.image }}
-      secrets: inherit
+  trivy-docker:
+    needs: build-and-publish
+    uses: navikt/flex-github-actions-workflows/.github/workflows/trivy-docker.yml@master
+    with:
+      image: ${{ needs.build-and-publish.outputs.image }}
+    secrets: inherit
