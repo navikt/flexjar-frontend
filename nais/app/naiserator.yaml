@@ -42,3 +42,8 @@ spec:
     outbound:
       rules:
         - application: flexjar-backend
+  env:
+  {{#each env}}
+     - name: {{@key}}
+       value: "{{this}}"
+  {{/each}}
