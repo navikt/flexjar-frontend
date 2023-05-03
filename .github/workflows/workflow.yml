@@ -46,4 +46,3 @@ jobs:
       image: ${{ needs.build-and-publish.outputs.image }}
       app: ${{ inputs.app }}
     secrets: inherit
-
