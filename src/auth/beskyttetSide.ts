@@ -23,7 +23,7 @@ export function beskyttetSide(handler: PageHandler): any {
 
         const wonderwallRedirect = {
             redirect: {
-                destination: '/oauth2/login?redirect=/syk/sykepenger',
+                destination: '/oauth2/login?redirect=/',
                 permanent: false,
             },
         }
