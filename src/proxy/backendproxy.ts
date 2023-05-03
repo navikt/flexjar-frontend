@@ -32,9 +32,11 @@ export async function proxyKallTilBackend(opts: Opts): Promise<void> {
         }
         return undefined
     }
-    logger.info('proxyer apikall til backend')
 
-    await proxyApiRouteRequest({ ...opts, path: rewritedPath, bearerToken: await bearerToken(), https: false })
+    const bearerToken1 = await bearerToken()
+    logger.info('proxyer apikall til backend')
+    logger.info('bruker bearertoken: ' + bearerToken1)
+    await proxyApiRouteRequest({ ...opts, path: rewritedPath, bearerToken: bearerToken1, https: false })
 }
 
 const UUID = /\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b/g
