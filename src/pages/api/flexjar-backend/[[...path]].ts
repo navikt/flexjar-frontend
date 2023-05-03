@@ -8,10 +8,15 @@ import { Feedback } from '../../../queryhooks/useFeedback'
 
 const { serverRuntimeConfig } = getConfig()
 
-const tillatteApier = ['GET /api/v1/intern/feedback']
+const tillatteApier = ['GET /api/v1/intern/feedback', 'POST /api/v1/feedback/azure']
 
 const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) => {
     if (isMockBackend()) {
+        if (req.method === 'POST') {
+            res.status(202)
+            res.end()
+            return
+        }
         res.status(200)
         const feedback: Feedback[] = [
             {

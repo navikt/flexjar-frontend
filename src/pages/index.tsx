@@ -2,9 +2,15 @@ import React from 'react'
 
 import { initialProps } from '../initialprops/initialProps'
 import { FeedbackTabell } from '../components/FeedbackTabell'
+import { Tilbakemelding } from '../components/Tilbakemelding'
 
 const Index = (): JSX.Element => {
-    return <FeedbackTabell />
+    return (
+        <>
+            <FeedbackTabell />
+            <Tilbakemelding />
+        </>
+    )
 }
 
 export const getServerSideProps = initialProps
