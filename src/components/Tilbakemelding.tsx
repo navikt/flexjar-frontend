@@ -147,6 +147,7 @@ export const Tilbakemelding = ({
                 >
                     <Button
                         variant="secondary"
+                        size={'small'}
                         className={cl({
                             'bg-deepblue-800 text-text-on-inverted ring-2 ring-inset ring-deepblue-800 focus-visible:shadow-focus focus-visible:ring-1 focus-visible:ring-white':
                                 activeState === HelpfulArticleEnum.JA,
@@ -159,6 +160,7 @@ export const Tilbakemelding = ({
                     </Button>
                     <Button
                         variant="secondary"
+                        size={'small'}
                         className={cl({
                             'bg-deepblue-800 text-text-on-inverted ring-2 ring-inset ring-deepblue-800 focus-visible:shadow-focus focus-visible:ring-1 focus-visible:ring-white':
                                 activeState === HelpfulArticleEnum.NEI,
@@ -171,6 +173,7 @@ export const Tilbakemelding = ({
                     </Button>
                     <Button
                         variant="secondary"
+                        size={'small'}
                         className={cl({
                             'bg-deepblue-800 text-text-on-inverted ring-2 ring-inset ring-deepblue-800 focus-visible:shadow-focus focus-visible:ring-1 focus-visible:ring-white':
                                 activeState === HelpfulArticleEnum.MISC,
