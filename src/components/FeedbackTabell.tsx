@@ -15,6 +15,10 @@ export const FeedbackTabell = (): JSX.Element => {
         )
     }
 
+    const sortertData = data?.sort((a, b) => {
+        return new Date(b.opprettet).getTime() - new Date(a.opprettet).getTime()
+    })
+
     return (
         <Table size="small">
             <Table.Header>
@@ -27,7 +31,7 @@ export const FeedbackTabell = (): JSX.Element => {
                 </Table.Row>
             </Table.Header>
             <Table.Body>
-                {data?.map((feedback) => (
+                {sortertData?.map((feedback) => (
                     <Table.Row key={feedback.id}>
                         <Table.DataCell className={'w-1/2'}>{feedback.feedback.feedback}</Table.DataCell>
                         <Table.DataCell>{feedback.feedback.app}</Table.DataCell>
