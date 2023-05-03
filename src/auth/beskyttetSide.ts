@@ -17,6 +17,7 @@ export function beskyttetSide(handler: PageHandler): any {
             return handler(context)
         }
 
+        logger.info('beskyttetSide bearertoken sjekk')
         const request = context.req
         if (request == null) {
             throw new Error('Context is missing request. This should not happen')
@@ -30,6 +31,8 @@ export function beskyttetSide(handler: PageHandler): any {
         }
         const bearerToken: string | null | undefined = request.headers['authorization']
         if (!bearerToken) {
+            logger.info('ingen bearertoken, redirecter til wonderwall')
+
             return wonderwallRedirect
         }
         try {
@@ -38,6 +41,8 @@ export function beskyttetSide(handler: PageHandler): any {
             logger.error(e, 'Kunne ikke autentisere.')
             return wonderwallRedirect
         }
+        logger.info('alt ok')
+
         return handler(context)
     }
 }
