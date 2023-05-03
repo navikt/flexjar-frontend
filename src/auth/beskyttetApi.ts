@@ -16,6 +16,8 @@ export function beskyttetApi(handler: ApiHandler): ApiHandler {
         async function beskyttetApiInterne(req: NextApiRequest, res: NextApiResponse): Promise<void> {
             const bearerToken: string | null | undefined = req.headers['authorization']
             if (!bearerToken) {
+                logger.info('ingen bearer token')
+
                 return send401()
             }
             try {

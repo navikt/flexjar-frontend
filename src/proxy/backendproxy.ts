@@ -32,6 +32,7 @@ export async function proxyKallTilBackend(opts: Opts): Promise<void> {
         }
         return undefined
     }
+    logger.info('proxyer apikall til backend')
 
     await proxyApiRouteRequest({ ...opts, path: rewritedPath, bearerToken: await bearerToken(), https: false })
 }
