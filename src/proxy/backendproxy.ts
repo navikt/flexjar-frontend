@@ -23,6 +23,7 @@ export async function proxyKallTilBackend(opts: Opts): Promise<void> {
         logger.warn(`404: ukjent api: ${api}.`)
         opts.res.status(404)
         opts.res.send(null)
+        opts.res.end()
         return
     }
 
