@@ -8,21 +8,25 @@ import { mockApi } from '../../../testdata/testdata'
 
 const { serverRuntimeConfig } = getConfig()
 
-const tillatteApier = ['GET /api/v1/intern/feedback', 'POST /api/v1/feedback/azure']
+const tillatteApier = [
+    'GET /api/v1/intern/feedback',
+    'DELETE /api/v1/intern/feedback/[uuid]',
+    'POST /api/v1/feedback/azure',
+]
 
 const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) => {
-    if (isMockBackend()) {
-        return mockApi(req, res)
-    }
-
-    await proxyKallTilBackend({
+    const opts = {
         req,
         res,
         tillatteApier,
         backend: 'flexjar-backend',
         hostname: 'flexjar-backend',
         backendClientId: serverRuntimeConfig.flexjarBackendClientId,
-    })
+    }
+    if (isMockBackend()) {
+        return mockApi(opts)
+    }
+    await proxyKallTilBackend(opts)
 })
 
 export const config = {

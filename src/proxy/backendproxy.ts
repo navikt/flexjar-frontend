@@ -4,7 +4,7 @@ import { NextApiRequest, NextApiResponse } from 'next'
 
 import { getOboAccessToken } from '../auth/getOboAccessToken'
 
-interface Opts {
+export interface BackendProxyOpts {
     req: NextApiRequest
     res: NextApiResponse
     tillatteApier: string[]
@@ -13,19 +13,27 @@ interface Opts {
     backendClientId: string
 }
 
-export async function proxyKallTilBackend(opts: Opts): Promise<void> {
+export function validerKall(opts: BackendProxyOpts): { api: string; rewritedPath: string } | undefined {
     const rewritedPath = opts.req.url?.replace(`/api/${opts.backend}`, '')
     if (!rewritedPath) {
         throw new Error('rewritedPath is undefined')
     }
-    const api = `${opts.req.method} ${rewritedPath}`
-    if (!opts.tillatteApier.includes(<string>cleanPathForMetric(api))) {
+
+    const api = `${opts.req.method} ${cleanPathForMetric(rewritedPath)}`
+    if (!opts.tillatteApier.includes(api)) {
         logger.warn(`404: ukjent api: ${api}.`)
         opts.res.status(404)
         opts.res.send(null)
         opts.res.end()
-        return
+        return undefined
     }
+
+    return { rewritedPath, api }
+}
+
+export async function proxyKallTilBackend(opts: BackendProxyOpts): Promise<void> {
+    const validert = validerKall(opts)
+    if (!validert) return
 
     async function bearerToken(): Promise<string | undefined> {
         if (opts.backendClientId) {
@@ -34,7 +42,7 @@ export async function proxyKallTilBackend(opts: Opts): Promise<void> {
         return undefined
     }
 
-    await proxyApiRouteRequest({ ...opts, path: rewritedPath, bearerToken: await bearerToken(), https: false })
+    await proxyApiRouteRequest({ ...opts, path: validert.rewritedPath, bearerToken: await bearerToken(), https: false })
 }
 
 const UUID = /\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b/g

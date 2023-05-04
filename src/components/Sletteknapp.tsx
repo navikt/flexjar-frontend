@@ -28,7 +28,7 @@ export const Sletteknapp = ({ feedback }: { feedback: Feedback }): JSX.Element =
                     <div className={'flex justify-between pt-8'}>
                         <Button
                             onClick={async () => {
-                                await fetch('/api/flexjar-backend/api/v1/feedback/' + feedback.id, {
+                                await fetch('/api/flexjar-backend/api/v1/intern/feedback/' + feedback.id, {
                                     method: 'DELETE',
                                 })
                                 await queryClient.invalidateQueries(['feedback'])
