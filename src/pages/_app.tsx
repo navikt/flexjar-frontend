@@ -1,10 +1,11 @@
 import '../style/global.css'
 
 import type { AppProps } from 'next/app'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Head from 'next/head'
 import { Header } from '@navikt/ds-react-internal'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { Modal } from '@navikt/ds-react'
 
 function MyApp({ Component, pageProps }: AppProps): JSX.Element {
     const [queryClient] = useState(
@@ -20,6 +21,9 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
                 },
             }),
     )
+    useEffect(() => {
+        Modal.setAppElement('#__next')
+    }, [])
     return (
         <>
             <Head>

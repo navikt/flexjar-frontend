@@ -10,11 +10,13 @@ export function UseFeedback(): UseQueryResult<Feedback[], Error> {
 }
 
 export interface Feedback {
-    feedback: {
-        feedback: string
-        app: string
-        feedbackId: string
-    }
+    feedback: FeedbackInput
     id: string
     opprettet: string
+}
+
+export interface FeedbackInput {
+    feedback: string
+    app: string
+    feedbackId: string
 }

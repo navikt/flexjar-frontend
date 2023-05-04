@@ -1,8 +1,10 @@
-import { Alert, Button, Table } from '@navikt/ds-react'
+import { Alert, Table } from '@navikt/ds-react'
 import React from 'react'
 import dayjs from 'dayjs'
 
 import { UseFeedback } from '../queryhooks/useFeedback'
+
+import { Sletteknapp } from './Sletteknapp'
 
 export const FeedbackTabell = (): JSX.Element => {
     const { data, error } = UseFeedback()
@@ -38,9 +40,7 @@ export const FeedbackTabell = (): JSX.Element => {
                         <Table.DataCell>{feedback.feedback.feedbackId}</Table.DataCell>
                         <Table.DataCell>{dayjs(feedback.opprettet).format('DD-MM-YYYY')}</Table.DataCell>
                         <Table.DataCell>
-                            <Button size={'small'} variant={'danger'}>
-                                Slett
-                            </Button>
+                            <Sletteknapp feedback={feedback} />
                         </Table.DataCell>
                     </Table.Row>
                 ))}

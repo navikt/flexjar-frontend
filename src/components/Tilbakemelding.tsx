@@ -4,6 +4,8 @@ import { useRouter } from 'next/router'
 import { useEffect, useRef, useState } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 
+import { FeedbackInput } from '../queryhooks/useFeedback'
+
 export enum HelpfulArticleEnum {
     'JA' = 'ja',
     'DELVIS' = 'delvis',
@@ -36,7 +38,7 @@ export const Tilbakemelding = ({
             return
         }
 
-        const body = {
+        const body: FeedbackInput = {
             feedback: textValue,
             feedbackId: 'test-' + activeState,
             app: 'flexjar-frontend',
