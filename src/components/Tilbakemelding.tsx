@@ -1,83 +1,77 @@
-import { Button, Heading, Label, Textarea } from '@navikt/ds-react'
-import cl from 'clsx'
-import { useRouter } from 'next/router'
-import { useEffect, useRef, useState } from 'react'
+import { Button, ButtonProps, Heading, Textarea } from '@navikt/ds-react'
+import { useEffect, useRef, useState, MouseEvent } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 
-import { FeedbackInput } from '../queryhooks/useFeedback'
+import { cn } from '../utils/tw-utils'
 
-export enum HelpfulArticleEnum {
-    'JA' = 'ja',
-    'DELVIS' = 'delvis',
-    'NEI' = 'nei',
-    'MISC' = 'misc',
+enum Feedbacktype {
+    'JA' = 'JA',
+    'NEI' = 'NEI',
+    'FORBEDRING' = 'FORBEDRING',
 }
 
-export const Tilbakemelding = ({
-    center,
-    akselFeedback = false,
-}: {
-    docId?: string
-    docType?: string
-    center?: boolean
-    akselFeedback?: boolean
-}): JSX.Element => {
-    const { asPath } = useRouter()
-    const queryClient = useQueryClient()
+interface FeedbackButtonProps extends ButtonProps {
+    feedbacktype: Feedbacktype
+}
 
+export const Tilbakemelding = (): JSX.Element => {
     const [textValue, setTextValue] = useState('')
-    const [activeState, setActiveState] = useState<HelpfulArticleEnum | null>(null)
+    const [activeState, setActiveState] = useState<Feedbacktype | null>(null)
     const [errorMsg, setErrorMsg] = useState<string | null>(null)
-    const timeoutTimer = useRef<number | null>()
     const [thanksFeedback, setThanksFeedback] = useState<boolean>(false)
-    const textAreaRef = useRef(null)
-    const [, setHasLoggedFeedback] = useState(false)
+    const textAreaRef = useRef<HTMLTextAreaElement>(null)
+    const queryClient = useQueryClient()
 
     const fetchFeedback = async (): Promise<void> => {
         if (activeState === null) {
             return
         }
 
-        const body: FeedbackInput = {
+        const body = {
             feedback: textValue,
-            feedbackId: 'test-' + activeState,
+            feedbackId: 'flexjar',
+            svar: activeState,
             app: 'flexjar-frontend',
+            ekstrafelt: '123',
         }
 
         await fetch('/api/flexjar-backend/api/v1/feedback/azure', {
             method: 'POST',
             body: JSON.stringify(body),
         })
+        await queryClient.invalidateQueries(['feedback'])
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const handleSend = (e: any): (() => void) | void => {
+    const FeedbackButton = (props: FeedbackButtonProps): JSX.Element => {
+        return (
+            <Button
+                variant={'primary-neutral'}
+                className={cn({
+                    'bg-surface-neutral-active text-text-on-inverted': activeState === props.feedbacktype,
+                })}
+                onClick={() => {
+                    setThanksFeedback(false)
+                    setActiveState((x) => (x === props.feedbacktype ? null : props.feedbacktype))
+                }}
+                {...props}
+            >
+                {props.children}
+            </Button>
+        )
+    }
+    const handleSend = async (e: MouseEvent<HTMLButtonElement>): Promise<void> => {
         e.preventDefault()
 
-        if (textValue === '') {
+        if (activeState === Feedbacktype.FORBEDRING && textValue === '') {
             setErrorMsg('Tilbakemeldingen kan ikke være tom. Legg til tekst i feltet.')
             return
         }
+        await fetchFeedback()
         setErrorMsg(null)
-        fetchFeedback().then(() => {
-            queryClient.invalidateQueries(['feedback'])
-        })
-
-        setHasLoggedFeedback(true)
 
         setActiveState(null)
         setTextValue('')
         setThanksFeedback(true)
-        timeoutTimer.current = window.setTimeout(() => {
-            setThanksFeedback(false)
-        }, 6000)
-
-        return () => {
-            if (timeoutTimer.current) {
-                window.clearTimeout(timeoutTimer.current)
-                timeoutTimer.current = null
-            }
-        }
     }
 
     useEffect(() => {
@@ -85,133 +79,61 @@ export const Tilbakemelding = ({
     }, [textValue, errorMsg])
 
     useEffect(() => {
-        if (timeoutTimer.current && activeState) {
-            setThanksFeedback(false)
-            window.clearTimeout(timeoutTimer.current)
-            timeoutTimer.current = null
-        }
-    }, [activeState])
-
-    useEffect(() => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        activeState && textAreaRef.current && (textAreaRef.current as any).focus()
+        activeState && textAreaRef.current && textAreaRef.current.focus()
         setErrorMsg(null)
     }, [activeState])
 
-    useEffect(() => {
-        setActiveState(null)
-        setTextValue('')
-        setThanksFeedback(false)
-
-        if (timeoutTimer.current) {
-            window.clearTimeout(timeoutTimer.current)
-            timeoutTimer.current = null
-        }
-    }, [asPath])
-
     const getPlaceholder = (): string => {
         switch (activeState) {
-            case HelpfulArticleEnum.JA:
-                return 'Hva vil du trekke frem?'
-            case HelpfulArticleEnum.DELVIS:
-                return 'Hva er det som mangler?'
-            case HelpfulArticleEnum.NEI:
-                return 'Hva er det du ikke liker?'
-            case HelpfulArticleEnum.MISC:
+            case Feedbacktype.JA:
+                return 'Er det noe du vil trekke frem? (valgfritt)'
+            case Feedbacktype.NEI:
+                return 'Hva er det du ikke liker? (valgfritt)'
+            case Feedbacktype.FORBEDRING:
                 return 'Hva kan forbedres?'
             default:
-                return 'Hva kan forbedres?'
+                throw Error('Ugyldig tilbakemeldingstype')
         }
     }
 
-    const classes = akselFeedback
-        ? 'toc-ignore scroll-my-[30vh]'
-        : cl('scroll-my-[30vh] toc-ignore mt-12 mb-28', {
-              'mx-auto': center,
-          })
-
     return (
-        <div className={classes} id="feedback-block" data-hj-suppress>
-            <div
-                className={cl('flex w-full flex-col gap-4', {
-                    '': akselFeedback,
-                    'items-center': center,
-                })}
-            >
-                <Heading size="small" level="2" className={cl({ 'text-deepblue-700': akselFeedback })}>
+        <div className={'toc-ignore mb-28 mt-12 scroll-my-[30vh]'}>
+            <div className={'flex w-full flex-col gap-4'}>
+                <Heading size="small" level="2">
                     Var denne siden nyttig?
                 </Heading>
-                <div
-                    className={cl('flex w-full gap-4', {
-                        'justify-start': akselFeedback,
-                        'justify-center': center,
-                    })}
-                >
-                    <Button
-                        variant="secondary"
-                        size={'small'}
-                        className={cl({
-                            'bg-deepblue-800 text-text-on-inverted ring-2 ring-inset ring-deepblue-800 focus-visible:shadow-focus focus-visible:ring-1 focus-visible:ring-white':
-                                activeState === HelpfulArticleEnum.JA,
-                        })}
-                        onClick={() =>
-                            setActiveState((x) => (x === HelpfulArticleEnum.JA ? null : HelpfulArticleEnum.JA))
-                        }
-                    >
-                        <Label as="span">Ja</Label>
-                    </Button>
-                    <Button
-                        variant="secondary"
-                        size={'small'}
-                        className={cl({
-                            'bg-deepblue-800 text-text-on-inverted ring-2 ring-inset ring-deepblue-800 focus-visible:shadow-focus focus-visible:ring-1 focus-visible:ring-white':
-                                activeState === HelpfulArticleEnum.NEI,
-                        })}
-                        onClick={() =>
-                            setActiveState((x) => (x === HelpfulArticleEnum.NEI ? null : HelpfulArticleEnum.NEI))
-                        }
-                    >
-                        <Label as="span">Nei</Label>
-                    </Button>
-                    <Button
-                        variant="secondary"
-                        size={'small'}
-                        className={cl({
-                            'bg-deepblue-800 text-text-on-inverted ring-2 ring-inset ring-deepblue-800 focus-visible:shadow-focus focus-visible:ring-1 focus-visible:ring-white':
-                                activeState === HelpfulArticleEnum.MISC,
-                        })}
-                        onClick={() =>
-                            setActiveState((x) => (x === HelpfulArticleEnum.MISC ? null : HelpfulArticleEnum.MISC))
-                        }
-                        id="feedback-forbedringer-button"
-                    >
-                        <Label as="span">Foreslå forbedring</Label>
-                    </Button>
+                <div className={'flex w-full gap-4'}>
+                    <FeedbackButton feedbacktype={Feedbacktype.JA}>Ja</FeedbackButton>
+                    <FeedbackButton feedbacktype={Feedbacktype.NEI}>Nei</FeedbackButton>
+                    <FeedbackButton feedbacktype={Feedbacktype.FORBEDRING}>Foreslå forbedring</FeedbackButton>
                 </div>
                 {activeState !== null && (
-                    <form className={cl('animate-fadeIn mt-4 flex w-full max-w-sm flex-col gap-4')}>
+                    <form className={'animate-fadeIn mt-4 flex w-full max-w-sm flex-col gap-4'}>
                         <Textarea
                             ref={textAreaRef}
                             error={errorMsg}
                             label={getPlaceholder()}
                             value={textValue}
-                            onChange={(e) => setTextValue(e.target.value)}
+                            onChange={(e) => {
+                                setThanksFeedback(false)
+                                setTextValue(e.target.value)
+                            }}
                             maxLength={600}
                             minRows={3}
                             description="Ikke skriv inn navn eller andre personopplysninger"
                         />
-                        <Button className="mr-auto" onClick={handleSend}>
+                        <Button className="mr-auto" variant={'primary-neutral'} onClick={handleSend}>
                             Send inn svar
                         </Button>
                     </form>
                 )}
-                <div aria-live="polite">
-                    {thanksFeedback && (
-                        <Heading size="small" as="p" className="mt-8">
-                            Takk for tilbakemeldingen!
-                        </Heading>
-                    )}
-                </div>
+            </div>
+            <div aria-live="polite">
+                {thanksFeedback && (
+                    <Heading size="small" as="p" className="mt-8">
+                        Takk for tilbakemeldingen!
+                    </Heading>
+                )}
             </div>
         </div>
     )
