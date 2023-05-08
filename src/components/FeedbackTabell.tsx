@@ -1,4 +1,4 @@
-import { Alert, Table } from '@navikt/ds-react'
+import { Accordion, Alert, Table } from '@navikt/ds-react'
 import React from 'react'
 import dayjs from 'dayjs'
 
@@ -35,7 +35,27 @@ export const FeedbackTabell = (): JSX.Element => {
             <Table.Body>
                 {sortertData?.map((feedback) => (
                     <Table.Row key={feedback.id}>
-                        <Table.DataCell className={'w-1/2'}>{feedback.feedback.feedback}</Table.DataCell>
+                        <Table.DataCell className={'w-1/2'}>
+                            <Accordion.Item>
+                                <Accordion>
+                                    <Accordion.Header className={'border-0'}>
+                                        {feedback.feedback.feedback || feedback.feedback.svar}
+                                    </Accordion.Header>
+                                    <Accordion.Content>
+                                        <Table size="small">
+                                            <Table.Body>
+                                                {Object.entries(feedback.feedback).map(([key, value]) => (
+                                                    <Table.Row key={key}>
+                                                        <Table.DataCell>{key}</Table.DataCell>
+                                                        <Table.DataCell>{value}</Table.DataCell>
+                                                    </Table.Row>
+                                                ))}
+                                            </Table.Body>
+                                        </Table>
+                                    </Accordion.Content>
+                                </Accordion>
+                            </Accordion.Item>
+                        </Table.DataCell>
                         <Table.DataCell>{feedback.feedback.app}</Table.DataCell>
                         <Table.DataCell>{feedback.feedback.feedbackId}</Table.DataCell>
                         <Table.DataCell>{dayjs(feedback.opprettet).format('DD-MM-YYYY')}</Table.DataCell>

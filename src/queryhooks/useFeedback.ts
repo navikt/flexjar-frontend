@@ -16,7 +16,8 @@ export interface Feedback {
 }
 
 export interface FeedbackInput {
-    feedback: string
+    feedback?: string
+    svar?: string
     app: string
     feedbackId: string
 }
