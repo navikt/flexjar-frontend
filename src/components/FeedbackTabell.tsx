@@ -47,7 +47,7 @@ export const FeedbackTabell = (): JSX.Element => {
                                                 {Object.entries(feedback.feedback).map(([key, value]) => (
                                                     <Table.Row key={key}>
                                                         <Table.DataCell>{key}</Table.DataCell>
-                                                        <Table.DataCell>{value}</Table.DataCell>
+                                                        <Table.DataCell>{`${value}`}</Table.DataCell>
                                                     </Table.Row>
                                                 ))}
                                             </Table.Body>
