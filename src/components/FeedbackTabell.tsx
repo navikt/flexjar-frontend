@@ -69,7 +69,7 @@ export const FeedbackTabell = (): JSX.Element => {
                                 </Table.DataCell>
                                 <Table.DataCell>{feedback.feedback.app}</Table.DataCell>
                                 <Table.DataCell>{feedback.feedback.feedbackId}</Table.DataCell>
-                                <Table.DataCell>{dayjs(feedback.opprettet).format('DD-MM-YYYY hh:MM')}</Table.DataCell>
+                                <Table.DataCell>{dayjs(feedback.opprettet).format('DD-MM-YYYY HH:mm')}</Table.DataCell>
                                 <Table.DataCell>
                                     <Sletteknapp feedback={feedback} />
                                 </Table.DataCell>
