@@ -10,6 +10,7 @@ let testdata: Feedback[] = [
     {
         feedback: {
             feedback: 'Dette er en test',
+            svar: 'JA',
             app: 'flexjar',
             feedbackId: 'flexjartesting',
         },
@@ -20,6 +21,7 @@ let testdata: Feedback[] = [
         feedback: {
             feedback: 'Dette er en test 2',
             app: 'spinnsyn',
+            svar: 'JA',
             feedbackId: 'spinnsyn refusjon',
         },
         id: randomUUID(),

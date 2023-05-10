@@ -35,7 +35,7 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
                 <Header>
                     <Header.Title as="h1">Flexjar 💪🫙</Header.Title>
                 </Header>
-                <div id="root" className="mx-auto max-w-6xl p-4 pb-32">
+                <div id="root" className="mx-auto p-4 pb-32">
                     <Component {...pageProps} />
                 </div>
             </QueryClientProvider>

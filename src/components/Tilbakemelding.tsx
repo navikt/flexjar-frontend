@@ -3,6 +3,7 @@ import { useEffect, useRef, useState, MouseEvent } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 
 import { cn } from '../utils/tw-utils'
+import { isMockBackend } from '../utils/environment'
 
 enum Feedbacktype {
     'JA' = 'JA',
@@ -14,7 +15,7 @@ interface FeedbackButtonProps extends ButtonProps {
     feedbacktype: Feedbacktype
 }
 
-export const Tilbakemelding = (): JSX.Element => {
+export const Tilbakemelding = (): JSX.Element | null => {
     const [textValue, setTextValue] = useState('')
     const [activeState, setActiveState] = useState<Feedbacktype | null>(null)
     const [errorMsg, setErrorMsg] = useState<string | null>(null)
@@ -95,7 +96,9 @@ export const Tilbakemelding = (): JSX.Element => {
                 throw Error('Ugyldig tilbakemeldingstype')
         }
     }
-
+    if (!isMockBackend()) {
+        return null
+    }
     return (
         <div className={'toc-ignore mb-28 mt-12 scroll-my-[30vh]'}>
             <div className={'flex w-full flex-col gap-4'}>
