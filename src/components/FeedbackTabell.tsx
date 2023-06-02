@@ -1,8 +1,9 @@
 import { Accordion, Alert, Switch, Table } from '@navikt/ds-react'
 import React, { useState } from 'react'
-import dayjs from 'dayjs'
+import dayjs, { Dayjs } from 'dayjs'
+import MUIDataTable from 'mui-datatables'
 
-import { UseFeedback } from '../queryhooks/useFeedback'
+import { Feedback, UseFeedback } from '../queryhooks/useFeedback'
 
 import { Sletteknapp } from './Sletteknapp'
 
@@ -17,9 +18,20 @@ export const FeedbackTabell = (): JSX.Element => {
             </Alert>
         )
     }
+    if (!data) {
+        return (
+            <Alert variant={'info'} className={'mb-8'}>
+                Laster inn
+            </Alert>
+        )
+    }
 
-    const sortertData = data?.sort((a, b) => {
+    const sortertData = data.sort((a, b) => {
         return new Date(b.opprettet).getTime() - new Date(a.opprettet).getTime()
+    })
+
+    const tabellData = sortertData.map((a) => {
+        return [dayjs(a.opprettet), a.feedback.feedback, a.feedback.app, a.feedback.svar, a]
     })
 
     return (
@@ -27,24 +39,52 @@ export const FeedbackTabell = (): JSX.Element => {
             <Switch checked={alt} onChange={() => setAlt(!alt)}>
                 Vis bare feedback med tekst
             </Switch>
-            <Table size="small">
-                <Table.Header>
-                    <Table.Row>
-                        <Table.HeaderCell scope="col">Feedback</Table.HeaderCell>
-                        <Table.HeaderCell scope="col">App</Table.HeaderCell>
-                        <Table.HeaderCell scope="col">Id</Table.HeaderCell>
-                        <Table.HeaderCell scope="col">Dato</Table.HeaderCell>
-                        <Table.HeaderCell scope="col"></Table.HeaderCell>
-                    </Table.Row>
-                </Table.Header>
-                <Table.Body>
-                    {sortertData
-                        ?.filter((feedback) => {
-                            return alt ? feedback.feedback.feedback?.trim() : true
-                        })
-                        ?.map((feedback) => (
-                            <Table.Row key={feedback.id}>
-                                <Table.DataCell className={'w-1/2'}>
+            <MUIDataTable
+                title={'Aktiviteter'}
+                data={tabellData}
+                options={{
+                    selectableRows: 'none',
+                    print: false,
+                }}
+                columns={[
+                    {
+                        name: 'Dato',
+                        options: {
+                            customBodyRenderLite: (dataIndex: number) => {
+                                const dato = tabellData[dataIndex][0] as Dayjs
+                                return dato.format('YYYY.MM.DD')
+                            },
+
+                            filter: true,
+                            filterType: 'dropdown',
+                            filterOptions: {
+                                names: ['Siste 7 dager', 'I dag', 'Siste 14 dager'],
+                                logic(dag, filterVal) {
+                                    let dato = dayjs().subtract(30, 'years')
+                                    if (filterVal.indexOf('Siste 7 dager') >= 0) {
+                                        dato = dayjs().subtract(7, 'day')
+                                    }
+                                    if (filterVal.indexOf('I dag') >= 0) {
+                                        dato = dayjs().startOf('day')
+                                    }
+                                    if (filterVal.indexOf('Siste 14 dager') >= 0) {
+                                        dato = dayjs().subtract(14, 'day')
+                                    }
+
+                                    // eslint-disable-next-line
+                                    return (dag as any as Dayjs).isBefore(dato)
+                                },
+                            },
+                            sort: false,
+                        },
+                    },
+                    {
+                        name: 'Feedback',
+                        options: {
+                            filter: false,
+                            customBodyRenderLite: (dataIndex: number) => {
+                                const feedback = tabellData[dataIndex][4] as Feedback
+                                return (
                                     <Accordion.Item>
                                         <Accordion>
                                             <Accordion.Header className={'border-0'}>
@@ -66,17 +106,24 @@ export const FeedbackTabell = (): JSX.Element => {
                                             </Accordion.Content>
                                         </Accordion>
                                     </Accordion.Item>
-                                </Table.DataCell>
-                                <Table.DataCell>{feedback.feedback.app}</Table.DataCell>
-                                <Table.DataCell>{feedback.feedback.feedbackId}</Table.DataCell>
-                                <Table.DataCell>{dayjs(feedback.opprettet).format('DD-MM-YYYY HH:mm')}</Table.DataCell>
-                                <Table.DataCell>
-                                    <Sletteknapp feedback={feedback} />
-                                </Table.DataCell>
-                            </Table.Row>
-                        ))}
-                </Table.Body>
-            </Table>
+                                )
+                            },
+                        },
+                    },
+                    { name: 'App' },
+                    { name: 'Svar' },
+                    {
+                        name: 'Slett',
+                        options: {
+                            filter: false,
+                            customBodyRenderLite: (dataIndex: number) => {
+                                const feedback = tabellData[dataIndex][4] as Feedback
+                                return <Sletteknapp feedback={feedback} />
+                            },
+                        },
+                    },
+                ]}
+            />
         </>
     )
 }
