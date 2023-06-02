@@ -7,7 +7,7 @@ import { Feedback, UseFeedback } from '../queryhooks/useFeedback'
 
 import { Sletteknapp } from './Sletteknapp'
 
-export const FeedbackTabell = (): JSX.Element => {
+export const FeedbackTabell = (): JSX.Element | null => {
     const { data, error } = UseFeedback()
     const [alt, setAlt] = useState(true)
 
@@ -19,20 +19,19 @@ export const FeedbackTabell = (): JSX.Element => {
         )
     }
     if (!data) {
-        return (
-            <Alert variant={'info'} className={'mb-8'}>
-                Laster inn
-            </Alert>
-        )
+        return null
     }
 
-    const sortertData = data.sort((a, b) => {
-        return new Date(b.opprettet).getTime() - new Date(a.opprettet).getTime()
-    })
-
-    const tabellData = sortertData.map((a) => {
-        return [dayjs(a.opprettet), a.feedback.feedback, a.feedback.app, a.feedback.svar, a]
-    })
+    const tabellData = data
+        .sort((a, b) => {
+            return new Date(b.opprettet).getTime() - new Date(a.opprettet).getTime()
+        })
+        ?.filter((feedback) => {
+            return alt ? feedback.feedback.feedback?.trim() : true
+        })
+        .map((a) => {
+            return [dayjs(a.opprettet), a.feedback.feedback, a.feedback.app, a.feedback.svar, a]
+        })
 
     return (
         <>
@@ -45,6 +44,9 @@ export const FeedbackTabell = (): JSX.Element => {
                 options={{
                     selectableRows: 'none',
                     print: false,
+                    customSearch: (searchQuery: string, currentRow: string[]) => {
+                        return JSON.stringify(currentRow[4]).toLowerCase().indexOf(searchQuery.toLowerCase()) >= 0
+                    },
                 }}
                 columns={[
                     {
