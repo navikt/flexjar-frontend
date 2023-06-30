@@ -87,7 +87,7 @@ export const FeedbackTabell = (): JSX.Element | null => {
                             customBodyRenderLite: (dataIndex: number) => {
                                 const feedback = tabellData[dataIndex][4] as Feedback
                                 return (
-                                    <Accordion.Item>
+                                    <Accordion.Item key={feedback.id}>
                                         <Accordion>
                                             <Accordion.Header className={'border-0'}>
                                                 {feedback.feedback.svar + ' '}
