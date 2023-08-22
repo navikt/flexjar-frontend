@@ -22,7 +22,7 @@
         "uuid": "^9.0.0"
     },
     "devDependencies": {
-        "@navikt/eslint-config-teamsykmelding": "^1.6.0",
+        "@navikt/eslint-config-teamsykmelding": "^3.0.0",
         "@types/mui-datatables": "^4.3.5",
         "@types/node": "^18.15.11",
         "@types/react": "^18.0.28",
