@@ -1,12 +1,15 @@
 import { BodyLong, Button, Modal } from '@navikt/ds-react'
 import React, { useState } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
+import { useRouter } from 'next/router'
 
 import { Feedback } from '../queryhooks/useFeedback'
 
 export const Sletteknapp = ({ feedback }: { feedback: Feedback }): JSX.Element => {
     const [open, setOpen] = useState(false)
     const queryClient = useQueryClient()
+    const { team } = useRouter().query
+    const selectedTeam = team ?? 'flex'
 
     return (
         <>
@@ -31,7 +34,7 @@ export const Sletteknapp = ({ feedback }: { feedback: Feedback }): JSX.Element =
                                 await fetch('/api/flexjar-backend/api/v1/intern/feedback/' + feedback.id, {
                                     method: 'DELETE',
                                 })
-                                await queryClient.invalidateQueries(['feedback'])
+                                await queryClient.invalidateQueries([`feedback-${selectedTeam}`])
 
                                 setOpen(false)
                             }}
