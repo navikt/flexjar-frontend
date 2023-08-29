@@ -1,6 +1,7 @@
 import { randomUUID } from 'crypto'
 
 import dayjs from 'dayjs'
+import { logger } from '@navikt/next-logger'
 
 import { Feedback, FeedbackInput } from '../queryhooks/useFeedback'
 import { reqToBody } from '../utils/reqToBody'
@@ -39,6 +40,8 @@ export async function mockApi(opts: BackendProxyOpts): Promise<void> {
     const { req, res } = opts
 
     if (validert.api == 'GET /api/v1/intern/feedback') {
+        logger.info(`Returning mocked data for feedbacks, also got query param: ${validert.query.toString()}`)
+
         res.status(200)
         res.json(testdata)
         res.end()

@@ -13,8 +13,13 @@ export interface BackendProxyOpts {
     backendClientId: string
 }
 
-export function validerKall(opts: BackendProxyOpts): { api: string; rewritedPath: string } | undefined {
-    const rewritedPath = opts.req.url?.replace(`/api/${opts.backend}`, '')
+export function validerKall(
+    opts: BackendProxyOpts,
+): { api: string; rewritedPath: string; query: URLSearchParams } | undefined {
+    if (opts.req.url == null) throw new Error('req.url is undefined')
+
+    const [path, queryParams] = opts.req.url.split('?')
+    const rewritedPath = path.replace(`/api/${opts.backend}`, '')
     if (!rewritedPath) {
         throw new Error('rewritedPath is undefined')
     }
@@ -28,7 +33,7 @@ export function validerKall(opts: BackendProxyOpts): { api: string; rewritedPath
         return undefined
     }
 
-    return { rewritedPath, api }
+    return { rewritedPath, api, query: new URLSearchParams(queryParams) }
 }
 
 export async function proxyKallTilBackend(opts: BackendProxyOpts): Promise<void> {
@@ -42,7 +47,10 @@ export async function proxyKallTilBackend(opts: BackendProxyOpts): Promise<void>
         return undefined
     }
 
-    await proxyApiRouteRequest({ ...opts, path: validert.rewritedPath, bearerToken: await bearerToken(), https: false })
+    const team = validert.query.get('team')
+    const path = `${validert.rewritedPath}${team ? `?team=${team}` : ''}`
+
+    await proxyApiRouteRequest({ ...opts, path, bearerToken: await bearerToken(), https: false })
 }
 
 const UUID = /\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b/g
