@@ -1,17 +1,17 @@
-import { NextPageContext } from 'next'
+import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
 
 import { isMockBackend } from '../utils/environment'
 
 import { verifyAzureAccessToken } from './azureVerifisering'
 
-type PageHandler = (context: NextPageContext) => void
+type PageHandler<InitialPageProps> = (
+    context: GetServerSidePropsContext,
+) => Promise<GetServerSidePropsResult<InitialPageProps>>
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function beskyttetSide(handler: PageHandler): any {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return async function withBearerTokenHandler(context: NextPageContext): Promise<any> {
+export function beskyttetSide<InitialPageProps>(handler: PageHandler<InitialPageProps>) {
+    return async function withBearerTokenHandler(
+        context: GetServerSidePropsContext,
+    ): Promise<ReturnType<NonNullable<typeof handler>>> {
         if (isMockBackend()) {
             return handler(context)
         }
@@ -23,10 +23,11 @@ export function beskyttetSide(handler: PageHandler): any {
 
         const wonderwallRedirect = {
             redirect: {
-                destination: '/oauth2/login?redirect=/',
+                destination: `/oauth2/login?redirect=${context.resolvedUrl}`,
                 permanent: false,
             },
         }
+
         const bearerToken: string | null | undefined = request.headers['authorization']
         if (!bearerToken) {
             return wonderwallRedirect
@@ -36,6 +37,7 @@ export function beskyttetSide(handler: PageHandler): any {
         } catch (e) {
             return wonderwallRedirect
         }
+
         return handler(context)
     }
 }
