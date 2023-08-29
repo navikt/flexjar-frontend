@@ -1,13 +1,15 @@
-import { Accordion, Alert, Switch, Table } from '@navikt/ds-react'
+import { Accordion, Alert, Switch, Table, Select } from '@navikt/ds-react'
 import React, { useState } from 'react'
 import dayjs, { Dayjs } from 'dayjs'
 import MUIDataTable from 'mui-datatables'
+import { useRouter } from 'next/router'
 
 import { Feedback, UseFeedback } from '../queryhooks/useFeedback'
 
 import { Sletteknapp } from './Sletteknapp'
 
 export const FeedbackTabell = (): JSX.Element | null => {
+    const router = useRouter()
     const { data, error } = UseFeedback()
     const [alt, setAlt] = useState(true)
 
@@ -35,9 +37,24 @@ export const FeedbackTabell = (): JSX.Element | null => {
 
     return (
         <>
-            <Switch checked={alt} onChange={() => setAlt(!alt)}>
-                Vis bare feedback med tekst
-            </Switch>
+            <div className="flex justify-between items-center h-16 mb-4">
+                <Switch checked={alt} onChange={() => setAlt(!alt)}>
+                    Vis bare feedback med tekst
+                </Switch>
+                <div>
+                    <Select
+                        label="Velg team"
+                        size="small"
+                        defaultValue={router.query.team ?? 'flex'}
+                        onChange={(event) => {
+                            router.push('/?team=' + event.target.value)
+                        }}
+                    >
+                        <option value="flex">Flex</option>
+                        <option value="teamsykmelding">Team Sykmelding</option>
+                    </Select>
+                </div>
+            </div>
             <MUIDataTable
                 title={'Aktiviteter'}
                 data={tabellData}
