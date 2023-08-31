@@ -10,8 +10,9 @@ import { Sletteknapp } from './Sletteknapp'
 
 export const FeedbackTabell = (): JSX.Element | null => {
     const router = useRouter()
-    const { data, error } = UseFeedback()
     const [alt, setAlt] = useState(true)
+    const [polling, setPolling] = useState(false)
+    const { data, error } = UseFeedback(polling)
 
     if (error) {
         return (
@@ -29,7 +30,7 @@ export const FeedbackTabell = (): JSX.Element | null => {
             return new Date(b.opprettet).getTime() - new Date(a.opprettet).getTime()
         })
         ?.filter((feedback) => {
-            return alt ? feedback.feedback.feedback?.trim() : true
+            return polling ? feedback.feedback.feedback?.trim() : true
         })
         .map((a) => {
             return [dayjs(a.opprettet), a.feedback.feedback, a.feedback.app, a.feedback.svar, a]
@@ -38,9 +39,14 @@ export const FeedbackTabell = (): JSX.Element | null => {
     return (
         <>
             <div className="flex justify-between items-center h-16 mb-4">
-                <Switch checked={alt} onChange={() => setAlt(!alt)}>
-                    Vis bare feedback med tekst
-                </Switch>
+                <div className="flex gap-4">
+                    <Switch checked={alt} onChange={() => setAlt(!polling)} size="small">
+                        Vis bare feedback med tekst
+                    </Switch>
+                    <Switch checked={polling} onChange={() => setPolling(!polling)} size="small">
+                        Hent nye hvert 30. sekund
+                    </Switch>
+                </div>
                 <div>
                     <Select
                         label="Velg team"
