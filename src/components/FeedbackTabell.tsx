@@ -157,6 +157,9 @@ export const FeedbackTabell = (): JSX.Element | null => {
                             setCellHeaderProps: () => ({ style: { width: '68px', textAlign: 'center' } }),
                             customBodyRenderLite: (dataIndex: number) => {
                                 const feedback = tabellData[dataIndex][4]
+
+                                if (feedback.feedback.feedback?.trim() === '') return null
+
                                 return <Deleknapp feedback={feedback} />
                             },
                         },

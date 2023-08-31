@@ -30,6 +30,16 @@ let testdata: Feedback[] = [
         id: randomUUID(),
         opprettet: '2023-05-01T12:00:00.000000+02:00',
     },
+    {
+        feedback: {
+            feedback: '',
+            app: 'sponnsyn',
+            svar: 'JA',
+            feedbackId: 'spinnsyn refusjon',
+        },
+        id: randomUUID(),
+        opprettet: '2023-05-01T12:00:00.000000+02:00',
+    },
 ]
 
 function deleteFeedbackById(idToDelete: string): void {
