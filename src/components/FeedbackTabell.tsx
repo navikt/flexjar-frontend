@@ -7,6 +7,7 @@ import { useRouter } from 'next/router'
 import { Feedback, UseFeedback } from '../queryhooks/useFeedback'
 
 import { Sletteknapp } from './Sletteknapp'
+import { Deleknapp } from './Deleknapp'
 
 export const FeedbackTabell = (): JSX.Element | null => {
     const router = useRouter()
@@ -32,9 +33,7 @@ export const FeedbackTabell = (): JSX.Element | null => {
         ?.filter((feedback) => {
             return alt ? feedback.feedback.feedback?.trim() : true
         })
-        .map((a) => {
-            return [dayjs(a.opprettet), a.feedback.feedback, a.feedback.app, a.feedback.svar, a]
-        })
+        .map((a) => [dayjs(a.opprettet), a.feedback.feedback, a.feedback.app, a.feedback.svar, a] as const)
 
     return (
         <>
@@ -140,10 +139,28 @@ export const FeedbackTabell = (): JSX.Element | null => {
                     {
                         name: 'Slett',
                         options: {
+                            draggable: false,
+                            sort: false,
                             filter: false,
                             customBodyRenderLite: (dataIndex: number) => {
-                                const feedback = tabellData[dataIndex][4] as Feedback
+                                const feedback = tabellData[dataIndex][4]
                                 return <Sletteknapp feedback={feedback} />
+                            },
+                        },
+                    },
+                    {
+                        name: 'Del',
+                        options: {
+                            draggable: false,
+                            sort: false,
+                            filter: false,
+                            setCellHeaderProps: () => ({ style: { width: '68px', textAlign: 'center' } }),
+                            customBodyRenderLite: (dataIndex: number) => {
+                                const feedback = tabellData[dataIndex][4]
+
+                                if (feedback.feedback.feedback?.trim() === '') return null
+
+                                return <Deleknapp feedback={feedback} />
                             },
                         },
                     },

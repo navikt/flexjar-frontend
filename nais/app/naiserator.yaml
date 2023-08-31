@@ -44,6 +44,11 @@ spec:
     outbound:
       rules:
         - application: flexjar-backend
+      external:
+        - host: slack.com
+        - host: api.slack.com
+  envFrom:
+    - secret: flexjar-frontend-slack-webhooks
   env:
   {{#each env}}
      - name: {{@key}}

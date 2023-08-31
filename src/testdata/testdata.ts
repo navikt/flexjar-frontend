@@ -14,6 +14,7 @@ let testdata: Feedback[] = [
             svar: 'JA',
             app: 'flexjar',
             feedbackId: 'flexjartesting',
+            sporsmal: 'Liker du ost?',
         },
         id: randomUUID(),
         opprettet: '2023-02-04T12:00:00.000000+02:00',
@@ -22,6 +23,17 @@ let testdata: Feedback[] = [
         feedback: {
             feedback: 'Dette er en test 2',
             app: 'spinnsyn',
+            svar: 'JA',
+            feedbackId: 'spinnsyn refusjon',
+            annen_verdi: 'Random verdi',
+        },
+        id: randomUUID(),
+        opprettet: '2023-05-01T12:00:00.000000+02:00',
+    },
+    {
+        feedback: {
+            feedback: '',
+            app: 'sponnsyn',
             svar: 'JA',
             feedbackId: 'spinnsyn refusjon',
         },

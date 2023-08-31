@@ -20,9 +20,9 @@ export interface Feedback {
     opprettet: string
 }
 
-export interface FeedbackInput {
+export type FeedbackInput = {
     feedback?: string
     svar?: string
     app: string
     feedbackId: string
-}
+} & Record<string, string>
