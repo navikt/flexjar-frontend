@@ -30,7 +30,7 @@ export const FeedbackTabell = (): JSX.Element | null => {
             return new Date(b.opprettet).getTime() - new Date(a.opprettet).getTime()
         })
         ?.filter((feedback) => {
-            return polling ? feedback.feedback.feedback?.trim() : true
+            return alt ? feedback.feedback.feedback?.trim() : true
         })
         .map((a) => {
             return [dayjs(a.opprettet), a.feedback.feedback, a.feedback.app, a.feedback.svar, a]
