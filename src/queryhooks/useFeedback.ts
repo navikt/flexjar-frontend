@@ -3,13 +3,14 @@ import { useRouter } from 'next/router'
 
 import { fetchJsonMedRequestId } from '../utils/fetch'
 
-export function UseFeedback(): UseQueryResult<Feedback[], Error> {
+export function UseFeedback(refetchEvery30Seconds = false): UseQueryResult<Feedback[], Error> {
     const { team } = useRouter().query
     const selectedTeam = team ?? 'flex'
 
     return useQuery<Feedback[], Error>({
         queryKey: [`feedback-${selectedTeam}`],
         queryFn: () => fetchJsonMedRequestId(`/api/flexjar-backend/api/v1/intern/feedback?team=${team ?? 'flex'}`),
+        refetchInterval: refetchEvery30Seconds ? 30 * 1000 : undefined,
     })
 }
 
