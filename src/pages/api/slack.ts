@@ -3,22 +3,23 @@ import dayjs from 'dayjs'
 import { logger } from '@navikt/next-logger'
 
 import type { Feedback } from '../../queryhooks/useFeedback'
+import { beskyttetApi } from '../../auth/beskyttetApi'
 
 type InputBody = {
     team: string
     feedback: Feedback
 }
 
-const handler = async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
+const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
     if (req.method !== 'POST') {
         res.status(405).json({ message: 'Method not allowed' })
         return
     }
 
+    const postToSlackRequestedByName = getPostedByUser(req.headers['authorization'])
     const { team, feedback }: InputBody = JSON.parse(req.body)
 
     const webhook = teamToSlackWebhook[team]
-
     if (!webhook) {
         res.status(400).json({ message: 'Invalid team, no configured webhook' })
         return
@@ -65,7 +66,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse): Promise<void>
                     elements: [
                         {
                             type: 'plain_text',
-                            text: `${dayjs(feedback.opprettet).toISOString()}`,
+                            text: `${dayjs(feedback.opprettet).toISOString()} | Delt av ${postToSlackRequestedByName}`,
                             emoji: true,
                         },
                     ],
@@ -80,11 +81,21 @@ const handler = async (req: NextApiRequest, res: NextApiResponse): Promise<void>
         logger.error(`Unable to post to slack: ${await result.text()}`)
         res.status(500).json({ message: 'Failed to send feedback to slack' })
     }
-}
+})
 
 const teamToSlackWebhook: Record<string, string | undefined> = {
     flex: process.env.FLEX_SLACK_WEBHOOK,
     teamsykmelding: process.env.TEAMSYKMELDING_SLACK_WEBHOOK,
+}
+
+function getPostedByUser(header: string | undefined): string {
+    if (!header) {
+        return 'Ukjent'
+    }
+
+    const bearerToken = header.split(' ')[1]
+    const decoded = Buffer.from(bearerToken.split('.')[1], 'base64').toString()
+    return JSON.parse(decoded).name
 }
 
 export default handler
