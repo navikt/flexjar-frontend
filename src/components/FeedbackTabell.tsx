@@ -40,10 +40,10 @@ export const FeedbackTabell = (): JSX.Element | null => {
         <>
             <div className="flex justify-between items-center h-16 mb-4">
                 <div className="flex gap-4">
-                    <Switch checked={alt} onChange={() => setAlt(!polling)} size="small">
+                    <Switch checked={alt} onChange={() => setAlt((b) => !b)} size="small">
                         Vis bare feedback med tekst
                     </Switch>
-                    <Switch checked={polling} onChange={() => setPolling(!polling)} size="small">
+                    <Switch checked={polling} onChange={() => setPolling((b) => !b)} size="small">
                         Hent nye hvert 30. sekund
                     </Switch>
                 </div>
