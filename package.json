@@ -5,7 +5,7 @@
     "dependencies": {
         "@navikt/ds-css": "^2.9.3",
         "@navikt/ds-css-internal": "^2.9.3",
-        "@navikt/ds-react": "^2.9.3",
+        "@navikt/ds-react": "^5.3.0",
         "@navikt/ds-react-internal": "^2.9.3",
         "@navikt/ds-tailwind": "^2.9.3",
         "@navikt/ds-tokens": "^2.9.3",
