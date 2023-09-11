@@ -17,7 +17,7 @@ export const FeedbackTabell = (): JSX.Element | null => {
 
     if (error) {
         return (
-            <Alert variant={'error'} className={'mb-8'}>
+            <Alert variant="error" className="mb-8">
                 Noe gikk galt
             </Alert>
         )
@@ -61,7 +61,7 @@ export const FeedbackTabell = (): JSX.Element | null => {
                 </div>
             </div>
             <MUIDataTable
-                title={'Aktiviteter'}
+                title="Aktiviteter"
                 data={tabellData}
                 options={{
                     selectableRows: 'none',
@@ -111,7 +111,7 @@ export const FeedbackTabell = (): JSX.Element | null => {
                                 return (
                                     <Accordion.Item key={feedback.id}>
                                         <Accordion>
-                                            <Accordion.Header className={'border-0'}>
+                                            <Accordion.Header className="border-0">
                                                 {feedback.feedback.svar + ' '}
                                                 {feedback.feedback.feedback?.trim() &&
                                                     ': ' + feedback.feedback.feedback?.trim()}

@@ -46,7 +46,7 @@ export const Tilbakemelding = (): JSX.Element | null => {
     const FeedbackButton = (props: FeedbackButtonProps): JSX.Element => {
         return (
             <Button
-                variant={'primary-neutral'}
+                variant="primary-neutral"
                 className={cn({
                     'bg-surface-neutral-active text-text-on-inverted': activeState === props.feedbacktype,
                 })}
@@ -100,18 +100,18 @@ export const Tilbakemelding = (): JSX.Element | null => {
         return null
     }
     return (
-        <div className={'toc-ignore mb-28 mt-12 scroll-my-[30vh]'}>
-            <div className={'flex w-full flex-col gap-4'}>
+        <div className="toc-ignore mb-28 mt-12 scroll-my-[30vh]">
+            <div className="flex w-full flex-col gap-4">
                 <Heading size="small" level="2">
                     Var denne siden nyttig?
                 </Heading>
-                <div className={'flex w-full gap-4'}>
+                <div className="flex w-full gap-4">
                     <FeedbackButton feedbacktype={Feedbacktype.JA}>Ja</FeedbackButton>
                     <FeedbackButton feedbacktype={Feedbacktype.NEI}>Nei</FeedbackButton>
                     <FeedbackButton feedbacktype={Feedbacktype.FORBEDRING}>Foreslå forbedring</FeedbackButton>
                 </div>
                 {activeState !== null && (
-                    <form className={'animate-fadeIn mt-4 flex w-full max-w-sm flex-col gap-4'}>
+                    <form className="animate-fadeIn mt-4 flex w-full max-w-sm flex-col gap-4">
                         <Textarea
                             ref={textAreaRef}
                             error={errorMsg}
@@ -125,7 +125,7 @@ export const Tilbakemelding = (): JSX.Element | null => {
                             minRows={3}
                             description="Ikke skriv inn navn eller andre personopplysninger"
                         />
-                        <Button className="mr-auto" variant={'primary-neutral'} onClick={handleSend}>
+                        <Button className="mr-auto" variant="primary-neutral" onClick={handleSend}>
                             Send inn svar
                         </Button>
                     </form>
