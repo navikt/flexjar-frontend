@@ -15,7 +15,7 @@
         "classnames": "^2.3.2",
         "dayjs": "^1.11.9",
         "mui-datatables": "^4.3.0",
-        "openid-client": "^5.4.3",
+        "openid-client": "^5.5.0",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
         "tailwind-merge": "^1.14.0",
