@@ -39,7 +39,6 @@ on:
 #          identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
 #          project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
 
-
 jobs:
   felles-workflow:
     uses: navikt/flex-github-actions-workflows/.github/workflows/next-js-lightweight.yml@dev-lightweight-nextjs-buildjob
@@ -49,7 +48,6 @@ jobs:
       id-token: write
       security-events: write
     secrets: inherit
-
 #  nais-deploy:
 #    needs: build-and-publish
 #    uses: navikt/flex-github-actions-workflows/.github/workflows/nais-deploy-dev-og-prod.yml@master
