@@ -1,4 +1,4 @@
-name: Push
+name: workflow
 on:
   workflow_dispatch:
   push:
@@ -55,10 +55,10 @@ jobs:
 #      sentry-project: sykepengesoknad
 #      sentry-enabled: false
 
-  nais-deploy:
-    needs: build-and-publish
-    uses: navikt/flex-github-actions-workflows/.github/workflows/nais-deploy-dev-og-prod.yml@master
-    with:
-      image: ${{ needs.build-and-publish.outputs.image }}
-      app: ${{ inputs.app }}
-    secrets: inherit
+#  nais-deploy:
+#    needs: build-and-publish
+#    uses: navikt/flex-github-actions-workflows/.github/workflows/nais-deploy-dev-og-prod.yml@master
+#    with:
+#      image: ${{ needs.build-and-publish.outputs.image }}
+#      app: ${{ inputs.app }}
+#    secrets: inherit
