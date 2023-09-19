@@ -42,18 +42,13 @@ on:
 
 jobs:
   felles-workflow:
-    uses: navikt/flex-github-actions-workflows/.github/workflows/next-js.yml@master
+    uses: navikt/flex-github-actions-workflows/.github/workflows/next-js-lightweight.yml@dev-lightweight-nextjs-buildjob
     permissions:
       packages: read
       contents: read
       id-token: write
       security-events: write
     secrets: inherit
-    with:
-      app: flexjar-frontend
-#      base-path: syk/sykepengesoknad
-#      sentry-project: sykepengesoknad
-#      sentry-enabled: false
 
 #  nais-deploy:
 #    needs: build-and-publish
