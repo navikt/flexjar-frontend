@@ -47,6 +47,7 @@ jobs:
       contents: read
       id-token: write
       security-events: write
+      actions: read
     secrets: inherit
 #  nais-deploy:
 #    needs: build-and-publish
