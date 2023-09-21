@@ -1,15 +1,11 @@
 import { useQuery, UseQueryResult } from '@tanstack/react-query'
-import { useRouter } from 'next/router'
 
 import { fetchJsonMedRequestId } from '../utils/fetch'
 
-export function UseFeedback(refetchEvery30Seconds = false): UseQueryResult<Feedback[], Error> {
-    const { team } = useRouter().query
-    const selectedTeam = team ?? 'flex'
-
+export function useFeedback(team: string | string[], refetchEvery30Seconds = false): UseQueryResult<Feedback[], Error> {
     return useQuery<Feedback[], Error>({
-        queryKey: [`feedback-${selectedTeam}`],
-        queryFn: () => fetchJsonMedRequestId(`/api/flexjar-backend/api/v1/intern/feedback?team=${team ?? 'flex'}`),
+        queryKey: [`feedback-${team}`],
+        queryFn: () => fetchJsonMedRequestId(`/api/flexjar-backend/api/v1/intern/feedback?team=${team}`),
         refetchInterval: refetchEvery30Seconds ? 30 * 1000 : undefined,
     })
 }

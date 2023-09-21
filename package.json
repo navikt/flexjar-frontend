@@ -30,12 +30,13 @@
         "eslint": "^8.49.0",
         "eslint-config-next": "^13.4.19",
         "next": "^13.4.19",
+        "pino-pretty": "^10.2.0",
         "prettier": "^3.0.3",
         "tailwindcss": "^3.3.3",
         "typescript": "^5.2.2"
     },
     "scripts": {
-        "dev": "MOCK_BACKEND=true next dev -p 8080",
+        "dev": "MOCK_BACKEND=true next dev -p 8080 | pino-pretty",
         "start": "next start -p 8080",
         "build": "next build",
         "prettier:write": "prettier --write .",

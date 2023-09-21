@@ -4,16 +4,19 @@ import dayjs, { Dayjs } from 'dayjs'
 import MUIDataTable from 'mui-datatables'
 import { useRouter } from 'next/router'
 
-import { Feedback, UseFeedback } from '../queryhooks/useFeedback'
+import { Feedback, useFeedback } from '../queryhooks/useFeedback'
 
 import { Sletteknapp } from './Sletteknapp'
-import { Deleknapp } from './Deleknapp'
+import { DeleknappSlack, DeleknappTrello } from './Deleknapp'
 
 export const FeedbackTabell = (): JSX.Element | null => {
+    const { team } = useRouter().query
+    const selectedTeam = team ?? 'flex'
+
     const router = useRouter()
     const [alt, setAlt] = useState(true)
     const [polling, setPolling] = useState(false)
-    const { data, error } = UseFeedback(polling)
+    const { data, error } = useFeedback(selectedTeam, polling)
 
     if (error) {
         return (
@@ -154,16 +157,36 @@ export const FeedbackTabell = (): JSX.Element | null => {
                             draggable: false,
                             sort: false,
                             filter: false,
-                            setCellHeaderProps: () => ({ style: { width: '68px', textAlign: 'center' } }),
+                            setCellHeaderProps: () => ({ style: { width: '36px', textAlign: 'center' } }),
                             customBodyRenderLite: (dataIndex: number) => {
                                 const feedback = tabellData[dataIndex][4]
 
                                 if (feedback.feedback.feedback?.trim() === '') return null
 
-                                return <Deleknapp feedback={feedback} />
+                                return <DeleknappSlack feedback={feedback} />
                             },
                         },
                     },
+                    ...(selectedTeam === 'teamsykmelding'
+                        ? [
+                              {
+                                  name: 'Trello',
+                                  options: {
+                                      draggable: false,
+                                      sort: false,
+                                      filter: false,
+                                      setCellHeaderProps: () => ({ style: { width: '36px', textAlign: 'center' } }),
+                                      customBodyRenderLite: (dataIndex: number) => {
+                                          const feedback = tabellData[dataIndex][4]
+
+                                          if (feedback.feedback.feedback?.trim() === '') return null
+
+                                          return <DeleknappTrello feedback={feedback} />
+                                      },
+                                  },
+                              },
+                          ]
+                        : []),
                 ]}
             />
         </>
