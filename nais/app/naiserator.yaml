@@ -47,8 +47,11 @@ spec:
       external:
         - host: slack.com
         - host: api.slack.com
+        - host: api.trello.com
+        - host: trello.com
   envFrom:
     - secret: flexjar-frontend-slack-webhooks
+    - secret: flexjar-frontend-trello-teamsykmelding-secrets
   env:
   {{#each env}}
      - name: {{@key}}

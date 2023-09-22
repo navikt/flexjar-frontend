@@ -15,6 +15,8 @@ let testdata: Feedback[] = [
             app: 'flexjar',
             feedbackId: 'flexjartesting',
             sporsmal: 'Liker du ost?',
+            segment: '40-49',
+            arbeidssituasjon: 'ARBEIDSTAKER',
         },
         id: randomUUID(),
         opprettet: '2023-02-04T12:00:00.000000+02:00',
