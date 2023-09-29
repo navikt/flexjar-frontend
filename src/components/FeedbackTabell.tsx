@@ -1,4 +1,4 @@
-import { Accordion, Alert, Switch, Table, Select } from '@navikt/ds-react'
+import { Accordion, Alert, Switch, Table, Select, CopyButton } from '@navikt/ds-react'
 import React, { useState } from 'react'
 import dayjs, { Dayjs } from 'dayjs'
 import MUIDataTable from 'mui-datatables'
@@ -36,7 +36,17 @@ export const FeedbackTabell = (): JSX.Element | null => {
         ?.filter((feedback) => {
             return alt ? feedback.feedback.feedback?.trim() : true
         })
-        .map((a) => [dayjs(a.opprettet), a.feedback.feedback, a.feedback.app, a.feedback.svar, a] as const)
+        .map(
+            (a) =>
+                [
+                    dayjs(a.opprettet),
+                    a.feedback.feedback,
+                    a.feedback.app,
+                    a.feedback.svar,
+                    a.feedback.feedback,
+                    a,
+                ] as const,
+        )
 
     return (
         <>
@@ -111,7 +121,7 @@ export const FeedbackTabell = (): JSX.Element | null => {
                         options: {
                             filter: false,
                             customBodyRenderLite: (dataIndex: number) => {
-                                const feedback = tabellData[dataIndex][4] as Feedback
+                                const feedback = tabellData[dataIndex][5] as Feedback
                                 return (
                                     <Accordion.Item key={feedback.id}>
                                         <Accordion>
@@ -138,7 +148,20 @@ export const FeedbackTabell = (): JSX.Element | null => {
                             },
                         },
                     },
+                    {
+                        name: 'Kopier',
+                        options: {
+                            draggable: false,
+                            sort: false,
+                            filter: false,
+                            customBodyRenderLite: (dataIndex: number) => {
+                                const feedback = tabellData[dataIndex][5]
+                                return <CopyButton copyText={feedback.feedback.feedback ?? ''} variant="action" />
+                            },
+                        },
+                    },
                     { name: 'App' },
+
                     { name: 'Svar' },
                     {
                         name: 'Slett',
@@ -147,7 +170,7 @@ export const FeedbackTabell = (): JSX.Element | null => {
                             sort: false,
                             filter: false,
                             customBodyRenderLite: (dataIndex: number) => {
-                                const feedback = tabellData[dataIndex][4]
+                                const feedback = tabellData[dataIndex][5]
                                 return <Sletteknapp feedback={feedback} />
                             },
                         },
@@ -160,7 +183,7 @@ export const FeedbackTabell = (): JSX.Element | null => {
                             filter: false,
                             setCellHeaderProps: () => ({ style: { width: '36px', textAlign: 'center' } }),
                             customBodyRenderLite: (dataIndex: number) => {
-                                const feedback = tabellData[dataIndex][4]
+                                const feedback = tabellData[dataIndex][5]
 
                                 if (feedback.feedback.feedback?.trim() === '') return null
 
@@ -178,7 +201,7 @@ export const FeedbackTabell = (): JSX.Element | null => {
                                       filter: false,
                                       setCellHeaderProps: () => ({ style: { width: '36px', textAlign: 'center' } }),
                                       customBodyRenderLite: (dataIndex: number) => {
-                                          const feedback = tabellData[dataIndex][4]
+                                          const feedback = tabellData[dataIndex][5]
 
                                           if (feedback.feedback.feedback?.trim() === '') return null
 
