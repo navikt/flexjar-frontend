@@ -41,6 +41,7 @@ export const FeedbackTabell = (): JSX.Element | null => {
                 [
                     dayjs(a.opprettet),
                     a.feedback.feedback,
+                    a.feedback.feedback,
                     a.feedback.app,
                     a.feedback.svar,
                     a.feedback.feedback,
@@ -121,7 +122,7 @@ export const FeedbackTabell = (): JSX.Element | null => {
                         options: {
                             filter: false,
                             customBodyRenderLite: (dataIndex: number) => {
-                                const feedback = tabellData[dataIndex][5] as Feedback
+                                const feedback = tabellData[dataIndex][6] as Feedback
                                 return (
                                     <Accordion.Item key={feedback.id}>
                                         <Accordion>
@@ -155,7 +156,7 @@ export const FeedbackTabell = (): JSX.Element | null => {
                             sort: false,
                             filter: false,
                             customBodyRenderLite: (dataIndex: number) => {
-                                const feedback = tabellData[dataIndex][5]
+                                const feedback = tabellData[dataIndex][6]
                                 return <CopyButton copyText={feedback.feedback.feedback ?? ''} variant="action" />
                             },
                         },
@@ -170,7 +171,7 @@ export const FeedbackTabell = (): JSX.Element | null => {
                             sort: false,
                             filter: false,
                             customBodyRenderLite: (dataIndex: number) => {
-                                const feedback = tabellData[dataIndex][5]
+                                const feedback = tabellData[dataIndex][6]
                                 return <Sletteknapp feedback={feedback} />
                             },
                         },
@@ -183,7 +184,7 @@ export const FeedbackTabell = (): JSX.Element | null => {
                             filter: false,
                             setCellHeaderProps: () => ({ style: { width: '36px', textAlign: 'center' } }),
                             customBodyRenderLite: (dataIndex: number) => {
-                                const feedback = tabellData[dataIndex][5]
+                                const feedback = tabellData[dataIndex][6]
 
                                 if (feedback.feedback.feedback?.trim() === '') return null
 
@@ -201,7 +202,7 @@ export const FeedbackTabell = (): JSX.Element | null => {
                                       filter: false,
                                       setCellHeaderProps: () => ({ style: { width: '36px', textAlign: 'center' } }),
                                       customBodyRenderLite: (dataIndex: number) => {
-                                          const feedback = tabellData[dataIndex][5]
+                                          const feedback = tabellData[dataIndex][6]
 
                                           if (feedback.feedback.feedback?.trim() === '') return null
 
