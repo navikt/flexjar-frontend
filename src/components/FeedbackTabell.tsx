@@ -82,7 +82,7 @@ export const FeedbackTabell = (): JSX.Element | null => {
                     selectableRows: 'none',
                     print: false,
                     customSearch: (searchQuery: string, currentRow: string[]) => {
-                        return JSON.stringify(currentRow[5]).toLowerCase().indexOf(searchQuery.toLowerCase()) >= 0
+                        return JSON.stringify(currentRow[6]).toLowerCase().indexOf(searchQuery.toLowerCase()) >= 0
                     },
                 }}
                 columns={[
