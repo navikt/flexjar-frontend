@@ -256,7 +256,9 @@ function TanstackTable({ data }: { data: Feedback[] }): React.JSX.Element {
         }),
         columnHelper.accessor((row) => row, {
             id: 'app',
-            cell: (info) => <i>{info.getValue().feedback.app}</i>,
+            cell: (info) => {
+                return <BodyShort>{info.getValue().feedback.app}</BodyShort>
+            },
             header: () => 'App',
             footer: (info) => info.column.id,
         }),
@@ -279,12 +281,13 @@ function TanstackTable({ data }: { data: Feedback[] }): React.JSX.Element {
                 <Table.Header>
                     {table.getHeaderGroups().map((headerGroup) => (
                         <Table.Row key={headerGroup.id}>
+                            <Table.HeaderCell />
                             {headerGroup.headers.map((header) => (
-                                <th key={header.id}>
+                                <Table.HeaderCell key={header.id}>
                                     {header.isPlaceholder
                                         ? null
                                         : flexRender(header.column.columnDef.header, header.getContext())}
-                                </th>
+                                </Table.HeaderCell>
                             ))}
                         </Table.Row>
                     ))}
