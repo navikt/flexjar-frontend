@@ -2,48 +2,29 @@ import { randomUUID } from 'crypto'
 
 import dayjs from 'dayjs'
 import { logger } from '@navikt/next-logger'
+import { faker } from '@faker-js/faker'
 
 import { Feedback, FeedbackInput } from '../queryhooks/useFeedback'
 import { reqToBody } from '../utils/reqToBody'
 import { BackendProxyOpts, validerKall } from '../proxy/backendproxy'
 
-let testdata: Feedback[] = [
-    {
-        feedback: {
-            feedback: 'Dette er en test',
-            svar: 'JA',
-            app: 'flexjar',
-            feedbackId: 'flexjartesting',
-            sporsmal: 'Liker du ost?',
-            segment: '40-49',
-            arbeidssituasjon: 'ARBEIDSTAKER',
-        },
-        id: randomUUID(),
-        opprettet: '2023-02-04T12:00:00.000000+02:00',
-    },
-    {
-        feedback: {
-            feedback: 'Dette er en test 2',
-            app: 'spinnsyn',
-            svar: 'JA',
-            feedbackId: 'spinnsyn refusjon',
-            annen_verdi: 'Random verdi',
-        },
-        id: randomUUID(),
-        opprettet: '2023-05-01T12:00:00.000000+02:00',
-    },
-    {
-        feedback: {
-            feedback: '',
-            app: 'sponnsyn',
-            svar: 'JA',
-            feedbackId: 'spinnsyn refusjon',
-        },
-        id: randomUUID(),
-        opprettet: '2023-05-01T12:00:00.000000+02:00',
-    },
-]
+faker.seed(123)
 
+let testdata: Feedback[] = []
+
+const antallFeedback = 11200
+for (let i = 0; i < antallFeedback; i++) {
+    testdata.push({
+        feedback: {
+            feedback: faker.datatype.boolean() ? faker.company.catchPhrase() : '',
+            svar: faker.datatype.boolean() ? 'JA' : 'NEI',
+            app: faker.color.human(),
+            feedbackId: faker.science.chemicalElement().name,
+        },
+        id: faker.string.uuid(),
+        opprettet: faker.date.past().toISOString(),
+    })
+}
 function deleteFeedbackById(idToDelete: string): void {
     testdata = testdata.filter((feedback) => feedback.id !== idToDelete)
 }
