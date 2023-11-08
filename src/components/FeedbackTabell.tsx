@@ -1,4 +1,4 @@
-import { Alert, BodyShort, Button, CopyButton, Pagination, Select, Switch, Table, TextField } from '@navikt/ds-react'
+import { Alert, BodyShort, CopyButton, Pagination, Select, Switch, Table, TextField } from '@navikt/ds-react'
 import React, { useState } from 'react'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
@@ -74,26 +74,27 @@ export const FeedbackTabell = (): JSX.Element | null => {
                     if (feedback.feedbackId !== 'sykepengesoknad-kvittering') {
                         return svar
                     }
-                    if (svar === '1') {
+                    if (svar == '1') {
                         // sinna
                         return '😡'
                     }
-                    if (svar === '2') {
+                    if (svar == '2') {
                         // lei
                         return '🙁'
                     }
-                    if (svar === '3') {
+                    if (svar == '3') {
                         // nøytral
                         return '😐'
                     }
-                    if (svar === '4') {
+                    if (svar == '4') {
                         // glad
                         return '😀'
                     }
-                    if (svar === '5') {
+                    if (svar == '5') {
                         // hjerteøye
                         return '😍'
                     }
+                    return svar
                 }
 
                 return (
@@ -198,14 +199,6 @@ export const FeedbackTabell = (): JSX.Element | null => {
                             }
                         }}
                     />
-                    <Button
-                        variant="secondary-neutral"
-                        onClick={() => {
-                            setFritekst(fritekstInput)
-                        }}
-                    >
-                        Søk
-                    </Button>
                     <Select
                         label="Velg team"
                         size="small"

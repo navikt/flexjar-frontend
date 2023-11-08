@@ -27,6 +27,18 @@ for (let i = 0; i < antallFeedback; i++) {
     })
 }
 
+testdata.push({
+    feedback: {
+        feedback: 'hei',
+        svar: '5',
+        app: 'sykepengesoknad',
+        team: faker.datatype.boolean() ? 'flex' : 'teamsykmelding',
+        feedbackId: 'sykepengesoknad-kvittering',
+    },
+    id: faker.string.uuid(),
+    opprettet: faker.date.past().toISOString(),
+})
+
 function deleteFeedbackById(idToDelete: string): void {
     testdata = testdata.filter((feedback) => feedback.id !== idToDelete)
 }
