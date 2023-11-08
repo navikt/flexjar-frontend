@@ -8,19 +8,45 @@ import {
     getCoreRowModel,
     getFilteredRowModel,
     getPaginationRowModel,
+    PaginationState,
     useReactTable,
 } from '@tanstack/react-table'
+import { useQuery } from '@tanstack/react-query'
 
-import { Feedback, useFeedback } from '../queryhooks/useFeedback'
+import { Feedback } from '../queryhooks/useFeedback'
+import { fetchJsonMedRequestId } from '../utils/fetch'
+import { PageResponse } from '../testdata/testdata'
 
 export const FeedbackTabellRedesign = (): JSX.Element | null => {
     const { team } = useRouter().query
     const selectedTeam = team ?? 'flex'
+    const [{ pageIndex, pageSize }, setPagination] = React.useState<PaginationState>({
+        pageIndex: 0,
+        pageSize: 10,
+    })
 
     const router = useRouter()
-    const { data, error } = useFeedback(selectedTeam)
+    const { data, error } = useQuery<PageResponse, Error>({
+        queryKey: [`feedback-pagable`, team, pageIndex, pageSize],
+        queryFn: async () => {
+            const fetchet: PageResponse = await fetchJsonMedRequestId(
+                `/api/flexjar-backend/api/v1/intern/feedback-pagable?team=${selectedTeam}&page=${pageIndex}&size=${pageSize}`,
+            )
+            return fetchet
+        },
+        keepPreviousData: true,
+    })
+    const defaultData = React.useMemo(() => [], [])
 
     const columnHelper = createColumnHelper<Feedback>()
+
+    const pagination = React.useMemo(
+        () => ({
+            pageIndex,
+            pageSize,
+        }),
+        [pageIndex, pageSize],
+    )
 
     const columns = [
         columnHelper.accessor('opprettet', {
@@ -52,12 +78,20 @@ export const FeedbackTabellRedesign = (): JSX.Element | null => {
         }),
     ]
     const table = useReactTable({
-        data: data || [],
+        data: data?.content ?? defaultData,
         columns,
         // Pipeline
         getCoreRowModel: getCoreRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
+        onPaginationChange: setPagination,
+        pageCount: data?.totalPages ?? -1,
+        manualPagination: true,
+
+        state: {
+            pagination,
+        },
+
         //
         debugTable: true,
     })
@@ -82,7 +116,7 @@ export const FeedbackTabellRedesign = (): JSX.Element | null => {
                         size="small"
                         defaultValue={router.query.team ?? 'flex'}
                         onChange={(event) => {
-                            router.push('/?team=' + event.target.value)
+                            router.push('/redesign/?team=' + event.target.value)
                         }}
                     >
                         <option value="flex">Flex</option>

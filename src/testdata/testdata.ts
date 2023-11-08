@@ -51,6 +51,9 @@ export async function mockApi(opts: BackendProxyOpts): Promise<void> {
         const team = validert.query.get('team') || 'flex'
         const medTekst = (validert.query.get('medTekst') || 'false') == 'true'
 
+        testdata.sort((a, b) => {
+            return new Date(b.opprettet).getTime() - new Date(a.opprettet).getTime()
+        })
         // Filter data based on 'feedback' query parameter if it's provided
         const filteredData = testdata
             .filter((feedback) => {
@@ -67,7 +70,7 @@ export async function mockApi(opts: BackendProxyOpts): Promise<void> {
         const paginatedData = filteredData.slice(page * size, (page + 1) * size)
 
         // Create a response object that includes pagination information
-        const response = {
+        const response: PageResponse = {
             content: paginatedData,
             totalPages: Math.ceil(filteredData.length / size),
             totalElements: filteredData.length,
@@ -100,4 +103,12 @@ export async function mockApi(opts: BackendProxyOpts): Promise<void> {
 
     res.status(404)
     res.end()
+}
+
+export interface PageResponse {
+    content: Feedback[]
+    totalPages: number
+    totalElements: number
+    size: number
+    number: number
 }
