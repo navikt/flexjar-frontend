@@ -67,12 +67,42 @@ export const FeedbackTabell = (): JSX.Element | null => {
         }),
         columnHelper.accessor((row) => row, {
             id: 'feedback',
-            cell: (info) => (
-                <BodyShort>
-                    <span className="font-bold">{info.getValue().feedback.svar}: </span>
-                    <span className="italic">{info.getValue().feedback.feedback}</span>
-                </BodyShort>
-            ),
+            cell: (info) => {
+                function svarTilEmoji(): string | undefined {
+                    const feedback = info.getValue().feedback
+                    const svar = feedback.svar
+                    if (feedback.feedbackId !== 'sykepengesoknad-kvittering') {
+                        return svar
+                    }
+                    if (svar === '1') {
+                        // sinna
+                        return '😡'
+                    }
+                    if (svar === '2') {
+                        // lei
+                        return '🙁'
+                    }
+                    if (svar === '3') {
+                        // nøytral
+                        return '😐'
+                    }
+                    if (svar === '4') {
+                        // glad
+                        return '😀'
+                    }
+                    if (svar === '5') {
+                        // hjerteøye
+                        return '😍'
+                    }
+                }
+
+                return (
+                    <BodyShort>
+                        <span className="font-bold">{svarTilEmoji()}: </span>
+                        <span className="italic">{info.getValue().feedback.feedback}</span>
+                    </BodyShort>
+                )
+            },
             header: () => 'Feedback',
             footer: (info) => info.column.id,
         }),
