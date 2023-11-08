@@ -17,6 +17,9 @@ import { Feedback } from '../queryhooks/useFeedback'
 import { fetchJsonMedRequestId } from '../utils/fetch'
 import { PageResponse } from '../testdata/testdata'
 
+import { DeleknappSlack, DeleknappTrello } from './Deleknapp'
+import { Sletteknapp } from './Sletteknapp'
+
 export const FeedbackTabellRedesign = (): JSX.Element | null => {
     const { team } = useRouter().query
     const selectedTeam = team ?? 'flex'
@@ -60,14 +63,19 @@ export const FeedbackTabellRedesign = (): JSX.Element | null => {
         }),
         columnHelper.accessor((row) => row, {
             id: 'feedback',
-            cell: (info) => <i>{info.getValue().feedback.feedback}</i>,
+            cell: (info) => (
+                <BodyShort>
+                    <span className="font-bold">{info.getValue().feedback.svar}: </span>
+                    <span className="italic">{info.getValue().feedback.feedback}</span>
+                </BodyShort>
+            ),
             header: () => 'Feedback',
             footer: (info) => info.column.id,
         }),
         columnHelper.accessor((row) => row, {
             id: 'kopier',
             cell: (info) => <CopyButton copyText={info.getValue().feedback.feedback ?? ''} variant="action" />,
-            header: () => 'Kopier',
+            header: () => '',
             footer: (info) => info.column.id,
         }),
         columnHelper.accessor((row) => row, {
@@ -76,6 +84,36 @@ export const FeedbackTabellRedesign = (): JSX.Element | null => {
                 return <BodyShort>{info.getValue().feedback.app}</BodyShort>
             },
             header: () => 'App',
+            footer: (info) => info.column.id,
+        }),
+        columnHelper.accessor((row) => row, {
+            id: 'slack',
+            cell: (info) => {
+                const feedback = info.getValue()
+                if (feedback.feedback.feedback?.trim() === '') return null
+                return <DeleknappSlack feedback={feedback} />
+            },
+            header: () => '',
+            footer: (info) => info.column.id,
+        }),
+        columnHelper.accessor((row) => row, {
+            id: 'trello',
+            cell: (info) => {
+                const feedback = info.getValue()
+                if (feedback.feedback.feedback?.trim() === '') return null
+                if (selectedTeam !== 'teamsykmelding') return null
+                return <DeleknappTrello feedback={feedback} />
+            },
+            header: () => '',
+            footer: (info) => info.column.id,
+        }),
+        columnHelper.accessor((row) => row, {
+            id: 'slett',
+            cell: (info) => {
+                const feedback = info.getValue()
+                return <Sletteknapp feedback={feedback} />
+            },
+            header: () => '',
             footer: (info) => info.column.id,
         }),
     ]
