@@ -47,8 +47,8 @@ export async function proxyKallTilBackend(opts: BackendProxyOpts): Promise<void>
         return undefined
     }
 
-    const team = validert.query.get('team')
-    const path = `${validert.rewritedPath}${team ? `?team=${team}` : ''}`
+    const queryToString = validert.query.toString()
+    const path = `${validert.rewritedPath}${queryToString ? `?${queryToString}` : ''}`
 
     await proxyApiRouteRequest({ ...opts, path, bearerToken: await bearerToken(), https: false })
 }
