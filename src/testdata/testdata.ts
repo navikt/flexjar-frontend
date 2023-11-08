@@ -31,6 +31,10 @@ function deleteFeedbackById(idToDelete: string): void {
     testdata = testdata.filter((feedback) => feedback.id !== idToDelete)
 }
 
+function sleep(ms: number): Promise<void> {
+    return new Promise((resolve) => setTimeout(resolve, ms))
+}
+
 export async function mockApi(opts: BackendProxyOpts): Promise<void> {
     const validert = validerKall(opts)
     if (!validert) return
@@ -46,9 +50,10 @@ export async function mockApi(opts: BackendProxyOpts): Promise<void> {
     }
 
     if (validert.api == 'GET /api/v1/intern/feedback-pagable') {
+        await sleep(500)
+        const team = validert.query.get('team') || 'flex'
         const page = parseInt(validert.query.get('page') || '0', 10)
         const size = parseInt(validert.query.get('size') || '10', 10)
-        const team = validert.query.get('team') || 'flex'
         const medTekst = (validert.query.get('medTekst') || 'false') == 'true'
 
         testdata.sort((a, b) => {
