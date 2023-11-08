@@ -1,4 +1,4 @@
-import { Alert, BodyShort, CopyButton, Pagination, Select, Switch, Table } from '@navikt/ds-react'
+import { Alert, BodyShort, CopyButton, Pagination, Select, Switch, Table, TextField } from '@navikt/ds-react'
 import React, { useState } from 'react'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
@@ -24,6 +24,7 @@ export const FeedbackTabellRedesign = (): JSX.Element | null => {
     const { team } = useRouter().query
     const selectedTeam = team ?? 'flex'
     const [medTekst, setMedTekst] = useState(true)
+    const [fritekst, setFritekst] = useState('')
 
     const [{ pageIndex, pageSize }, setPagination] = React.useState<PaginationState>({
         pageIndex: 0,
@@ -32,11 +33,13 @@ export const FeedbackTabellRedesign = (): JSX.Element | null => {
 
     const router = useRouter()
     const { data, error } = useQuery<PageResponse, Error>({
-        queryKey: [`feedback-pagable`, team, pageIndex, pageSize, medTekst],
+        queryKey: [`feedback-pagable`, team, pageIndex, pageSize, medTekst, fritekst],
         queryFn: async () => {
-            const fetchet: PageResponse = await fetchJsonMedRequestId(
-                `/api/flexjar-backend/api/v1/intern/feedback-pagable?team=${selectedTeam}&page=${pageIndex}&size=${pageSize}&medTekst=${medTekst}`,
-            )
+            let url = `/api/flexjar-backend/api/v1/intern/feedback-pagable?team=${selectedTeam}&page=${pageIndex}&size=${pageSize}&medTekst=${medTekst}`
+            if (fritekst) {
+                url += `&fritekst=${fritekst}`
+            }
+            const fetchet: PageResponse = await fetchJsonMedRequestId(url)
             return fetchet
         },
         keepPreviousData: true,
@@ -151,6 +154,14 @@ export const FeedbackTabellRedesign = (): JSX.Element | null => {
         <>
             <div className="flex justify-between items-center h-16 mb-4">
                 <div className="flex gap-4">
+                    <TextField
+                        label="Søk"
+                        size="small"
+                        value={fritekst}
+                        onChange={(e) => {
+                            setFritekst(e.target.value)
+                        }}
+                    />
                     <Select
                         label="Velg team"
                         size="small"

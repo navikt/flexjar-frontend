@@ -54,6 +54,7 @@ export async function mockApi(opts: BackendProxyOpts): Promise<void> {
         const team = validert.query.get('team') || 'flex'
         const page = parseInt(validert.query.get('page') || '0', 10)
         const size = parseInt(validert.query.get('size') || '10', 10)
+        const fritekst = validert.query.get('fritekst')
         const medTekst = (validert.query.get('medTekst') || 'false') == 'true'
 
         testdata.sort((a, b) => {
@@ -67,6 +68,12 @@ export async function mockApi(opts: BackendProxyOpts): Promise<void> {
             .filter((feedback) => {
                 if (medTekst) {
                     return feedback.feedback.feedback
+                }
+                return true
+            })
+            .filter((feedback) => {
+                if (fritekst) {
+                    return JSON.stringify(feedback.feedback).toLowerCase().includes(fritekst.toLowerCase())
                 }
                 return true
             })
