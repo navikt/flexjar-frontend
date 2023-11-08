@@ -20,7 +20,7 @@ import { PageResponse } from '../testdata/testdata'
 import { DeleknappSlack, DeleknappTrello } from './Deleknapp'
 import { Sletteknapp } from './Sletteknapp'
 
-export const FeedbackTabellRedesign = (): JSX.Element | null => {
+export const FeedbackTabell = (): JSX.Element | null => {
     const { team } = useRouter().query
     const selectedTeam = team ?? 'flex'
     const [medTekst, setMedTekst] = useState(true)

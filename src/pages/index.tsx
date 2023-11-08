@@ -2,12 +2,12 @@ import React from 'react'
 
 import { initialProps } from '../initialprops/initialProps'
 import { Tilbakemelding } from '../components/Tilbakemelding'
-import { FeedbackTabellRedesign } from '../components/FeedbackTabellRedesign'
+import { FeedbackTabell } from '../components/FeedbackTabell'
 
 const Index = (): JSX.Element => {
     return (
         <>
-            <FeedbackTabellRedesign />
+            <FeedbackTabell />
             <Tilbakemelding />
         </>
     )
