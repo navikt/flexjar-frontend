@@ -185,7 +185,7 @@ export const FeedbackTabell = (): JSX.Element | null => {
     return (
         <>
             <div className="flex justify-between items-center h-16 mb-4">
-                <div className="flex gap-4">
+                <div className="flex gap-4 items-end">
                     <TextField
                         label="Søk"
                         size="small"
@@ -211,9 +211,11 @@ export const FeedbackTabell = (): JSX.Element | null => {
                         <option value="teamsykmelding">Team Sykmelding</option>
                         <option value="helsearbeidsgiver">Team HAG</option>
                     </Select>
-                    <Switch checked={medTekst} onChange={() => setMedTekst((b) => !b)} size="small">
-                        Vis bare feedback med tekst
-                    </Switch>
+                    <div className="self-end">
+                        <Switch checked={medTekst} onChange={() => setMedTekst((b) => !b)} size="small">
+                            Vis bare feedback med tekst
+                        </Switch>
+                    </div>
                 </div>
             </div>
 
