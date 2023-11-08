@@ -4,7 +4,7 @@ import type { AppProps } from 'next/app'
 import React, { useState } from 'react'
 import Head from 'next/head'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { InternalHeader, Link } from '@navikt/ds-react'
+import { InternalHeader } from '@navikt/ds-react'
 
 function MyApp({ Component, pageProps }: AppProps): JSX.Element {
     const [queryClient] = useState(
@@ -31,9 +31,6 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
             <QueryClientProvider client={queryClient}>
                 <InternalHeader>
                     <InternalHeader.Title as="h1">Flexjar 💪🫙</InternalHeader.Title>
-                    <Link className="text-white px-2" href="/redesign">
-                        Redesign beta
-                    </Link>
                 </InternalHeader>
                 <div id="root" className="mx-auto p-4 pb-32">
                     <Component {...pageProps} />

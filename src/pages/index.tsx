@@ -1,13 +1,13 @@
 import React from 'react'
 
 import { initialProps } from '../initialprops/initialProps'
-import { FeedbackTabell } from '../components/FeedbackTabell'
 import { Tilbakemelding } from '../components/Tilbakemelding'
+import { FeedbackTabellRedesign } from '../components/FeedbackTabellRedesign'
 
 const Index = (): JSX.Element => {
     return (
         <>
-            <FeedbackTabell />
+            <FeedbackTabellRedesign />
             <Tilbakemelding />
         </>
     )

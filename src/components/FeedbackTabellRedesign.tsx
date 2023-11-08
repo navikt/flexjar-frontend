@@ -156,7 +156,7 @@ export const FeedbackTabellRedesign = (): JSX.Element | null => {
                         size="small"
                         defaultValue={router.query.team ?? 'flex'}
                         onChange={(event) => {
-                            router.push('/redesign/?team=' + event.target.value)
+                            router.push('/?team=' + event.target.value)
                         }}
                     >
                         <option value="flex">Flex</option>
