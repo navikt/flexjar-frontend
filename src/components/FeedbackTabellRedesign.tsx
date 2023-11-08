@@ -1,5 +1,5 @@
-import { Alert, BodyShort, CopyButton, Pagination, Select, Table } from '@navikt/ds-react'
-import React from 'react'
+import { Alert, BodyShort, CopyButton, Pagination, Select, Switch, Table } from '@navikt/ds-react'
+import React, { useState } from 'react'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
 import {
@@ -20,6 +20,8 @@ import { PageResponse } from '../testdata/testdata'
 export const FeedbackTabellRedesign = (): JSX.Element | null => {
     const { team } = useRouter().query
     const selectedTeam = team ?? 'flex'
+    const [medTekst, setMedTekst] = useState(true)
+
     const [{ pageIndex, pageSize }, setPagination] = React.useState<PaginationState>({
         pageIndex: 0,
         pageSize: 10,
@@ -27,10 +29,10 @@ export const FeedbackTabellRedesign = (): JSX.Element | null => {
 
     const router = useRouter()
     const { data, error } = useQuery<PageResponse, Error>({
-        queryKey: [`feedback-pagable`, team, pageIndex, pageSize],
+        queryKey: [`feedback-pagable`, team, pageIndex, pageSize, medTekst],
         queryFn: async () => {
             const fetchet: PageResponse = await fetchJsonMedRequestId(
-                `/api/flexjar-backend/api/v1/intern/feedback-pagable?team=${selectedTeam}&page=${pageIndex}&size=${pageSize}`,
+                `/api/flexjar-backend/api/v1/intern/feedback-pagable?team=${selectedTeam}&page=${pageIndex}&size=${pageSize}&medTekst=${medTekst}`,
             )
             return fetchet
         },
@@ -110,7 +112,7 @@ export const FeedbackTabellRedesign = (): JSX.Element | null => {
     return (
         <>
             <div className="flex justify-between items-center h-16 mb-4">
-                <div>
+                <div className="flex gap-4">
                     <Select
                         label="Velg team"
                         size="small"
@@ -123,6 +125,9 @@ export const FeedbackTabellRedesign = (): JSX.Element | null => {
                         <option value="teamsykmelding">Team Sykmelding</option>
                         <option value="helsearbeidsgiver">Team HAG</option>
                     </Select>
+                    <Switch checked={medTekst} onChange={() => setMedTekst((b) => !b)} size="small">
+                        Vis bare feedback med tekst
+                    </Switch>
                 </div>
             </div>
 
