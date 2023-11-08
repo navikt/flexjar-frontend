@@ -1,4 +1,4 @@
-import { Alert, BodyShort, CopyButton, Pagination, Select, Switch, Table, TextField } from '@navikt/ds-react'
+import { Alert, BodyShort, Button, CopyButton, Pagination, Select, Switch, Table, TextField } from '@navikt/ds-react'
 import React, { useState } from 'react'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
@@ -24,6 +24,7 @@ export const FeedbackTabellRedesign = (): JSX.Element | null => {
     const { team } = useRouter().query
     const selectedTeam = team ?? 'flex'
     const [medTekst, setMedTekst] = useState(true)
+    const [fritekstInput, setFritekstInput] = useState('')
     const [fritekst, setFritekst] = useState('')
 
     const [{ pageIndex, pageSize }, setPagination] = React.useState<PaginationState>({
@@ -157,11 +158,24 @@ export const FeedbackTabellRedesign = (): JSX.Element | null => {
                     <TextField
                         label="Søk"
                         size="small"
-                        value={fritekst}
+                        value={fritekstInput}
                         onChange={(e) => {
-                            setFritekst(e.target.value)
+                            setFritekstInput(e.target.value)
+                        }}
+                        onKeyUp={(e) => {
+                            if (e.key === 'Enter') {
+                                setFritekst(fritekstInput)
+                            }
                         }}
                     />
+                    <Button
+                        variant="secondary-neutral"
+                        onClick={() => {
+                            setFritekst(fritekstInput)
+                        }}
+                    >
+                        Søk
+                    </Button>
                     <Select
                         label="Velg team"
                         size="small"
