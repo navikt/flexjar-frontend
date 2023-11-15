@@ -1,4 +1,4 @@
-import { Alert, BodyShort, CopyButton, Pagination, Select, Switch, Table, TextField } from '@navikt/ds-react'
+import {Alert, BodyShort, Button, CopyButton, Pagination, Select, Switch, Table, Tag, TextField} from '@navikt/ds-react'
 import React, { useState } from 'react'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
@@ -19,6 +19,7 @@ import { PageResponse } from '../testdata/testdata'
 
 import { DeleknappSlack, DeleknappTrello } from './Deleknapp'
 import { Sletteknapp } from './Sletteknapp'
+import {Tags} from "./Tags";
 
 export const FeedbackTabell = (): JSX.Element | null => {
     const { team } = useRouter().query
@@ -43,7 +44,7 @@ export const FeedbackTabell = (): JSX.Element | null => {
             const fetchet: PageResponse = await fetchJsonMedRequestId(url)
             return fetchet
         },
-        keepPreviousData: true,
+        keepPreviousData: false,
     })
     const defaultData = React.useMemo(() => [], [])
 
@@ -147,6 +148,16 @@ export const FeedbackTabell = (): JSX.Element | null => {
             cell: (info) => {
                 const feedback = info.getValue()
                 return <Sletteknapp feedback={feedback} />
+            },
+            header: () => '',
+            footer: (info) => info.column.id,
+        }),
+         columnHelper.accessor((row) => row, {
+            id: 'tags',
+            cell: () => {
+                // const feedback = info.getValue()
+            return <Tags/>
+
             },
             header: () => '',
             footer: (info) => info.column.id,
