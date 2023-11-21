@@ -3,7 +3,7 @@
     "version": "0.1.0",
     "private": true,
     "dependencies": {
-        "@faker-js/faker": "^8.2.0",
+        "@faker-js/faker": "^8.3.1",
         "@navikt/ds-css": "^5.10.4",
         "@navikt/ds-react": "^5.10.4",
         "@navikt/ds-tailwind": "^5.10.4",
