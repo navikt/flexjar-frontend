@@ -24,6 +24,7 @@ for (let i = 0; i < antallFeedback; i++) {
         },
         id: faker.string.uuid(),
         opprettet: faker.date.past().toISOString(),
+        tags: faker.datatype.boolean() ? ['tag1', 'tag2'] : [],
     })
 }
 
@@ -37,6 +38,7 @@ testdata.push({
     },
     id: faker.string.uuid(),
     opprettet: faker.date.past().toISOString(),
+    tags: [],
 })
 
 function deleteFeedbackById(idToDelete: string): void {
@@ -119,6 +121,7 @@ export async function mockApi(opts: BackendProxyOpts): Promise<void> {
             feedback: body,
             id: randomUUID(),
             opprettet: dayjs().toISOString(),
+            tags: [],
         })
         res.status(202)
         res.end()

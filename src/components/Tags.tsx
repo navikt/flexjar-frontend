@@ -1,28 +1,28 @@
-import { useState } from 'react';
-import { Tag } from "@navikt/ds-react";
+import { useState } from 'react'
+import { Tag, UNSAFE_Combobox } from '@navikt/ds-react'
 
-export const Tags = (): JSX.Element => {
-    const [tags, setTags] = useState<string[]>(['example', 'example2']);
-    const [inputValue, setInputValue] = useState('');
+import { Feedback } from '../queryhooks/useFeedback'
 
-    const addTag = () : void => {
-        setInputValue('');
-    if (inputValue && !tags.includes(inputValue)) {
-        setTags([...tags, inputValue]);
-
-    }
-};
+export const Tags = ({ feedback }: { feedback: Feedback }): JSX.Element => {
+    const [selectedTags, setSelectedTags] = useState<string[]>(feedback.tags)
 
     return (
         <div>
-            {tags.length > 0 && tags.map((tag, index) => <Tag className={"p1"} variant={"info"} key={index}>{tag}</Tag>)}
-            <input
-                type="text"
-                value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
-                className={"border-2 border-gray-400"}
+            <UNSAFE_Combobox
+                allowNewValues
+                label="Hva er dine favorittdrikker? Legg gjerne til flere alternativer."
+                options={feedback.tags}
+                isMultiSelect
+                selectedOptions={selectedTags}
+                onToggleSelected={(option, isSelected) => {
+                    if (isSelected) {
+                        setSelectedTags([...selectedTags, option])
+                    } else {
+                        setSelectedTags(selectedTags.filter((item) => item !== option))
+                    }
+                }
+                }
             />
-            <button onClick={addTag}>Add Tag</button>
         </div>
-    );
-};
+    )
+}

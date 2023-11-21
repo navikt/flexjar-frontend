@@ -23,6 +23,7 @@ export interface Feedback {
     feedback: FeedbackInput
     id: string
     opprettet: string
+    tags: string[]
 }
 
 export type FeedbackInput = {
