@@ -1,12 +1,11 @@
 import React from 'react';
-import { useQuery, useMutation, useQueryClient } from 'react-query';
 import { UNSAFE_Combobox } from '@navikt/ds-react';
-
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Feedback } from '../queryhooks/useFeedback';
 
 // API interaction functions
 const fetchTags = async (): Promise<string[]> => {
-  const response = await fetch('/api/v1/intern/feedback/tags');
+  const response = await fetch('http://localhost:8085/api/v1/intern/feedback/tags');
   if (!response.ok) {
     throw new Error('Network response was not ok');
   }
@@ -14,7 +13,7 @@ const fetchTags = async (): Promise<string[]> => {
 };
 
 const addTag = async (tag: string): Promise<void> => {
-  await fetch('/api/v1/intern/feedback/:id/tags', {
+  await fetch('http://localhost:8085/api/v1/intern/feedback/:id/tags', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -25,15 +24,15 @@ const addTag = async (tag: string): Promise<void> => {
 
 export const Tags = ({ feedback }: { feedback: Feedback }): JSX.Element => {
   const queryClient = useQueryClient();
-
+  // const localQueryClient = new QueryClient();
   // Fetch tags using React Query
-  const { data: tags, isLoading, isError } = useQuery('tags', fetchTags);
+  const { data: tags, isLoading, isError } = useQuery(['tags'], fetchTags);
 
   // Mutation for adding a tag
   const addTagMutation = useMutation(addTag, {
     onSuccess: () => {
       // Invalidate and refetch
-      queryClient.invalidateQueries('tags');
+      queryClient.invalidateQueries(['tags']);
     },
   });
 
