@@ -4,16 +4,16 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Feedback } from '../queryhooks/useFeedback';
 
 // API interaction functions
-const fetchTags = async (): Promise<string[]> => {
-  const response = await fetch('http://localhost:8085/api/v1/intern/feedback/tags');
+const fetchTags = async (id: string): Promise<string[]> => {
+  const response = await fetch(`http://localhost:8085/api/v1/intern/feedback/${id}/tags`);
   if (!response.ok) {
     throw new Error('Network response was not ok');
   }
   return response.json();
 };
 
-const addTag = async (tag: string): Promise<void> => {
-  await fetch('http://localhost:8085/api/v1/intern/feedback/:id/tags', {
+const addTag = async (tag: string, id: string): Promise<void> => {
+  await fetch(`http://localhost:8085/api/v1/intern/feedback/${id}/tags`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -24,15 +24,16 @@ const addTag = async (tag: string): Promise<void> => {
 
 export const Tags = ({ feedback }: { feedback: Feedback }): JSX.Element => {
   const queryClient = useQueryClient();
-  // const localQueryClient = new QueryClient();
-  // Fetch tags using React Query
-  const { data: tags, isLoading, isError } = useQuery(['tags'], fetchTags);
+  const feedbackId = feedback.id; // Assuming feedback object has an 'id' property
+
+  // Fetch tags for a specific feedback ID
+  const { data: selectedTags, isLoading, isError } = useQuery(['selectedTags', feedbackId], () => fetchTags(feedbackId));
 
   // Mutation for adding a tag
-  const addTagMutation = useMutation(addTag, {
+  const addTagMutation = useMutation((tag: string) => addTag(tag, feedbackId), {
     onSuccess: () => {
       // Invalidate and refetch
-      queryClient.invalidateQueries(['tags']);
+      queryClient.invalidateQueries(['selectedTags', feedbackId]);
     },
   });
 
@@ -53,9 +54,9 @@ export const Tags = ({ feedback }: { feedback: Feedback }): JSX.Element => {
       <UNSAFE_Combobox
         allowNewValues
         label="Hva er dine favorittdrikker? Legg gjerne til flere alternativer."
-        options={tags || []} // Use fetched tags
+        options={feedback.tags} // Use fetched tags
         isMultiSelect
-        selectedOptions={feedback.tags} // Assuming 'feedback.tags' is an array of selected tags
+        selectedOptions={selectedTags} // Assuming 'feedback.tags' is an array of selected tags
         onToggleSelected={(option, isSelected) => {
           handleTagToggle(option, isSelected);
         }}
