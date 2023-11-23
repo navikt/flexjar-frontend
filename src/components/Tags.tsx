@@ -29,6 +29,13 @@ const addTag = async (tag: string, id: string): Promise<void> => {
   });
 };
 
+const getFilteredTags = (allTags: string[] | undefined, selectedTags: string[] | undefined): string[] => {
+  if (!allTags || !selectedTags) return [];
+
+  const selectedSet = new Set(selectedTags);
+  return allTags.filter(tag => !selectedSet.has(tag));
+};
+
 export const Tags = ({ feedback }: { feedback: Feedback }): JSX.Element => {
   const queryClient = useQueryClient();
   const feedbackId = feedback.id; // Assuming feedback object has an 'id' property
@@ -57,16 +64,22 @@ const { data: allTags, isLoading: isLoadingAllTags, isError: isErrorAllTags } = 
       // Handle tag removal logic
     }
   };
+    const filteredTags = getFilteredTags(allTags, selectedTags);
+
 
 if (isLoading || isLoadingAllTags) return <div>Loading...</div>;
 if (isError || isErrorAllTags) return <div>An error has occurred</div>;
   return (
     <div>
+        {JSON.stringify(selectedTags)}
+        {JSON.stringify(allTags)}
       <UNSAFE_Combobox
         allowNewValues
+        isMultiSelect
         label="Hva er dine favorittdrikker? Legg gjerne til flere alternativer."
-      options={allTags || []} // Use all fetched tags        isMultiSelect
-        selectedOptions={selectedTags || []} // Assuming 'feedback.tags' is an array of selected tags
+      options={filteredTags || []} // Use all fetched tags
+
+        selectedOptions={selectedTags} // Assuming 'feedback.tags' is an array of selected tags
         onToggleSelected={(option, isSelected) => {
           handleTagToggle(option, isSelected);
         }}
