@@ -210,6 +210,7 @@ export const FeedbackTabell = (): JSX.Element | null => {
                         <option value="flex">Flex</option>
                         <option value="teamsykmelding">Team Sykmelding</option>
                         <option value="helsearbeidsgiver">Team HAG</option>
+                        <option value="tbd">TBD</option>
                     </Select>
                     <div className="self-end">
                         <Switch checked={medTekst} onChange={() => setMedTekst((b) => !b)} size="small">
