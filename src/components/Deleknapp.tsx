@@ -9,17 +9,30 @@ import { Feedback } from '../queryhooks/useFeedback'
 import TrelloIcon from './icons/trello'
 import SlackIcon from './icons/slack'
 
-export const DeleknappSlack = ({ feedback }: { feedback: Feedback }): ReactElement => {
+export const DeleknappSlack = ({ feedback }: { feedback: Feedback }): React.ReactElement | null => {
     const [delt, setDelt] = useState(false)
     const [deling, setDeling] = useState(false)
     const { team } = useRouter().query
-    const selectedTeam = team ?? 'flex'
+    const valgTeam = team ?? 'flex'
+    const teamsMedSlackWebHook: Array<string> = ['flex', 'teamsykmelding']
+
+    function valgTeamHarSlack(selectedTeam: string | string[], slackTeams: string[]): boolean {
+        if (Array.isArray(selectedTeam)) {
+            return selectedTeam.some((t) => slackTeams.includes(t))
+        } else {
+            return slackTeams.includes(selectedTeam)
+        }
+    }
+
+    if (!valgTeamHarSlack(valgTeam, teamsMedSlackWebHook)) {
+        return null
+    }
 
     const delTilbakemeldingTilSlack = async (): Promise<void> => {
         setDeling(true)
         const res = await fetch('/api/slack', {
             method: 'POST',
-            body: JSON.stringify({ feedback, team: selectedTeam }),
+            body: JSON.stringify({ feedback, team: valgTeam }),
         })
 
         if (res.ok) {
@@ -36,7 +49,7 @@ export const DeleknappSlack = ({ feedback }: { feedback: Feedback }): ReactEleme
     }
 
     return (
-        <Tooltip content={`Del til team ${selectedTeam} på Slack`}>
+        <Tooltip content={`Del til team ${valgTeam} på Slack`}>
             <Button
                 variant="tertiary"
                 icon={<SlackIcon />}
