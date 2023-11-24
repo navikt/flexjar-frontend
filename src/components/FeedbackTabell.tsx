@@ -1,13 +1,11 @@
 import {
     Alert,
     BodyShort,
-    Button,
     CopyButton,
     Pagination,
     Select,
     Switch,
     Table,
-    Tag,
     TextField,
 } from '@navikt/ds-react'
 import React, { useState } from 'react'

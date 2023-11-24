@@ -1,103 +1,105 @@
-import React from 'react';
-import { UNSAFE_Combobox } from '@navikt/ds-react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { Feedback } from '../queryhooks/useFeedback';
+import React from 'react'
+import { UNSAFE_Combobox } from '@navikt/ds-react'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+
+import { Feedback } from '../queryhooks/useFeedback'
 // import {ur} from "@faker-js/faker";
 
 // const urlPrefix = "http://localhost:8085"
-const urlPrefix = ""
+const urlPrefix = ''
 const fetchAllTags = async (): Promise<string[]> => {
-  const response = await fetch(urlPrefix + '/api/v1/intern/feedback/tags/');
-  if (!response.ok) {
-    throw new Error('Network response was not ok');
-  }
-  return response.json();
-};
+    const response = await fetch(urlPrefix + '/api/v1/intern/feedback/tags/')
+    if (!response.ok) {
+        throw new Error('Network response was not ok')
+    }
+    return response.json()
+}
 
 const fetchTags = async (id: string): Promise<string[]> => {
-  const response = await fetch(urlPrefix + `/api/v1/intern/feedback/${id}/tags`);
-  if (!response.ok) {
-    throw new Error('Network response was not ok');
-  }
-  return response.json();
-};
+    const response = await fetch(urlPrefix + `/api/v1/intern/feedback/${id}/tags`)
+    if (!response.ok) {
+        throw new Error('Network response was not ok')
+    }
+    return response.json()
+}
 
 const addTag = async (tag: string, id: string): Promise<void> => {
-  await fetch(urlPrefix + `/api/v1/intern/feedback/${id}/tags`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ tag }),
-  });
-};
+    await fetch(urlPrefix + `/api/v1/intern/feedback/${id}/tags`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ tag }),
+    })
+}
 
 const getFilteredTags = (allTags: string[] | undefined, selectedTags: string[] | undefined): string[] => {
-  if (!allTags || !selectedTags) return [];
+    if (!allTags || !selectedTags) return []
 
-  const selectedSet = new Set(selectedTags);
-  return allTags.filter(tag => !selectedSet.has(tag));
-};
+    const selectedSet = new Set(selectedTags)
+    return allTags.filter((tag) => !selectedSet.has(tag))
+}
 
 const deleteTag = async (tag: string, id: string): Promise<void> => {
-  await fetch(urlPrefix + `/api/v1/intern/feedback/${id}/tags?tag=${encodeURIComponent(tag)}`, {
-    method: 'DELETE',
-  });
-};
+    await fetch(urlPrefix + `/api/v1/intern/feedback/${id}/tags?tag=${encodeURIComponent(tag)}`, {
+        method: 'DELETE',
+    })
+}
 export const Tags = ({ feedback }: { feedback: Feedback }): JSX.Element => {
-  const queryClient = useQueryClient();
-  const feedbackId = feedback.id;
+    const queryClient = useQueryClient()
+    const feedbackId = feedback.id
 
-  const { data: selectedTags, isLoading, isError } = useQuery(['selectedTags', feedbackId], () => fetchTags(feedbackId));
+    const {
+        data: selectedTags,
+        isLoading,
+        isError,
+    } = useQuery(['selectedTags', feedbackId], () => fetchTags(feedbackId))
     // Fetch all unique tags
-const { data: allTags, isLoading: isLoadingAllTags, isError: isErrorAllTags } = useQuery(['allTags'], fetchAllTags);
+    const { data: allTags, isLoading: isLoadingAllTags, isError: isErrorAllTags } = useQuery(['allTags'], fetchAllTags)
 
-  // Mutation for adding a tag
-  const addTagMutation = useMutation((tag: string) => addTag(tag, feedbackId), {
-    onSuccess: () => {
-      // Invalidate and refetch
-      queryClient.invalidateQueries(['selectedTags', feedbackId]);
-      queryClient.invalidateQueries(['allTags']);
-
-    },
-  });
+    // Mutation for adding a tag
+    const addTagMutation = useMutation((tag: string) => addTag(tag, feedbackId), {
+        onSuccess: () => {
+            // Invalidate and refetch
+            queryClient.invalidateQueries(['selectedTags', feedbackId])
+            queryClient.invalidateQueries(['allTags'])
+        },
+    })
 
     const deleteTagMutation = useMutation((tag: string) => deleteTag(tag, feedbackId), {
-    onSuccess: () => {
-      // Invalidate and refetch
-      queryClient.invalidateQueries(['selectedTags', feedbackId]);
-      queryClient.invalidateQueries(['allTags']);
-    },
-  });
-  // Handle tag toggle
+        onSuccess: () => {
+            // Invalidate and refetch
+            queryClient.invalidateQueries(['selectedTags', feedbackId])
+            queryClient.invalidateQueries(['allTags'])
+        },
+    })
+    // Handle tag toggle
     const handleTagToggle = (tag: string, isSelected: boolean): void => {
-    if (isSelected) {
-      addTagMutation.mutate(tag);
-    } else {
-      deleteTagMutation.mutate(tag);
+        if (isSelected) {
+            addTagMutation.mutate(tag)
+        } else {
+            deleteTagMutation.mutate(tag)
+        }
     }
-  };
-    const filteredTags = getFilteredTags(allTags, selectedTags);
+    const filteredTags = getFilteredTags(allTags, selectedTags)
 
-
-if (isLoading || isLoadingAllTags) return <div>Loading...</div>;
-if (isError || isErrorAllTags) return <div>An error has occurred</div>;
-  return (
-    <div>
-        {JSON.stringify(selectedTags)}
-        {JSON.stringify(filteredTags)}
-        {JSON.stringify(allTags)}
-      <UNSAFE_Combobox
-        allowNewValues
-        isMultiSelect
-        label="Hva er dine favorittdrikker? Legg gjerne til flere alternativer."
-      options={filteredTags || []}
-
-        selectedOptions={selectedTags}
-        onToggleSelected={(option, isSelected) => {
-          handleTagToggle(option, isSelected);
-        }}
-      />
-    </div>
-  );
-};
+    if (isLoading || isLoadingAllTags) return <div>Loading...</div>
+    if (isError || isErrorAllTags) return <div>An error has occurred</div>
+    return (
+        <div>
+            {JSON.stringify(selectedTags)}
+            {JSON.stringify(filteredTags)}
+            {JSON.stringify(allTags)}
+            <UNSAFE_Combobox
+                allowNewValues
+                isMultiSelect
+                label="Hva er dine favorittdrikker? Legg gjerne til flere alternativer."
+                options={filteredTags || []}
+                selectedOptions={selectedTags}
+                onToggleSelected={(option, isSelected) => {
+                    handleTagToggle(option, isSelected)
+                }}
+            />
+        </div>
+    )
+}
