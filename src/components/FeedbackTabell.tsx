@@ -1,13 +1,4 @@
-import {
-    Alert,
-    BodyShort,
-    CopyButton,
-    Pagination,
-    Select,
-    Switch,
-    Table,
-    TextField,
-} from '@navikt/ds-react'
+import { Alert, BodyShort, CopyButton, Pagination, Select, Switch, Table, TextField } from '@navikt/ds-react'
 import React, { useState } from 'react'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
