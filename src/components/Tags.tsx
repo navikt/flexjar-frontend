@@ -36,14 +36,17 @@ const getFilteredTags = (allTags: string[] | undefined, selectedTags: string[] |
   return allTags.filter(tag => !selectedSet.has(tag));
 };
 
+const deleteTag = async (tag: string, id: string): Promise<void> => {
+  await fetch(`http://localhost:8085/api/v1/intern/feedback/${id}/tags?tag=${encodeURIComponent(tag)}`, {
+    method: 'DELETE',
+  });
+};
 export const Tags = ({ feedback }: { feedback: Feedback }): JSX.Element => {
   const queryClient = useQueryClient();
-  const feedbackId = feedback.id; // Assuming feedback object has an 'id' property
+  const feedbackId = feedback.id; 
 
-  // Fetch tags for a specific feedback ID
   const { data: selectedTags, isLoading, isError } = useQuery(['selectedTags', feedbackId], () => fetchTags(feedbackId));
     // Fetch all unique tags
-// Fetch all unique tags
 const { data: allTags, isLoading: isLoadingAllTags, isError: isErrorAllTags } = useQuery(['allTags'], fetchAllTags);
 
   // Mutation for adding a tag
@@ -56,12 +59,19 @@ const { data: allTags, isLoading: isLoadingAllTags, isError: isErrorAllTags } = 
     },
   });
 
+    const deleteTagMutation = useMutation((tag: string) => deleteTag(tag, feedbackId), {
+    onSuccess: () => {
+      // Invalidate and refetch
+      queryClient.invalidateQueries(['selectedTags', feedbackId]);
+      queryClient.invalidateQueries(['allTags']);
+    },
+  });
   // Handle tag toggle
-  const handleTagToggle = (tag: string, isSelected: boolean): void => {
+    const handleTagToggle = (tag: string, isSelected: boolean): void => {
     if (isSelected) {
       addTagMutation.mutate(tag);
     } else {
-      // Handle tag removal logic
+      deleteTagMutation.mutate(tag);
     }
   };
     const filteredTags = getFilteredTags(allTags, selectedTags);
@@ -72,14 +82,15 @@ if (isError || isErrorAllTags) return <div>An error has occurred</div>;
   return (
     <div>
         {JSON.stringify(selectedTags)}
+        {JSON.stringify(filteredTags)}
         {JSON.stringify(allTags)}
       <UNSAFE_Combobox
         allowNewValues
         isMultiSelect
         label="Hva er dine favorittdrikker? Legg gjerne til flere alternativer."
-      options={filteredTags || []} // Use all fetched tags
+      options={filteredTags || []}
 
-        selectedOptions={selectedTags} // Assuming 'feedback.tags' is an array of selected tags
+        selectedOptions={selectedTags}
         onToggleSelected={(option, isSelected) => {
           handleTagToggle(option, isSelected);
         }}
