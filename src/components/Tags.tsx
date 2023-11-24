@@ -2,9 +2,12 @@ import React from 'react';
 import { UNSAFE_Combobox } from '@navikt/ds-react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Feedback } from '../queryhooks/useFeedback';
+// import {ur} from "@faker-js/faker";
 
+// const urlPrefix = "http://localhost:8085"
+const urlPrefix = ""
 const fetchAllTags = async (): Promise<string[]> => {
-  const response = await fetch('http://localhost:8085/api/v1/intern/feedback/tags/');
+  const response = await fetch(urlPrefix + '/api/v1/intern/feedback/tags/');
   if (!response.ok) {
     throw new Error('Network response was not ok');
   }
@@ -12,7 +15,7 @@ const fetchAllTags = async (): Promise<string[]> => {
 };
 
 const fetchTags = async (id: string): Promise<string[]> => {
-  const response = await fetch(`http://localhost:8085/api/v1/intern/feedback/${id}/tags`);
+  const response = await fetch(urlPrefix + `/api/v1/intern/feedback/${id}/tags`);
   if (!response.ok) {
     throw new Error('Network response was not ok');
   }
@@ -20,7 +23,7 @@ const fetchTags = async (id: string): Promise<string[]> => {
 };
 
 const addTag = async (tag: string, id: string): Promise<void> => {
-  await fetch(`http://localhost:8085/api/v1/intern/feedback/${id}/tags`, {
+  await fetch(urlPrefix + `/api/v1/intern/feedback/${id}/tags`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -37,13 +40,13 @@ const getFilteredTags = (allTags: string[] | undefined, selectedTags: string[] |
 };
 
 const deleteTag = async (tag: string, id: string): Promise<void> => {
-  await fetch(`http://localhost:8085/api/v1/intern/feedback/${id}/tags?tag=${encodeURIComponent(tag)}`, {
+  await fetch(urlPrefix + `/api/v1/intern/feedback/${id}/tags?tag=${encodeURIComponent(tag)}`, {
     method: 'DELETE',
   });
 };
 export const Tags = ({ feedback }: { feedback: Feedback }): JSX.Element => {
   const queryClient = useQueryClient();
-  const feedbackId = feedback.id; 
+  const feedbackId = feedback.id;
 
   const { data: selectedTags, isLoading, isError } = useQuery(['selectedTags', feedbackId], () => fetchTags(feedbackId));
     // Fetch all unique tags
