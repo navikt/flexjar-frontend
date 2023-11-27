@@ -5,6 +5,7 @@ import { UNSAFE_Combobox } from '@navikt/ds-react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 
 import { Feedback } from '../queryhooks/useFeedback'
+import {FetchError, fetchMedRequestId} from "../utils/fetch";
 // import {ur} from "@faker-js/faker";
 
 // const urlPrefix = "http://localhost:8085"
@@ -26,15 +27,41 @@ const fetchTags = async (id: string): Promise<string[]> => {
     return response.json()
 }
 
+// async function addTag2(tag: string, id: string): Promise<void> {
+//     await fetch(urlPrefix + `/api/v1/intern/feedback/${id}/tags`, {
+//         method: 'POST',
+//         headers: {
+//             'Content-Type': 'application/json',
+//         },
+//         body: JSON.stringify({ tag }),
+//     })
+// }
+
 async function addTag2(tag: string, id: string): Promise<void> {
-    await fetch(urlPrefix + `/api/v1/intern/feedback/${id}/tags`, {
+    const url = urlPrefix + `/api/v1/intern/feedback/${id}/tags`;
+    const options = {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({ tag }),
-    })
+    };
+
+    try {
+        const { response } = await fetchMedRequestId(url, options);
+        if (!response.ok) {
+            // Handle non-OK responses here
+        }
+        // Handle success
+    } catch (error) {
+        if (error instanceof FetchError) {
+            // Handle FetchError
+        } else {
+            // Handle other errors
+        }
+    }
 }
+
 // const addTag = async (tag: string, id: string): Promise<void> => {
 //     console.log('addTag', tag, id)
 //     await fetch(urlPrefix + `/api/v1/intern/feedback/${id}/tags`, {
