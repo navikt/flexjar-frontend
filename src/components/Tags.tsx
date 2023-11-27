@@ -15,6 +15,8 @@ const fetchAllTags = async (): Promise<string[]> => {
     return response.json()
 }
 
+
+// so this is wrong
 const fetchTags = async (id: string): Promise<string[]> => {
     const response = await fetch(urlPrefix + `/api/v1/intern/feedback/${id}/tags`)
     if (!response.ok) {
