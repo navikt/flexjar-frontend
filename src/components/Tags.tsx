@@ -8,7 +8,7 @@ import { Feedback } from '../queryhooks/useFeedback'
 // import {ur} from "@faker-js/faker";
 
 // const urlPrefix = "http://localhost:8085"
-const urlPrefix = ''
+const urlPrefix = '/api/flexjar-backend' // wtf wtf wtf
 const fetchAllTags = async (): Promise<string[]> => {
     const response = await fetch(urlPrefix + '/api/v1/intern/feedback/tags/')
     if (!response.ok) {
