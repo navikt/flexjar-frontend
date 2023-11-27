@@ -26,7 +26,7 @@ const fetchTags = async (id: string): Promise<string[]> => {
     return response.json()
 }
 
-const addTag = async (tag: string, id: string): Promise<void> => {
+async function addTag2(tag: string, id: string): Promise<void> {
     await fetch(urlPrefix + `/api/v1/intern/feedback/${id}/tags`, {
         method: 'POST',
         headers: {
@@ -35,6 +35,16 @@ const addTag = async (tag: string, id: string): Promise<void> => {
         body: JSON.stringify({ tag }),
     })
 }
+// const addTag = async (tag: string, id: string): Promise<void> => {
+//     console.log('addTag', tag, id)
+//     await fetch(urlPrefix + `/api/v1/intern/feedback/${id}/tags`, {
+//         method: 'POST',
+//         headers: {
+//             'Content-Type': 'application/json',
+//         },
+//         body: JSON.stringify({ tag }),
+//     })
+// }
 
 const getFilteredTags = (allTags: string[] | undefined, selectedTags: string[] | undefined): string[] => {
     if (!allTags || !selectedTags) return []
@@ -61,13 +71,13 @@ export const Tags = ({ feedback }: { feedback: Feedback }): JSX.Element => {
     const { data: allTags } = useQuery(['allTags'], fetchAllTags) // , isLoading: isLoadingAllTags, isError: isErrorAllTags
 
     // Mutation for adding a tag
-    const addTagMutation = useMutation((tag: string) => addTag(tag, feedbackId), {
-        onSuccess: () => {
-            // Invalidate and refetch
-            queryClient.invalidateQueries(['selectedTags', feedbackId])
-            queryClient.invalidateQueries(['allTags'])
-        },
-    })
+    // const addTagMutation = useMutation((tag: string) => addTag(tag, feedbackId), {
+    //     onSuccess: () => {
+    //         // Invalidate and refetch
+    //         queryClient.invalidateQueries(['selectedTags', feedbackId])
+    //         queryClient.invalidateQueries(['allTags'])
+    //     },
+    // })
 
     const deleteTagMutation = useMutation((tag: string) => deleteTag(tag, feedbackId), {
         onSuccess: () => {
@@ -79,7 +89,9 @@ export const Tags = ({ feedback }: { feedback: Feedback }): JSX.Element => {
     // Handle tag toggle
     const handleTagToggle = (tag: string, isSelected: boolean): void => {
         if (isSelected) {
-            addTagMutation.mutate(tag)
+            //addTagMutation.mutate(tag)
+
+            addTag2(tag, feedbackId)
         } else {
             deleteTagMutation.mutate(tag)
         }
@@ -90,10 +102,12 @@ export const Tags = ({ feedback }: { feedback: Feedback }): JSX.Element => {
     // if (isError || isErrorAllTags) return <div>An error has occurred</div>
     return (
         <div>
-            {JSON.stringify(feedback)}
-            {JSON.stringify(selectedTags)}
+            {/*{JSON.stringify(feedback)}*/}
+            {JSON.stringify(feedback.tags)}
             {JSON.stringify(filteredTags)}
-            {JSON.stringify(allTags)}
+            {/*{JSON.stringify(selectedTags)}
+            {JSON.stringify(filteredTags)}
+            {JSON.stringify(allTags)}*/}
             <UNSAFE_Combobox
                 allowNewValues
                 isMultiSelect
