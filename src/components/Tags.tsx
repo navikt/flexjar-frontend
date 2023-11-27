@@ -97,7 +97,7 @@ export const Tags = ({ feedback }: { feedback: Feedback }): JSX.Element => {
                 isMultiSelect
                 label="Hva er dine favorittdrikker? Legg gjerne til flere alternativer."
                 options={filteredTags || []}
-                selectedOptions={selectedTags}
+                selectedOptions={feedback.tags || []}
                 onToggleSelected={(option, isSelected) => {
                     handleTagToggle(option, isSelected)
                 }}
