@@ -3,6 +3,7 @@ import { UNSAFE_Combobox } from '@navikt/ds-react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 
 import { Feedback } from '../queryhooks/useFeedback'
+import {json} from "stream/consumers";
 // import {ur} from "@faker-js/faker";
 
 // const urlPrefix = "http://localhost:8085"
@@ -83,11 +84,12 @@ export const Tags = ({ feedback }: { feedback: Feedback }): JSX.Element => {
         }
     }
     const filteredTags = getFilteredTags(allTags, selectedTags)
-
-    if (isLoading || isLoadingAllTags) return <div>Loading...</div>
-    if (isError || isErrorAllTags) return <div>An error has occurred</div>
+    //
+    // if (isLoading || isLoadingAllTags) return <div>Loading...</div>
+    // if (isError || isErrorAllTags) return <div>An error has occurred</div>
     return (
         <div>
+            {JSON.stringify(feedback)}
             {JSON.stringify(selectedTags)}
             {JSON.stringify(filteredTags)}
             {JSON.stringify(allTags)}
