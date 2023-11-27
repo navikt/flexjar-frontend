@@ -1,9 +1,10 @@
+// import { json } from 'stream/consumers'
+
 import React from 'react'
 import { UNSAFE_Combobox } from '@navikt/ds-react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 
 import { Feedback } from '../queryhooks/useFeedback'
-import {json} from "stream/consumers";
 // import {ur} from "@faker-js/faker";
 
 // const urlPrefix = "http://localhost:8085"
@@ -53,11 +54,11 @@ export const Tags = ({ feedback }: { feedback: Feedback }): JSX.Element => {
 
     const {
         data: selectedTags,
-        isLoading,
-        isError,
+        // isLoading,
+        // isError,
     } = useQuery(['selectedTags', feedbackId], () => fetchTags(feedbackId))
     // Fetch all unique tags
-    const { data: allTags, isLoading: isLoadingAllTags, isError: isErrorAllTags } = useQuery(['allTags'], fetchAllTags)
+    const { data: allTags } = useQuery(['allTags'], fetchAllTags) // , isLoading: isLoadingAllTags, isError: isErrorAllTags
 
     // Mutation for adding a tag
     const addTagMutation = useMutation((tag: string) => addTag(tag, feedbackId), {
