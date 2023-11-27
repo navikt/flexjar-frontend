@@ -155,8 +155,9 @@ export const FeedbackTabell = (): JSX.Element | null => {
         columnHelper.accessor((row) => row, {
             id: 'tags',
             cell: (info) => {
-                // const feedback = info.getValue()
-                return <Tags feedback={info.getValue()} />
+                const feedback = info.getValue()
+
+                return <> {JSON.stringify(info.getValue())} <Tags feedback={feedback} /> </>
             },
             header: () => '',
             footer: (info) => info.column.id,
