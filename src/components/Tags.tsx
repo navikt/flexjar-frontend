@@ -11,7 +11,7 @@ import { FetchError, fetchMedRequestId } from '../utils/fetch'
 // const urlPrefix = "http://localhost:8085"
 const urlPrefix = '/api/flexjar-backend' // wtf wtf wtf
 const fetchAllTags = async (): Promise<string[]> => {
-    const response = await fetch(urlPrefix + '/api/v1/intern/feedback/tags/')
+    const response = await fetch(urlPrefix + '/api/v1/intern/feedback/tags')
     if (!response.ok) {
         throw new Error('Network response was not ok')
     }
