@@ -119,6 +119,7 @@ export const Tags = ({ feedback }: { feedback: Feedback }): JSX.Element => {
             //addTagMutation.mutate(tag)
 
             addTag2(tag, feedbackId)
+            queryClient.invalidateQueries(['feedback'])
         } else {
             deleteTagMutation.mutate(tag)
         }
