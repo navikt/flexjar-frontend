@@ -95,7 +95,6 @@ export const Tags = ({ feedback }: { feedback: Feedback }): JSX.Element => {
     //     // isError,
     // } = useQuery(['selectedTags', feedbackId], () => fetchTags(feedbackId))
 
-
     // Fetch all unique tags
     const { data: allTags } = useQuery(['allTags'], fetchAllTags) // , isLoading: isLoadingAllTags, isError: isErrorAllTags
 
