@@ -19,13 +19,13 @@ const fetchAllTags = async (): Promise<string[]> => {
 }
 
 // so this is wrong
-const fetchTags = async (id: string): Promise<string[]> => {
-    const response = await fetch(urlPrefix + `/api/v1/intern/feedback/${id}/tags`)
-    if (!response.ok) {
-        throw new Error('Network response was not ok')
-    }
-    return response.json()
-}
+// const fetchTags = async (id: string): Promise<string[]> => {
+//     const response = await fetch(urlPrefix + `/api/v1/intern/feedback/${id}/tags`)
+//     if (!response.ok) {
+//         throw new Error('Network response was not ok')
+//     }
+//     return response.json()
+// }
 
 // async function addTag2(tag: string, id: string): Promise<void> {
 //     await fetch(urlPrefix + `/api/v1/intern/feedback/${id}/tags`, {
@@ -89,11 +89,13 @@ export const Tags = ({ feedback }: { feedback: Feedback }): JSX.Element => {
     const queryClient = useQueryClient()
     const feedbackId = feedback.id
 
-    const {
-        data: selectedTags,
-        // isLoading,
-        // isError,
-    } = useQuery(['selectedTags', feedbackId], () => fetchTags(feedbackId))
+    // const {
+    //     data: selectedTags,
+    //     // isLoading,
+    //     // isError,
+    // } = useQuery(['selectedTags', feedbackId], () => fetchTags(feedbackId))
+
+
     // Fetch all unique tags
     const { data: allTags } = useQuery(['allTags'], fetchAllTags) // , isLoading: isLoadingAllTags, isError: isErrorAllTags
 
@@ -109,8 +111,8 @@ export const Tags = ({ feedback }: { feedback: Feedback }): JSX.Element => {
     const deleteTagMutation = useMutation((tag: string) => deleteTag(tag, feedbackId), {
         onSuccess: () => {
             // Invalidate and refetch
-            queryClient.invalidateQueries(['selectedTags', feedbackId])
-            queryClient.invalidateQueries(['allTags'])
+            queryClient.invalidateQueries()
+            // queryClient.invalidateQueries(['allTags'])
         },
     })
     // Handle tag toggle
@@ -124,7 +126,7 @@ export const Tags = ({ feedback }: { feedback: Feedback }): JSX.Element => {
             deleteTagMutation.mutate(tag)
         }
     }
-    const filteredTags = getFilteredTags(allTags, selectedTags)
+    // const filteredTags = getFilteredTags(allTags, selectedTags)
     //
     // if (isLoading || isLoadingAllTags) return <div>Loading...</div>
     // if (isError || isErrorAllTags) return <div>An error has occurred</div>
@@ -132,7 +134,7 @@ export const Tags = ({ feedback }: { feedback: Feedback }): JSX.Element => {
         <div>
             {/*{JSON.stringify(feedback)}*/}
             {'feedback.tags: ' + JSON.stringify(feedback.tags)}
-            {'filtered tags' + JSON.stringify(filteredTags)}
+            {/*{'filtered tags' + JSON.stringify(filteredTags)}*/}
             {/*{JSON.stringify(selectedTags)}
             {JSON.stringify(filteredTags)}
             {JSON.stringify(allTags)}*/}
@@ -140,7 +142,7 @@ export const Tags = ({ feedback }: { feedback: Feedback }): JSX.Element => {
                 allowNewValues
                 isMultiSelect
                 label="Hva er dine favorittdrikker? Legg gjerne til flere alternativer."
-                options={filteredTags || []}
+                options={feedback.tags || []}
                 selectedOptions={feedback.tags || []}
                 onToggleSelected={(option, isSelected) => {
                     handleTagToggle(option, isSelected)
