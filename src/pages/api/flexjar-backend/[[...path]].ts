@@ -10,7 +10,7 @@ const { serverRuntimeConfig } = getConfig()
 
 const tillatteApier = [
     'GET /api/v1/intern/feedback',
-    'GET /api/v1/intern/tags',
+    'GET /api/v1/intern/feedback/tags',
     'POST /api/v1/intern/feedback/[uuid]/tags',
     'DELETE /api/v1/intern/feedback/[uuid]/tags',
     'DELETE /api/v1/intern/feedback',
