@@ -125,7 +125,7 @@ export const Tags = ({ feedback }: { feedback: Feedback }): JSX.Element => {
             deleteTagMutation.mutate(tag)
         }
     }
-    const filteredTags = getFilteredTags(allTags, feedback.feedback)
+    const filteredTags = getFilteredTags(allTags, feedback.tags)
     //
     // if (isLoading || isLoadingAllTags) return <div>Loading...</div>
     // if (isError || isErrorAllTags) return <div>An error has occurred</div>
