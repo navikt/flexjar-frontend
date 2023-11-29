@@ -18,7 +18,7 @@ const urlPrefix = '/api/flexjar-backend' // wtf wtf wtf
 //     return response.json()
 // }
 
-async function fetchAllTags(): Promise<void> {
+async function fetchAllTags(): Promise<string[]> {
     const url = urlPrefix + `/api/v1/intern/feedback/tags`
     const options = {
         method: 'GET',
@@ -37,6 +37,7 @@ async function fetchAllTags(): Promise<void> {
             // Handle other errors
         }
     }
+    return []
 }
 
 // so this is wrong
