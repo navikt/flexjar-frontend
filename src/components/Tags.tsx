@@ -27,7 +27,7 @@ async function fetchAllTags(): Promise<void> {
     try {
         const { response } = await fetchMedRequestId(url, options)
         if (!response.ok) {
-            // Handle non-OK responses here
+            return response.json()
         }
         // Handle success
     } catch (error) {
