@@ -10,12 +10,33 @@ import { FetchError, fetchMedRequestId } from '../utils/fetch'
 
 // const urlPrefix = "http://localhost:8085"
 const urlPrefix = '/api/flexjar-backend' // wtf wtf wtf
-const fetchAllTags = async (): Promise<string[]> => {
-    const response = await fetch(urlPrefix + '/api/v1/intern/feedback/tags')
-    if (!response.ok) {
-        throw new Error('Network response was not ok')
+// const fetchAllTagsOld = async (): Promise<string[]> => {
+//     const response = await fetch(urlPrefix + '/api/v1/intern/feedback/tags')
+//     if (!response.ok) {
+//         throw new Error('Network response was not ok')
+//     }
+//     return response.json()
+// }
+
+async function fetchAllTags(): Promise<void> {
+    const url = urlPrefix + `/api/v1/intern/feedback/tags`
+    const options = {
+        method: 'GET',
     }
-    return response.json()
+
+    try {
+        const { response } = await fetchMedRequestId(url, options)
+        if (!response.ok) {
+            // Handle non-OK responses here
+        }
+        // Handle success
+    } catch (error) {
+        if (error instanceof FetchError) {
+            // Handle FetchError
+        } else {
+            // Handle other errors
+        }
+    }
 }
 
 // so this is wrong
@@ -141,7 +162,7 @@ export const Tags = ({ feedback }: { feedback: Feedback }): JSX.Element => {
             <UNSAFE_Combobox
                 allowNewValues
                 isMultiSelect
-                label="Tags"
+                label="Tags:"
                 options={filteredTags || []}
                 selectedOptions={feedback.tags || []}
                 onToggleSelected={(option, isSelected) => {
