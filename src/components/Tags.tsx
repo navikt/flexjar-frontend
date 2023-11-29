@@ -125,7 +125,7 @@ export const Tags = ({ feedback }: { feedback: Feedback }): JSX.Element => {
             deleteTagMutation.mutate(tag)
         }
     }
-    // const filteredTags = getFilteredTags(allTags, selectedTags)
+    const filteredTags = getFilteredTags(allTags, feedback.feedback)
     //
     // if (isLoading || isLoadingAllTags) return <div>Loading...</div>
     // if (isError || isErrorAllTags) return <div>An error has occurred</div>
@@ -141,7 +141,7 @@ export const Tags = ({ feedback }: { feedback: Feedback }): JSX.Element => {
                 allowNewValues
                 isMultiSelect
                 label="Hva er dine favorittdrikker? Legg gjerne til flere alternativer."
-                options={feedback.tags || []}
+                options={filteredTags || []}
                 selectedOptions={feedback.tags || []}
                 onToggleSelected={(option, isSelected) => {
                     handleTagToggle(option, isSelected)
