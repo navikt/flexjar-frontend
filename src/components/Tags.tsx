@@ -120,7 +120,8 @@ export const Tags = ({ feedback }: { feedback: Feedback }): JSX.Element => {
             //addTagMutation.mutate(tag)
 
             addTag2(tag, feedbackId)
-            queryClient.invalidateQueries(['feedback'])
+            // queryClient.invalidateQueries(['feedback'])
+            queryClient.invalidateQueries()
         } else {
             deleteTagMutation.mutate(tag)
         }
@@ -140,7 +141,7 @@ export const Tags = ({ feedback }: { feedback: Feedback }): JSX.Element => {
             <UNSAFE_Combobox
                 allowNewValues
                 isMultiSelect
-                label="Hva er dine favorittdrikker? Legg gjerne til flere alternativer."
+                label="Tags"
                 options={filteredTags || []}
                 selectedOptions={feedback.tags || []}
                 onToggleSelected={(option, isSelected) => {
