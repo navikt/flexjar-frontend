@@ -155,7 +155,7 @@ export const Tags = ({ feedback }: { feedback: Feedback }): JSX.Element => {
     return (
         <div>
             {/*{JSON.stringify(feedback)}*/}
-            {'feedback.tags: ' + JSON.stringify(feedback.tags)}
+            {/*{'feedback.tags: ' + JSON.stringify(feedback.tags)}*/}
             {/*{'filtered tags' + JSON.stringify(filteredTags)}*/}
             {/*{JSON.stringify(selectedTags)}
             {JSON.stringify(filteredTags)}
