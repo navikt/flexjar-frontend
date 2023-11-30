@@ -4,9 +4,9 @@
     "private": true,
     "dependencies": {
         "@faker-js/faker": "^8.3.1",
-        "@navikt/ds-css": "^5.11.2",
-        "@navikt/ds-react": "^5.11.2",
-        "@navikt/ds-tailwind": "^5.11.2",
+        "@navikt/ds-css": "^5.11.3",
+        "@navikt/ds-react": "^5.11.3",
+        "@navikt/ds-tailwind": "^5.11.3",
         "@navikt/ds-tokens": "^5.4.1",
         "@navikt/next-api-proxy": "^3.4.0",
         "@navikt/next-logger": "^1.21.0",
