@@ -6,17 +6,8 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 
 import { Feedback } from '../queryhooks/useFeedback'
 import { FetchError, fetchMedRequestId } from '../utils/fetch'
-// import {ur} from "@faker-js/faker";
 
-// const urlPrefix = "http://localhost:8085"
 const urlPrefix = '/api/flexjar-backend' // wtf wtf wtf
-// const fetchAllTagsOld = async (): Promise<string[]> => {
-//     const response = await fetch(urlPrefix + '/api/v1/intern/feedback/tags')
-//     if (!response.ok) {
-//         throw new Error('Network response was not ok')
-//     }
-//     return response.json()
-// }
 
 async function fetchAllTags(): Promise<string[]> {
     const url = urlPrefix + `/api/v1/intern/feedback/tags`
@@ -39,25 +30,6 @@ async function fetchAllTags(): Promise<string[]> {
     }
     return []
 }
-
-// so this is wrong
-// const fetchTags = async (id: string): Promise<string[]> => {
-//     const response = await fetch(urlPrefix + `/api/v1/intern/feedback/${id}/tags`)
-//     if (!response.ok) {
-//         throw new Error('Network response was not ok')
-//     }
-//     return response.json()
-// }
-
-// async function addTag2(tag: string, id: string): Promise<void> {
-//     await fetch(urlPrefix + `/api/v1/intern/feedback/${id}/tags`, {
-//         method: 'POST',
-//         headers: {
-//             'Content-Type': 'application/json',
-//         },
-//         body: JSON.stringify({ tag }),
-//     })
-// }
 
 async function addTag2(tag: string, id: string): Promise<void> {
     const url = urlPrefix + `/api/v1/intern/feedback/${id}/tags`
@@ -84,17 +56,6 @@ async function addTag2(tag: string, id: string): Promise<void> {
     }
 }
 
-// const addTag = async (tag: string, id: string): Promise<void> => {
-//     console.log('addTag', tag, id)
-//     await fetch(urlPrefix + `/api/v1/intern/feedback/${id}/tags`, {
-//         method: 'POST',
-//         headers: {
-//             'Content-Type': 'application/json',
-//         },
-//         body: JSON.stringify({ tag }),
-//     })
-// }
-
 const getFilteredTags = (allTags: string[] | undefined, selectedTags: string[] | undefined): string[] => {
     if (!allTags || !selectedTags) return []
 
@@ -111,23 +72,15 @@ export const Tags = ({ feedback }: { feedback: Feedback }): JSX.Element => {
     const queryClient = useQueryClient()
     const feedbackId = feedback.id
 
-    // const {
-    //     data: selectedTags,
-    //     // isLoading,
-    //     // isError,
-    // } = useQuery(['selectedTags', feedbackId], () => fetchTags(feedbackId))
+    const { data: allTags , isError: isErrorAllTags} = useQuery(['allTags'], fetchAllTags) // ,
 
-    // Fetch all unique tags
-    const { data: allTags } = useQuery(['allTags'], fetchAllTags) // , isLoading: isLoadingAllTags, isError: isErrorAllTags
 
-    // Mutation for adding a tag
-    // const addTagMutation = useMutation((tag: string) => addTag(tag, feedbackId), {
-    //     onSuccess: () => {
-    //         // Invalidate and refetch
-    //         queryClient.invalidateQueries(['selectedTags', feedbackId])
-    //         queryClient.invalidateQueries(['allTags'])
-    //     },
-    // })
+    const addTagMutation = useMutation({
+    mutationFn: ({ tag, id }: { tag: string; id: string }) => addTag2(tag, id),
+        onSuccess: () => {
+            queryClient.invalidateQueries()
+        },
+    })
 
     const deleteTagMutation = useMutation((tag: string) => deleteTag(tag, feedbackId), {
         onSuccess: () => {
@@ -138,28 +91,20 @@ export const Tags = ({ feedback }: { feedback: Feedback }): JSX.Element => {
     })
     // Handle tag toggle
     const handleTagToggle = (tag: string, isSelected: boolean): void => {
-        if (isSelected) {
-            //addTagMutation.mutate(tag)
+        if (isSelected && feedbackId) {
 
-            addTag2(tag, feedbackId)
-            // queryClient.invalidateQueries(['feedback'])
-            queryClient.invalidateQueries()
+            addTagMutation.mutate({ tag: tag, id: feedbackId })
         } else {
             deleteTagMutation.mutate(tag)
         }
     }
+
     const filteredTags = getFilteredTags(allTags, feedback.tags)
-    //
-    // if (isLoading || isLoadingAllTags) return <div>Loading...</div>
-    // if (isError || isErrorAllTags) return <div>An error has occurred</div>
+
+    // if (isLoadingAllTags) return <div>Laster data...</div> // vi trenger kanskje ikke denne, det er inne i combox elementet dataene vil synes uansett
+    if ( isErrorAllTags) return <div>Det har skjedd en feil</div>
     return (
         <div>
-            {/*{JSON.stringify(feedback)}*/}
-            {/*{'feedback.tags: ' + JSON.stringify(feedback.tags)}*/}
-            {/*{'filtered tags' + JSON.stringify(filteredTags)}*/}
-            {/*{JSON.stringify(selectedTags)}
-            {JSON.stringify(filteredTags)}
-            {JSON.stringify(allTags)}*/}
             <UNSAFE_Combobox
                 allowNewValues
                 isMultiSelect
