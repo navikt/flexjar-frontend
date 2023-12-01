@@ -72,11 +72,10 @@ export const Tags = ({ feedback }: { feedback: Feedback }): JSX.Element => {
     const queryClient = useQueryClient()
     const feedbackId = feedback.id
 
-    const { data: allTags , isError: isErrorAllTags} = useQuery(['allTags'], fetchAllTags) // ,
-
+    const { data: allTags, isError: isErrorAllTags } = useQuery(['allTags'], fetchAllTags) // ,
 
     const addTagMutation = useMutation({
-    mutationFn: ({ tag, id }: { tag: string; id: string }) => addTag2(tag, id),
+        mutationFn: ({ tag, id }: { tag: string; id: string }) => addTag2(tag, id),
         onSuccess: () => {
             queryClient.invalidateQueries()
         },
@@ -92,7 +91,6 @@ export const Tags = ({ feedback }: { feedback: Feedback }): JSX.Element => {
     // Handle tag toggle
     const handleTagToggle = (tag: string, isSelected: boolean): void => {
         if (isSelected && feedbackId) {
-
             addTagMutation.mutate({ tag: tag, id: feedbackId })
         } else {
             deleteTagMutation.mutate(tag)
@@ -102,7 +100,7 @@ export const Tags = ({ feedback }: { feedback: Feedback }): JSX.Element => {
     const filteredTags = getFilteredTags(allTags, feedback.tags)
 
     // if (isLoadingAllTags) return <div>Laster data...</div> // vi trenger kanskje ikke denne, det er inne i combox elementet dataene vil synes uansett
-    if ( isErrorAllTags) return <div>Det har skjedd en feil</div>
+    if (isErrorAllTags) return <div>Det har skjedd en feil</div>
     return (
         <div>
             {JSON.stringify(feedback)}
