@@ -1,5 +1,5 @@
 // import { json } from 'stream/consumers'
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react'
 import { UNSAFE_Combobox } from '@navikt/ds-react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 
@@ -69,7 +69,7 @@ const deleteTag = async (tag: string, id: string): Promise<void> => {
 }
 export const Tags = ({ feedback }: { feedback: Feedback }): JSX.Element => {
     const [componentTags, setComponentTags] = useState<string[]>(feedback.tags || [])
-    const [filteredTags, setFilteredTags] = useState<string[]>([]);
+    const [filteredTags, setFilteredTags] = useState<string[]>([])
     const queryClient = useQueryClient()
     const feedbackId = feedback.id
 
@@ -122,10 +122,9 @@ export const Tags = ({ feedback }: { feedback: Feedback }): JSX.Element => {
         }
     }
 
-        useEffect(() => {
-        setFilteredTags(getFilteredTags(allTags, componentTags));
-    }, [allTags, componentTags]);
-    
+    useEffect(() => {
+        setFilteredTags(getFilteredTags(allTags, componentTags))
+    }, [allTags, componentTags])
 
     // if (isLoadingAllTags) return <div>Laster data...</div> // vi trenger kanskje ikke denne, det er inne i combox elementet dataene vil synes uansett
     if (isErrorAllTags) return <div>Det har skjedd en feil</div>
