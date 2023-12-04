@@ -10,7 +10,7 @@ import { addTag, deleteTag } from './Tags'
 export const Stjerneknapp = ({ feedback }: { feedback: Feedback }): JSX.Element => {
     const queryClient = useQueryClient()
 
-    async function toggleStjerne(feedback: Feedback): Promise<void> {
+    const toggleStjerne = async (feedback: Feedback): Promise<void> => {
         if (feedback.tags?.includes('stjerne')) {
             await deleteTag('stjerne', feedback.id)
             await queryClient.invalidateQueries()
@@ -20,15 +20,17 @@ export const Stjerneknapp = ({ feedback }: { feedback: Feedback }): JSX.Element 
         }
     }
 
+    const erStjerne = feedback.tags?.includes('stjerne')
+
     return (
         <Button
             size="small"
             onClick={async () => {
                 await toggleStjerne(feedback)
             }}
-            variant="secondary"
+            variant={erStjerne ? 'primary' : 'secondary'}
         >
-            <StarIcon title="a11y-title" fontSize="1.5rem" />
+            <StarIcon title="a11y-title" fontSize="1.5rem" className={erStjerne ? 'text-white' : ''} />
         </Button>
     )
 }
