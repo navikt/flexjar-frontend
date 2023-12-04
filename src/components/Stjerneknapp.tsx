@@ -9,7 +9,7 @@ export const Stjerneknapp = ({ feedback }: { feedback: Feedback }): JSX.Element 
     const queryClient = useQueryClient()
 
     async function addTag(tag: string, id: string): Promise<void> {
-        const url = `/api/flexjar-backend/api/flexjar-backend/api/v1/intern/feedback/${id}/tags`
+        const url = `/api/flexjar-backend/api/v1/intern/feedback/${id}/tags`
         const options = {
             method: 'POST',
             headers: {

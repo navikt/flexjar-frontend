@@ -15,7 +15,7 @@ async function fetchAllTags(): Promise<string[]> {
 }
 
 async function addTag(tag: string, id: string): Promise<void> {
-    const url = `/api/flexjar-backend/api/flexjar-backend/api/v1/intern/feedback/${id}/tags`
+    const url = `/api/flexjar-backend/api/v1/intern/feedback/${id}/tags`
     const options = {
         method: 'POST',
         headers: {
