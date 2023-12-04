@@ -77,6 +77,9 @@ export const Tags = ({ feedback }: { feedback: Feedback }): JSX.Element => {
     const { data: allTags, isError: isErrorAllTags } = useQuery(['allTags'], fetchAllTags) // ,
 
     const addTagMutation = useMutation({
+        onMutate: async ({ tag }) => {
+            setComponentTags([...componentTags, tag])
+        },
         mutationFn: ({ tag, id }: { tag: string; id: string }) => addTag2(tag, id),
         onError: () => {
             queryClient.invalidateQueries()
