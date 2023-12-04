@@ -81,7 +81,7 @@ export const Tags = ({ feedback }: { feedback: Feedback }): JSX.Element => {
         },
         mutationFn: ({ tag, id }: { tag: string; id: string }) => addTag2(tag, id),
         onError: () => {
-            queryClient.invalidateQueries()
+            queryClient.invalidateQueries(['allTags'])
         },
         onSuccess: () => {
             // queryClient.invalidateQueries(['allTags'])
