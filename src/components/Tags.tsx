@@ -20,7 +20,7 @@ async function fetchAllTags(): Promise<string[]> {
         if (!response.ok) {
             return response.json()
         }
-        // Handle success
+        return response.json()
     } catch (error) {
         if (error instanceof FetchError) {
             // Handle FetchError
@@ -85,7 +85,7 @@ export const Tags = ({ feedback }: { feedback: Feedback }): JSX.Element => {
             queryClient.invalidateQueries()
         },
         onSuccess: () => {
-            queryClient.invalidateQueries()
+            queryClient.invalidateQueries(['allTags'])
         },
     })
 
