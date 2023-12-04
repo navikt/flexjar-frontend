@@ -86,7 +86,7 @@ export const Tags = ({ feedback }: { feedback: Feedback }): JSX.Element => {
         },
         onSuccess: () => {
             queryClient.invalidateQueries()
-        }
+        },
     })
 
     const deleteTagMutation = useMutation((tag: string) => deleteTag(tag, feedbackId), {
@@ -112,7 +112,7 @@ export const Tags = ({ feedback }: { feedback: Feedback }): JSX.Element => {
         },
         onSuccess: () => {
             queryClient.invalidateQueries()
-        }
+        },
     })
     // Handle tag toggle
     const handleTagToggle = (tag: string, isSelected: boolean): void => {
