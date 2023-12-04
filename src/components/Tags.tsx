@@ -36,7 +36,7 @@ const getFilteredTags = (allTags: string[] | undefined, selectedTags: string[] |
     if (!allTags || !selectedTags) return []
 
     const selectedSet = new Set(selectedTags)
-    return allTags.filter((tag) => !selectedSet.has(tag))
+    return allTags.filter((tag) => !selectedSet.has(tag) && tag !== 'stjerne')
 }
 
 export const Tags = ({ feedback }: { feedback: Feedback }): JSX.Element => {
