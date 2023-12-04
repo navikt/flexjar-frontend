@@ -16,7 +16,7 @@ async function fetchAllTags(): Promise<string[]> {
     return fetchet || []
 }
 
-async function addTag2(tag: string, id: string): Promise<void> {
+async function addTag(tag: string, id: string): Promise<void> {
     const url = urlPrefix + `/api/v1/intern/feedback/${id}/tags`
     const options = {
         method: 'POST',
@@ -28,6 +28,12 @@ async function addTag2(tag: string, id: string): Promise<void> {
     fetchMedRequestId(url, options)
 }
 
+const deleteTag = async (tag: string, id: string): Promise<void> => {
+    await fetch(urlPrefix + `/api/v1/intern/feedback/${id}/tags?tag=${encodeURIComponent(tag)}`, {
+        method: 'DELETE',
+    })
+}
+
 const getFilteredTags = (allTags: string[] | undefined, selectedTags: string[] | undefined): string[] => {
     if (!allTags || !selectedTags) return []
 
@@ -35,11 +41,6 @@ const getFilteredTags = (allTags: string[] | undefined, selectedTags: string[] |
     return allTags.filter((tag) => !selectedSet.has(tag))
 }
 
-const deleteTag = async (tag: string, id: string): Promise<void> => {
-    await fetch(urlPrefix + `/api/v1/intern/feedback/${id}/tags?tag=${encodeURIComponent(tag)}`, {
-        method: 'DELETE',
-    })
-}
 export const Tags = ({ feedback }: { feedback: Feedback }): JSX.Element => {
     const [componentTags, setComponentTags] = useState<string[]>(feedback.tags || [])
     const [filteredTags, setFilteredTags] = useState<string[]>([])
@@ -52,7 +53,7 @@ export const Tags = ({ feedback }: { feedback: Feedback }): JSX.Element => {
         onMutate: async ({ tag }) => {
             setComponentTags([...componentTags, tag])
         },
-        mutationFn: ({ tag, id }: { tag: string; id: string }) => addTag2(tag, id),
+        mutationFn: ({ tag, id }: { tag: string; id: string }) => addTag(tag, id),
         onError: () => {
             alert('Det har skjedd en feil, dine siste endringer ble ikke lagret')
             queryClient.invalidateQueries()
