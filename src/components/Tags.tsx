@@ -79,12 +79,14 @@ export const Tags = ({ feedback }: { feedback: Feedback }): JSX.Element => {
     const addTagMutation = useMutation({
         onMutate: async ({ tag }) => {
             setComponentTags([...componentTags, tag])
-            queryClient.invalidateQueries()
         },
         mutationFn: ({ tag, id }: { tag: string; id: string }) => addTag2(tag, id),
         onError: () => {
             queryClient.invalidateQueries()
         },
+        onSuccess: () => {
+            queryClient.invalidateQueries()
+        }
     })
 
     const deleteTagMutation = useMutation((tag: string) => deleteTag(tag, feedbackId), {
@@ -100,13 +102,17 @@ export const Tags = ({ feedback }: { feedback: Feedback }): JSX.Element => {
             // queryClient.setQueryData<string[]>(['allTags'], (old) => old?.filter((t) => t !== tag))
             //
             // return { previousTags: previousTags || [] }
-            queryClient.invalidateQueries()
         },
         onError: () => {
+            queryClient.invalidateQueries()
+
             // Invalidate and refetch
             // queryClient.invalidateQueries()
             // queryClient.invalidateQueries(['allTags'])
         },
+        onSuccess: () => {
+            queryClient.invalidateQueries()
+        }
     })
     // Handle tag toggle
     const handleTagToggle = (tag: string, isSelected: boolean): void => {
