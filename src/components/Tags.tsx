@@ -6,7 +6,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { Feedback } from '../queryhooks/useFeedback'
 import { fetchJsonMedRequestId, fetchMedRequestId } from '../utils/fetch'
 
-async function fetchAllTags(): Promise<string[]> {
+const fetchAllTags = async (): Promise<string[]> => {
     const url = `/api/flexjar-backend/api/v1/intern/feedback/tags`
 
     const fetchet: string[] = await fetchJsonMedRequestId(url)
@@ -14,8 +14,8 @@ async function fetchAllTags(): Promise<string[]> {
     return fetchet || []
 }
 
-async function addTag(tag: string, id: string): Promise<void> {
-    const url = `/api/flexjar-backend/api/flexjar-backend/api/v1/intern/feedback/${id}/tags`
+const addTag = async (tag: string, id: string): Promise<void> => {
+    const url = `/api/flexjar-backend/api/v1/intern/feedback/${id}/tags`
     const options = {
         method: 'POST',
         headers: {
