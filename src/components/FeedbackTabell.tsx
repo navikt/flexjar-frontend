@@ -44,7 +44,7 @@ export const FeedbackTabell = (): JSX.Element | null => {
             const fetchet: PageResponse = await fetchJsonMedRequestId(url)
             return fetchet
         },
-        keepPreviousData: false,
+        keepPreviousData: true,
     })
     const defaultData = React.useMemo(() => [], [])
 
