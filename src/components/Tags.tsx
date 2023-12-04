@@ -69,6 +69,8 @@ const deleteTag = async (tag: string, id: string): Promise<void> => {
     })
 }
 export const Tags = ({ feedback }: { feedback: Feedback }): JSX.Element => {
+    const [componentTags, setComponentTags] = React.useState<string[]>(feedback.tags || [])
+
     const queryClient = useQueryClient()
     const feedbackId = feedback.id
 
@@ -76,13 +78,26 @@ export const Tags = ({ feedback }: { feedback: Feedback }): JSX.Element => {
 
     const addTagMutation = useMutation({
         mutationFn: ({ tag, id }: { tag: string; id: string }) => addTag2(tag, id),
-        onSuccess: () => {
+        onError: () => {
             queryClient.invalidateQueries()
         },
     })
 
     const deleteTagMutation = useMutation((tag: string) => deleteTag(tag, feedbackId), {
-        onSuccess: () => {
+        onMutate: async (tag) => {
+            setComponentTags((old) => old?.filter((t) => t !== tag) || [])
+
+            // await queryClient.cancelQueries(['allTags'])
+            // const currentTagState = queryClient.getQueryData(['feedback-pagable'])
+            // // eslint-disable-next-line
+            // console.log(currentTagState)
+            //
+            // const previousTags = queryClient.getQueryData<string[]>(['allTags'])
+            // queryClient.setQueryData<string[]>(['allTags'], (old) => old?.filter((t) => t !== tag))
+            //
+            // return { previousTags: previousTags || [] }
+        },
+        onError: () => {
             // Invalidate and refetch
             queryClient.invalidateQueries()
             // queryClient.invalidateQueries(['allTags'])
@@ -97,7 +112,7 @@ export const Tags = ({ feedback }: { feedback: Feedback }): JSX.Element => {
         }
     }
 
-    const filteredTags = getFilteredTags(allTags, feedback.tags)
+    const filteredTags = getFilteredTags(allTags, componentTags)
 
     // if (isLoadingAllTags) return <div>Laster data...</div> // vi trenger kanskje ikke denne, det er inne i combox elementet dataene vil synes uansett
     if (isErrorAllTags) return <div>Det har skjedd en feil</div>
