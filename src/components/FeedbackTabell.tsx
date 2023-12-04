@@ -159,8 +159,7 @@ export const FeedbackTabell = (): JSX.Element | null => {
 
                 return (
                     <>
-                        {' '}
-                        {JSON.stringify(info.getValue())} <Tags feedback={feedback} />{' '}
+                        <Tags feedback={feedback} />{' '}
                     </>
                 )
             },
