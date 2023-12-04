@@ -84,6 +84,7 @@ export const Tags = ({ feedback }: { feedback: Feedback }): JSX.Element => {
             queryClient.invalidateQueries()
         },
         onSuccess: () => {
+            // queryClient.invalidateQueries(['allTags'])
             queryClient.invalidateQueries(['allTags'])
         },
     })
@@ -110,7 +111,8 @@ export const Tags = ({ feedback }: { feedback: Feedback }): JSX.Element => {
             // queryClient.invalidateQueries(['allTags'])
         },
         onSuccess: () => {
-            queryClient.invalidateQueries()
+            // queryClient.invalidateQueries()
+            queryClient.invalidateQueries(['allTags'])
         },
     })
     // Handle tag toggle
