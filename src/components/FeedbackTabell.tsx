@@ -157,11 +157,7 @@ export const FeedbackTabell = (): JSX.Element | null => {
             cell: (info) => {
                 const feedback = info.getValue()
 
-                return (
-                    <>
-                        <Tags feedback={feedback} />{' '}
-                    </>
-                )
+                return <Tags feedback={feedback} />
             },
             header: () => '',
             footer: (info) => info.column.id,

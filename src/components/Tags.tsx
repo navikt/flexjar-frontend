@@ -6,7 +6,6 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { Feedback } from '../queryhooks/useFeedback'
 import { fetchJsonMedRequestId, fetchMedRequestId } from '../utils/fetch'
 
-
 async function fetchAllTags(): Promise<string[]> {
     const url = `/api/flexjar-backend/api/v1/intern/feedback/tags`
 
