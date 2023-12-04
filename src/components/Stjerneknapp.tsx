@@ -42,6 +42,8 @@ export const Stjerneknapp = ({ feedback }: { feedback: Feedback }): JSX.Element 
                 await toggleStjerne(feedback)
             }}
             variant="primary"
-        >stjerne</Button>
+        >
+            stjerne
+        </Button>
     )
 }
