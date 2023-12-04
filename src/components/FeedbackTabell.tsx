@@ -19,6 +19,7 @@ import { PageResponse } from '../testdata/testdata'
 
 import { DeleknappSlack, DeleknappTrello } from './Deleknapp'
 import { Sletteknapp } from './Sletteknapp'
+import { Tags } from './Tags'
 
 export const FeedbackTabell = (): JSX.Element | null => {
     const { team } = useRouter().query
@@ -147,6 +148,16 @@ export const FeedbackTabell = (): JSX.Element | null => {
             cell: (info) => {
                 const feedback = info.getValue()
                 return <Sletteknapp feedback={feedback} />
+            },
+            header: () => '',
+            footer: (info) => info.column.id,
+        }),
+        columnHelper.accessor((row) => row, {
+            id: 'tags',
+            cell: (info) => {
+                const feedback = info.getValue()
+
+                return <Tags feedback={feedback} />
             },
             header: () => '',
             footer: (info) => info.column.id,
