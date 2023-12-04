@@ -1,4 +1,4 @@
-import { Alert, BodyShort, CopyButton, Pagination, Select, Switch, Table, TextField } from '@navikt/ds-react'
+import { Alert, BodyShort, Button, CopyButton, Pagination, Select, Switch, Table, TextField } from '@navikt/ds-react'
 import React, { useState } from 'react'
 import dayjs from 'dayjs'
 import {
@@ -146,6 +146,20 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
             cell: (info) => {
                 const feedback = info.getValue()
                 return <Sletteknapp feedback={feedback} />
+            },
+            header: () => '',
+            footer: (info) => info.column.id,
+        }),
+        columnHelper.accessor((row) => row, {
+            id: 'star',
+            cell: (info) => {
+                const feedback = info.getValue()
+
+                return (
+                    <Button variant="secondary" size="small">
+                        * {feedback.id}
+                    </Button>
+                )
             },
             header: () => '',
             footer: (info) => info.column.id,
