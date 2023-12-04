@@ -21,6 +21,25 @@ export const Stjerneknapp = ({ feedback }: { feedback: Feedback }): JSX.Element 
         fetchMedRequestId(url, options)
     }
 
+
+    const deleteTag = async (tag: string, id: string): Promise<void> => {
+    await fetch(`/api/flexjar-backend/api/v1/intern/feedback/${id}/tags?tag=${encodeURIComponent(tag)}`, {
+        method: 'DELETE',
+    })
+}
+
+
+    async function  toggleStjerne(feedback: Feedback) : Promise<void> {
+        if (feedback.tags?.includes('*')) {
+            await deleteTag('*', feedback.id)
+            await queryClient.invalidateQueries()
+        } else {
+            await addTag('*', feedback.id)
+            await queryClient.invalidateQueries()
+        }
+
+    }
+
     return (
         <>
             <Button size="small" variant="secondary" onClick={() => setOpen(true)}>
@@ -33,8 +52,7 @@ export const Stjerneknapp = ({ feedback }: { feedback: Feedback }): JSX.Element 
                     <div className="flex justify-between pt-8">
                         <Button
                             onClick={async () => {
-                                await addTag('*', feedback.id)
-                                await queryClient.invalidateQueries()
+                               await toggleStjerne(feedback)
                             }}
                             variant="danger"
                         >
