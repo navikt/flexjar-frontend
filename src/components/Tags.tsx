@@ -6,10 +6,9 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { Feedback } from '../queryhooks/useFeedback'
 import { fetchJsonMedRequestId, fetchMedRequestId } from '../utils/fetch'
 
-const urlPrefix = '/api/flexjar-backend' // wtf wtf wtf
 
 async function fetchAllTags(): Promise<string[]> {
-    const url = urlPrefix + `/api/v1/intern/feedback/tags`
+    const url = `/api/flexjar-backend/api/v1/intern/feedback/tags`
 
     const fetchet: string[] = await fetchJsonMedRequestId(url)
 
@@ -17,7 +16,7 @@ async function fetchAllTags(): Promise<string[]> {
 }
 
 async function addTag(tag: string, id: string): Promise<void> {
-    const url = urlPrefix + `/api/v1/intern/feedback/${id}/tags`
+    const url = `/api/flexjar-backend/api/flexjar-backend/api/v1/intern/feedback/${id}/tags`
     const options = {
         method: 'POST',
         headers: {
@@ -29,7 +28,7 @@ async function addTag(tag: string, id: string): Promise<void> {
 }
 
 const deleteTag = async (tag: string, id: string): Promise<void> => {
-    await fetch(urlPrefix + `/api/v1/intern/feedback/${id}/tags?tag=${encodeURIComponent(tag)}`, {
+    await fetch(`/api/flexjar-backend/api/v1/intern/feedback/${id}/tags?tag=${encodeURIComponent(tag)}`, {
         method: 'DELETE',
     })
 }
