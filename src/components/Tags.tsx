@@ -56,12 +56,12 @@ async function addTag2(tag: string, id: string): Promise<void> {
     }
 }
 
-const getFilteredTags = (allTags: string[] | undefined, selectedTags: string[] | undefined): string[] => {
-    if (!allTags || !selectedTags) return []
-
-    const selectedSet = new Set(selectedTags)
-    return allTags.filter((tag) => !selectedSet.has(tag))
-}
+// const getFilteredTags = (allTags: string[] | undefined, selectedTags: string[] | undefined): string[] => {
+//     if (!allTags || !selectedTags) return []
+//
+//     const selectedSet = new Set(selectedTags)
+//     return allTags.filter((tag) => !selectedSet.has(tag))
+// }
 
 const deleteTag = async (tag: string, id: string): Promise<void> => {
     await fetch(urlPrefix + `/api/v1/intern/feedback/${id}/tags?tag=${encodeURIComponent(tag)}`, {
