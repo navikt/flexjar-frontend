@@ -79,6 +79,7 @@ export const Tags = ({ feedback }: { feedback: Feedback }): JSX.Element => {
     const addTagMutation = useMutation({
         onMutate: async ({ tag }) => {
             setComponentTags([...componentTags, tag])
+            queryClient.invalidateQueries()
         },
         mutationFn: ({ tag, id }: { tag: string; id: string }) => addTag2(tag, id),
         onError: () => {
@@ -99,10 +100,11 @@ export const Tags = ({ feedback }: { feedback: Feedback }): JSX.Element => {
             // queryClient.setQueryData<string[]>(['allTags'], (old) => old?.filter((t) => t !== tag))
             //
             // return { previousTags: previousTags || [] }
+            queryClient.invalidateQueries()
         },
         onError: () => {
             // Invalidate and refetch
-            queryClient.invalidateQueries()
+            // queryClient.invalidateQueries()
             // queryClient.invalidateQueries(['allTags'])
         },
     })
@@ -115,7 +117,7 @@ export const Tags = ({ feedback }: { feedback: Feedback }): JSX.Element => {
         }
     }
 
-    const filteredTags = getFilteredTags(allTags, componentTags)
+    const filteredTags = getFilteredTags(feedback.tags, componentTags)
 
     // if (isLoadingAllTags) return <div>Laster data...</div> // vi trenger kanskje ikke denne, det er inne i combox elementet dataene vil synes uansett
     if (isErrorAllTags) return <div>Det har skjedd en feil</div>
