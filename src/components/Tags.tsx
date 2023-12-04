@@ -128,7 +128,7 @@ export const Tags = ({ feedback }: { feedback: Feedback }): JSX.Element => {
                 allowNewValues
                 isMultiSelect
                 label="Tags:"
-                options={filteredTags || []}
+                options={allTags || []}
                 selectedOptions={componentTags || []}
                 onToggleSelected={(option, isSelected) => {
                     handleTagToggle(option, isSelected)
