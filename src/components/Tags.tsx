@@ -4,30 +4,16 @@ import { UNSAFE_Combobox } from '@navikt/ds-react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 
 import { Feedback } from '../queryhooks/useFeedback'
-import { FetchError, fetchMedRequestId } from '../utils/fetch'
+import { fetchJsonMedRequestId, fetchMedRequestId } from '../utils/fetch'
 
 const urlPrefix = '/api/flexjar-backend' // wtf wtf wtf
 
 async function fetchAllTags(): Promise<string[]> {
     const url = urlPrefix + `/api/v1/intern/feedback/tags`
-    const options = {
-        method: 'GET',
-    }
 
-    try {
-        const { response } = await fetchMedRequestId(url, options)
-        if (!response.ok) {
-            return response.json()
-        }
-        return response.json()
-    } catch (error) {
-        if (error instanceof FetchError) {
-            // Handle FetchError
-        } else {
-            // Handle other errors
-        }
-    }
-    return []
+    const fetchet: string[] = await fetchJsonMedRequestId(url)
+
+    return fetchet || []
 }
 
 async function addTag2(tag: string, id: string): Promise<void> {
@@ -39,20 +25,7 @@ async function addTag2(tag: string, id: string): Promise<void> {
         },
         body: JSON.stringify({ tag }),
     }
-
-    try {
-        const { response } = await fetchMedRequestId(url, options)
-        if (!response.ok) {
-            // Handle non-OK responses here
-        }
-        // Handle success
-    } catch (error) {
-        if (error instanceof FetchError) {
-            // Handle FetchError
-        } else {
-            // Handle other errors
-        }
-    }
+    fetchMedRequestId(url, options)
 }
 
 const getFilteredTags = (allTags: string[] | undefined, selectedTags: string[] | undefined): string[] => {
@@ -81,10 +54,10 @@ export const Tags = ({ feedback }: { feedback: Feedback }): JSX.Element => {
         },
         mutationFn: ({ tag, id }: { tag: string; id: string }) => addTag2(tag, id),
         onError: () => {
-            queryClient.invalidateQueries(['allTags'])
+            alert('Det har skjedd en feil, dine siste endringer ble ikke lagret')
+            queryClient.invalidateQueries()
         },
         onSuccess: () => {
-            // queryClient.invalidateQueries(['allTags'])
             queryClient.invalidateQueries(['allTags'])
         },
     })
@@ -92,30 +65,16 @@ export const Tags = ({ feedback }: { feedback: Feedback }): JSX.Element => {
     const deleteTagMutation = useMutation((tag: string) => deleteTag(tag, feedbackId), {
         onMutate: async (tag) => {
             setComponentTags((old) => old?.filter((t) => t !== tag) || [])
-
-            // await queryClient.cancelQueries(['allTags'])
-            // const currentTagState = queryClient.getQueryData(['feedback-pagable'])
-            // // eslint-disable-next-line
-            // console.log(currentTagState)
-            //
-            // const previousTags = queryClient.getQueryData<string[]>(['allTags'])
-            // queryClient.setQueryData<string[]>(['allTags'], (old) => old?.filter((t) => t !== tag))
-            //
-            // return { previousTags: previousTags || [] }
         },
         onError: () => {
+            alert('Det har skjedd en feil, dine siste endringer ble ikke lagret')
             queryClient.invalidateQueries()
-
-            // Invalidate and refetch
-            // queryClient.invalidateQueries()
-            // queryClient.invalidateQueries(['allTags'])
         },
         onSuccess: () => {
-            // queryClient.invalidateQueries()
             queryClient.invalidateQueries(['allTags'])
         },
     })
-    // Handle tag toggle
+
     const handleTagToggle = (tag: string, isSelected: boolean): void => {
         if (isSelected && feedbackId) {
             addTagMutation.mutate({ tag: tag, id: feedbackId })
@@ -128,7 +87,6 @@ export const Tags = ({ feedback }: { feedback: Feedback }): JSX.Element => {
         setFilteredTags(getFilteredTags(allTags, componentTags))
     }, [allTags, componentTags])
 
-    // if (isLoadingAllTags) return <div>Laster data...</div> // vi trenger kanskje ikke denne, det er inne i combox elementet dataene vil synes uansett
     if (isErrorAllTags) return <div>Det har skjedd en feil</div>
     return (
         <div>
