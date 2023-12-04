@@ -91,9 +91,6 @@ export const Tags = ({ feedback }: { feedback: Feedback }): JSX.Element => {
     if (isErrorAllTags) return <div>Det har skjedd en feil</div>
     return (
         <div>
-            {JSON.stringify(feedback)}
-            <div>tags</div>
-            <div>{JSON.stringify(allTags)}</div>
             <UNSAFE_Combobox
                 allowNewValues
                 isMultiSelect
