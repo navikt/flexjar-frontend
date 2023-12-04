@@ -27,11 +27,11 @@ export const Stjerneknapp = ({ feedback }: { feedback: Feedback }): JSX.Element 
     }
 
     async function toggleStjerne(feedback: Feedback): Promise<void> {
-        if (feedback.tags?.includes('*')) {
-            await deleteTag('*', feedback.id)
+        if (feedback.tags?.includes('stjerne')) {
+            await deleteTag('stjerne', feedback.id)
             await queryClient.invalidateQueries()
         } else {
-            await addTag('*', feedback.id)
+            await addTag('stjerne', feedback.id)
             await queryClient.invalidateQueries()
         }
     }
@@ -41,7 +41,7 @@ export const Stjerneknapp = ({ feedback }: { feedback: Feedback }): JSX.Element 
             onClick={async () => {
                 await toggleStjerne(feedback)
             }}
-            variant="danger"
-        ></Button>
+            variant="primary"
+        >stjerne</Button>
     )
 }
