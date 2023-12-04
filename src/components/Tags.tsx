@@ -14,7 +14,7 @@ async function fetchAllTags(): Promise<string[]> {
     return fetchet || []
 }
 
-async function addTag(tag: string, id: string): Promise<void> {
+export async function addTag(tag: string, id: string): Promise<void> {
     const url = `/api/flexjar-backend/api/v1/intern/feedback/${id}/tags`
     const options = {
         method: 'POST',
@@ -26,7 +26,7 @@ async function addTag(tag: string, id: string): Promise<void> {
     fetchMedRequestId(url, options)
 }
 
-const deleteTag = async (tag: string, id: string): Promise<void> => {
+export const deleteTag = async (tag: string, id: string): Promise<void> => {
     await fetch(`/api/flexjar-backend/api/v1/intern/feedback/${id}/tags?tag=${encodeURIComponent(tag)}`, {
         method: 'DELETE',
     })

@@ -3,28 +3,12 @@ import React from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 
 import { Feedback } from '../queryhooks/useFeedback'
-import { fetchMedRequestId } from '../utils/fetch'
+import {addTag, deleteTag} from "./Tags";
+import {StarIcon} from "@navikt/aksel-icons";
 
 export const Stjerneknapp = ({ feedback }: { feedback: Feedback }): JSX.Element => {
     const queryClient = useQueryClient()
 
-    async function addTag(tag: string, id: string): Promise<void> {
-        const url = `/api/flexjar-backend/api/v1/intern/feedback/${id}/tags`
-        const options = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ tag }),
-        }
-        fetchMedRequestId(url, options)
-    }
-
-    const deleteTag = async (tag: string, id: string): Promise<void> => {
-        await fetch(`/api/flexjar-backend/api/v1/intern/feedback/${id}/tags?tag=${encodeURIComponent(tag)}`, {
-            method: 'DELETE',
-        })
-    }
 
     async function toggleStjerne(feedback: Feedback): Promise<void> {
         if (feedback.tags?.includes('stjerne')) {
@@ -43,7 +27,7 @@ export const Stjerneknapp = ({ feedback }: { feedback: Feedback }): JSX.Element 
             }}
             variant="primary"
         >
-            stjerne
+            <StarIcon title="a11y-title" fontSize="1.5rem" />
         </Button>
     )
 }
