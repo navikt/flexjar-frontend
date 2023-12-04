@@ -130,6 +130,8 @@ export const Tags = ({ feedback }: { feedback: Feedback }): JSX.Element => {
     return (
         <div>
             {JSON.stringify(feedback)}
+            <div>tags</div>
+            <div>{JSON.stringify(allTags)}</div>
             <UNSAFE_Combobox
                 allowNewValues
                 isMultiSelect
