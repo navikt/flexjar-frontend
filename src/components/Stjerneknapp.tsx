@@ -5,7 +5,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { Feedback } from '../queryhooks/useFeedback'
 import { fetchMedRequestId } from '../utils/fetch'
 
-export const Sletteknapp = ({ feedback }: { feedback: Feedback }): JSX.Element => {
+export const Stjerneknapp = ({ feedback }: { feedback: Feedback }): JSX.Element => {
     const [open, setOpen] = useState(false)
     const queryClient = useQueryClient()
 
@@ -33,7 +33,7 @@ export const Sletteknapp = ({ feedback }: { feedback: Feedback }): JSX.Element =
                     <div className="flex justify-between pt-8">
                         <Button
                             onClick={async () => {
-                                await addTag('test', feedback.id)
+                                await addTag('*', feedback.id)
                                 await queryClient.invalidateQueries()
                             }}
                             variant="danger"

@@ -1,4 +1,4 @@
-import { Alert, BodyShort, Button, CopyButton, Pagination, Select, Switch, Table, TextField } from '@navikt/ds-react'
+import { Alert, BodyShort, CopyButton, Pagination, Select, Switch, Table, TextField } from '@navikt/ds-react'
 import React, { useState } from 'react'
 import dayjs from 'dayjs'
 import {
@@ -20,6 +20,7 @@ import { PageResponse } from '../testdata/testdata'
 import { DeleknappSlack, DeleknappTrello } from './Deleknapp'
 import { Sletteknapp } from './Sletteknapp'
 import { Tags } from './Tags'
+import { Stjerneknapp } from './Stjerneknapp'
 
 export const FeedbackTabell = (): React.JSX.Element | null => {
     const [team, setTeam] = useQueryState('team', parseAsString.withDefault('flex'))
@@ -155,11 +156,7 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
             cell: (info) => {
                 const feedback = info.getValue()
 
-                return (
-                    <Button variant="secondary" size="small">
-                        * {feedback.id}
-                    </Button>
-                )
+                return <Stjerneknapp feedback={feedback} />
             },
             header: () => '',
             footer: (info) => info.column.id,
