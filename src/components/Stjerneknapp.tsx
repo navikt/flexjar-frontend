@@ -1,14 +1,14 @@
 import { Button } from '@navikt/ds-react'
 import React from 'react'
 import { useQueryClient } from '@tanstack/react-query'
+import { StarIcon } from '@navikt/aksel-icons'
 
 import { Feedback } from '../queryhooks/useFeedback'
-import {addTag, deleteTag} from "./Tags";
-import {StarIcon} from "@navikt/aksel-icons";
+
+import { addTag, deleteTag } from './Tags'
 
 export const Stjerneknapp = ({ feedback }: { feedback: Feedback }): JSX.Element => {
     const queryClient = useQueryClient()
-
 
     async function toggleStjerne(feedback: Feedback): Promise<void> {
         if (feedback.tags?.includes('stjerne')) {
@@ -21,7 +21,8 @@ export const Stjerneknapp = ({ feedback }: { feedback: Feedback }): JSX.Element 
     }
 
     return (
-        <Button size={'small'}
+        <Button
+            size="small"
             onClick={async () => {
                 await toggleStjerne(feedback)
             }}
