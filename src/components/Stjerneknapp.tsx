@@ -21,11 +21,11 @@ export const Stjerneknapp = ({ feedback }: { feedback: Feedback }): JSX.Element 
     }
 
     return (
-        <Button
+        <Button size={'small'}
             onClick={async () => {
                 await toggleStjerne(feedback)
             }}
-            variant="primary"
+            variant="secondary"
         >
             <StarIcon title="a11y-title" fontSize="1.5rem" />
         </Button>
