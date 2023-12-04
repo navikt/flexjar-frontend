@@ -56,12 +56,12 @@ async function addTag2(tag: string, id: string): Promise<void> {
     }
 }
 
-// const getFilteredTags = (allTags: string[] | undefined, selectedTags: string[] | undefined): string[] => {
-//     if (!allTags || !selectedTags) return []
-//
-//     const selectedSet = new Set(selectedTags)
-//     return allTags.filter((tag) => !selectedSet.has(tag))
-// }
+const getFilteredTags = (allTags: string[] | undefined, selectedTags: string[] | undefined): string[] => {
+    if (!allTags || !selectedTags) return []
+
+    const selectedSet = new Set(selectedTags)
+    return allTags.filter((tag) => !selectedSet.has(tag))
+}
 
 const deleteTag = async (tag: string, id: string): Promise<void> => {
     await fetch(urlPrefix + `/api/v1/intern/feedback/${id}/tags?tag=${encodeURIComponent(tag)}`, {
@@ -123,7 +123,7 @@ export const Tags = ({ feedback }: { feedback: Feedback }): JSX.Element => {
         }
     }
 
-    // const filteredTags = getFilteredTags(allTags, feedback.tags)
+    const filteredTags = getFilteredTags(allTags, componentTags)
 
     // if (isLoadingAllTags) return <div>Laster data...</div> // vi trenger kanskje ikke denne, det er inne i combox elementet dataene vil synes uansett
     if (isErrorAllTags) return <div>Det har skjedd en feil</div>
