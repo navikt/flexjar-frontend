@@ -117,7 +117,7 @@ export const Tags = ({ feedback }: { feedback: Feedback }): JSX.Element => {
         }
     }
 
-    const filteredTags = getFilteredTags(feedback.tags, componentTags)
+    const filteredTags = getFilteredTags(allTags, feedback.tags)
 
     // if (isLoadingAllTags) return <div>Laster data...</div> // vi trenger kanskje ikke denne, det er inne i combox elementet dataene vil synes uansett
     if (isErrorAllTags) return <div>Det har skjedd en feil</div>
