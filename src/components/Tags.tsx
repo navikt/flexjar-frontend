@@ -84,11 +84,13 @@ export const Tags = ({ feedback }: { feedback: Feedback }): JSX.Element => {
 
     useEffect(() => {
         setFilteredTags(getFilteredTags(allTags, componentTags))
+        componentTags.filter((tag) => tag !== 'stjerne')
     }, [allTags, componentTags])
 
     if (isErrorAllTags) return <div>Det har skjedd en feil</div>
     return (
         <div>
+            {JSON.stringify(feedback.tags)}
             <UNSAFE_Combobox
                 allowNewValues
                 isMultiSelect
