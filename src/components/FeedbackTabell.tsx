@@ -1,7 +1,6 @@
 import { Alert, BodyShort, CopyButton, Pagination, Select, Switch, Table, TextField } from '@navikt/ds-react'
 import React, { useState } from 'react'
 import dayjs from 'dayjs'
-import { useRouter } from 'next/router'
 import {
     createColumnHelper,
     flexRender,
@@ -12,6 +11,7 @@ import {
     useReactTable,
 } from '@tanstack/react-table'
 import { useQuery } from '@tanstack/react-query'
+import { parseAsBoolean, parseAsString, useQueryState } from 'next-usequerystate'
 
 import { Feedback } from '../queryhooks/useFeedback'
 import { fetchJsonMedRequestId } from '../utils/fetch'
@@ -21,23 +21,21 @@ import { DeleknappSlack, DeleknappTrello } from './Deleknapp'
 import { Sletteknapp } from './Sletteknapp'
 import { Tags } from './Tags'
 
-export const FeedbackTabell = (): JSX.Element | null => {
-    const { team } = useRouter().query
-    const selectedTeam = team ?? 'flex'
-    const [medTekst, setMedTekst] = useState(true)
-    const [fritekstInput, setFritekstInput] = useState('')
-    const [fritekst, setFritekst] = useState('')
+export const FeedbackTabell = (): React.JSX.Element | null => {
+    const [team, setTeam] = useQueryState('team', parseAsString.withDefault('flex'))
+    const [medTekst, setMedTekst] = useQueryState('medTekst', parseAsBoolean.withDefault(true))
+    const [fritekstInput, setFritekstInput] = useQueryState('fritekst', parseAsString.withDefault(''))
+    const [fritekst, setFritekst] = useState(fritekstInput)
 
     const [{ pageIndex, pageSize }, setPagination] = React.useState<PaginationState>({
         pageIndex: 0,
         pageSize: 10,
     })
 
-    const router = useRouter()
     const { data, error } = useQuery<PageResponse, Error>({
         queryKey: [`feedback-pagable`, team, pageIndex, pageSize, medTekst, fritekst],
         queryFn: async () => {
-            let url = `/api/flexjar-backend/api/v1/intern/feedback-pagable?team=${selectedTeam}&page=${pageIndex}&size=${pageSize}&medTekst=${medTekst}`
+            let url = `/api/flexjar-backend/api/v1/intern/feedback-pagable?team=${team}&page=${pageIndex}&size=${pageSize}&medTekst=${medTekst}`
             if (fritekst) {
                 url += `&fritekst=${fritekst}`
             }
@@ -137,7 +135,7 @@ export const FeedbackTabell = (): JSX.Element | null => {
             cell: (info) => {
                 const feedback = info.getValue()
                 if (feedback.feedback.feedback?.trim() === '') return null
-                if (selectedTeam !== 'teamsykmelding') return null
+                if (team !== 'teamsykmelding') return null
                 return <DeleknappTrello feedback={feedback} />
             },
             header: () => '',
@@ -213,9 +211,9 @@ export const FeedbackTabell = (): JSX.Element | null => {
                     <Select
                         label="Velg team"
                         size="small"
-                        defaultValue={router.query.team ?? 'flex'}
+                        defaultValue={team}
                         onChange={(event) => {
-                            router.push('/?team=' + event.target.value)
+                            setTeam(event.target.value)
                         }}
                     >
                         <option value="flex">Flex</option>
