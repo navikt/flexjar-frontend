@@ -40,7 +40,7 @@ const getFilteredTags = (allTags: string[] | undefined, selectedTags: string[] |
 }
 
 export const Tags = ({ feedback }: { feedback: Feedback }): JSX.Element => {
-    const [componentTags, setComponentTags] = useState<string[]>(feedback.tags.filter(x => x !== "stjerne") || []) // this but filter out stjerne
+    const [componentTags, setComponentTags] = useState<string[]>(feedback.tags.filter((x) => x !== 'stjerne') || []) // this but filter out stjerne
     const [filteredTags, setFilteredTags] = useState<string[]>([])
     const queryClient = useQueryClient()
     const feedbackId = feedback.id
