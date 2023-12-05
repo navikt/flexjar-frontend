@@ -20,6 +20,7 @@ import { PageResponse } from '../testdata/testdata'
 import { DeleknappSlack, DeleknappTrello } from './Deleknapp'
 import { Sletteknapp } from './Sletteknapp'
 import { Tags } from './Tags'
+import { Stjerneknapp } from './Stjerneknapp'
 
 export const FeedbackTabell = (): React.JSX.Element | null => {
     const [team, setTeam] = useQueryState('team', parseAsString.withDefault('flex'))
@@ -146,6 +147,16 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
             cell: (info) => {
                 const feedback = info.getValue()
                 return <Sletteknapp feedback={feedback} />
+            },
+            header: () => '',
+            footer: (info) => info.column.id,
+        }),
+        columnHelper.accessor((row) => row, {
+            id: 'star',
+            cell: (info) => {
+                const feedback = info.getValue()
+
+                return <Stjerneknapp feedback={feedback} />
             },
             header: () => '',
             footer: (info) => info.column.id,

@@ -14,8 +14,8 @@ async function fetchAllTags(): Promise<string[]> {
     return fetchet || []
 }
 
-async function addTag(tag: string, id: string): Promise<void> {
-    const url = `/api/flexjar-backend/api/flexjar-backend/api/v1/intern/feedback/${id}/tags`
+export async function addTag(tag: string, id: string): Promise<void> {
+    const url = `/api/flexjar-backend/api/v1/intern/feedback/${id}/tags`
     const options = {
         method: 'POST',
         headers: {
@@ -26,7 +26,7 @@ async function addTag(tag: string, id: string): Promise<void> {
     fetchMedRequestId(url, options)
 }
 
-const deleteTag = async (tag: string, id: string): Promise<void> => {
+export const deleteTag = async (tag: string, id: string): Promise<void> => {
     await fetch(`/api/flexjar-backend/api/v1/intern/feedback/${id}/tags?tag=${encodeURIComponent(tag)}`, {
         method: 'DELETE',
     })
@@ -36,11 +36,11 @@ const getFilteredTags = (allTags: string[] | undefined, selectedTags: string[] |
     if (!allTags || !selectedTags) return []
 
     const selectedSet = new Set(selectedTags)
-    return allTags.filter((tag) => !selectedSet.has(tag))
+    return allTags.filter((tag) => !selectedSet.has(tag) && tag !== 'stjerne')
 }
 
 export const Tags = ({ feedback }: { feedback: Feedback }): JSX.Element => {
-    const [componentTags, setComponentTags] = useState<string[]>(feedback.tags || [])
+    const [componentTags, setComponentTags] = useState<string[]>(feedback.tags.filter((x) => x !== 'stjerne') || [])
     const [filteredTags, setFilteredTags] = useState<string[]>([])
     const queryClient = useQueryClient()
     const feedbackId = feedback.id
@@ -84,6 +84,7 @@ export const Tags = ({ feedback }: { feedback: Feedback }): JSX.Element => {
 
     useEffect(() => {
         setFilteredTags(getFilteredTags(allTags, componentTags))
+        setComponentTags([...componentTags.filter((tag) => tag !== 'stjerne')])
     }, [allTags, componentTags])
 
     if (isErrorAllTags) return <div>Det har skjedd en feil</div>
