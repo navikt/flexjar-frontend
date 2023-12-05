@@ -11,18 +11,15 @@ export const Stjerneknapp = ({ feedback }: { feedback: Feedback }): JSX.Element 
     const [erStjerne, setErStjerne] = React.useState<boolean>(feedback.tags.includes('stjerne'))
     const queryClient = useQueryClient()
 
-    const mutation = useMutation(
-        (arg: { tag: string; newStjerneState: boolean }) => {
+    const mutation = useMutation({
+        mutationFn: (arg: { tag: string; newStjerneState: boolean }) => {
             return arg.newStjerneState ? addTag(arg.tag, feedback.id) : deleteTag(arg.tag, feedback.id)
         },
-        {
-            onSuccess: () => {},
-            onError: () => {
-                setErStjerne(!erStjerne)
-                queryClient.invalidateQueries()
-            },
+        onError: () => {
+            setErStjerne(!erStjerne)
+            queryClient.invalidateQueries()
         },
-    )
+    })
     const toggleStjerne = (): void => {
         const currentStjerneState = erStjerne
         setErStjerne(!erStjerne)
