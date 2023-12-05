@@ -33,9 +33,9 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
     })
 
     const { data, error } = useQuery<PageResponse, Error>({
-        queryKey: [`feedback-pagable`, team, pageIndex, pageSize, medTekst, fritekst],
+        queryKey: [`feedback`, team, pageIndex, pageSize, medTekst, fritekst],
         queryFn: async () => {
-            let url = `/api/flexjar-backend/api/v1/intern/feedback-pagable?team=${team}&page=${pageIndex}&size=${pageSize}&medTekst=${medTekst}`
+            let url = `/api/flexjar-backend/api/v1/intern/feedback?team=${team}&page=${pageIndex}&size=${pageSize}&medTekst=${medTekst}`
             if (fritekst) {
                 url += `&fritekst=${fritekst}`
             }

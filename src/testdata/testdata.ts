@@ -1,7 +1,6 @@
 import { randomUUID } from 'crypto'
 
 import dayjs from 'dayjs'
-import { logger } from '@navikt/next-logger'
 import { faker } from '@faker-js/faker'
 
 import { Feedback, FeedbackInput } from '../queryhooks/useFeedback'
@@ -24,7 +23,7 @@ for (let i = 0; i < antallFeedback; i++) {
         },
         id: faker.string.uuid(),
         opprettet: faker.date.past().toISOString(),
-        tags: faker.datatype.boolean() ? ['tag1', 'tag2'] : [],
+        tags: faker.datatype.boolean() ? [faker.color.human(), faker.color.human()] : [],
     })
 }
 
@@ -55,15 +54,6 @@ export async function mockApi(opts: BackendProxyOpts): Promise<void> {
     const { req, res } = opts
 
     if (validert.api == 'GET /api/v1/intern/feedback') {
-        logger.info(`Returning mocked data for feedbacks, also got query param: ${validert.query.toString()}`)
-
-        res.status(200)
-        res.json(testdata)
-        res.end()
-        return
-    }
-
-    if (validert.api == 'GET /api/v1/intern/feedback-pagable') {
         await sleep(500)
         const team = validert.query.get('team') || 'flex'
         const page = parseInt(validert.query.get('page') || '0', 10)
@@ -125,6 +115,19 @@ export async function mockApi(opts: BackendProxyOpts): Promise<void> {
         })
         res.status(202)
         res.end()
+        return
+    }
+    if (validert.api == 'GET /api/v1/intern/feedback/tags') {
+        const tags = new Set<string>()
+        testdata.forEach((feedback) => {
+            feedback.tags.forEach((tag) => {
+                tags.add(tag)
+            })
+        })
+
+        // tags som array
+        const tagsArray = Array.from(tags)
+        res.status(200).json(tagsArray)
         return
     }
 
