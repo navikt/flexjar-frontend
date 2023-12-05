@@ -16,11 +16,11 @@ export const Stjerneknapp = ({ feedback }: { feedback: Feedback }): JSX.Element 
             return erStjerne ? deleteTag(tag, feedback.id) : addTag(tag, feedback.id)
         },
         {
-            onSuccess: () => {
-                queryClient.invalidateQueries()
-            },
+            onSuccess: () => {},
             onError: (error) => {
                 setErStjerne(!erStjerne)
+                queryClient.invalidateQueries()
+
                 alert('Det har skjedd en feil, dine siste endringer ble ikke lagret' + error)
             },
         },
@@ -28,7 +28,6 @@ export const Stjerneknapp = ({ feedback }: { feedback: Feedback }): JSX.Element 
 
     const toggleStjerne = (): void => {
         setErStjerne(!erStjerne)
-
         mutation.mutate('stjerne')
     }
 
