@@ -12,7 +12,7 @@ export const Stjerneknapp = ({ feedback }: { feedback: Feedback }): JSX.Element 
     const [erStjerne, setErStjerne] = React.useState<boolean>(feedback.tags.includes('stjerne'))
     // use state to handle display of changes, only invalidate on errors
     const toggleStjerne = async (feedback: Feedback): Promise<void> => {
-        if (feedback.tags?.includes('stjerne')) {
+        if (erStjerne) {
             await deleteTag('stjerne', feedback.id)
             setErStjerne(false)
         } else {
