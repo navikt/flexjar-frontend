@@ -45,7 +45,10 @@ export const Tags = ({ feedback }: { feedback: Feedback }): JSX.Element => {
     const queryClient = useQueryClient()
     const feedbackId = feedback.id
 
-    const { data: allTags, isError: isErrorAllTags } = useQuery(['allTags'], fetchAllTags) // ,
+    const { data: allTags, isError: isErrorAllTags } = useQuery({
+        queryFn: fetchAllTags,
+        queryKey: ['allTags'],
+    })
 
     const addTagMutation = useMutation({
         onMutate: async ({ tag }) => {
@@ -57,11 +60,14 @@ export const Tags = ({ feedback }: { feedback: Feedback }): JSX.Element => {
             queryClient.invalidateQueries()
         },
         onSuccess: () => {
-            queryClient.invalidateQueries(['allTags'])
+            queryClient.invalidateQueries({
+                queryKey: ['allTags'],
+            })
         },
     })
 
-    const deleteTagMutation = useMutation((tag: string) => deleteTag(tag, feedbackId), {
+    const deleteTagMutation = useMutation({
+        mutationFn: (tag: string) => deleteTag(tag, feedbackId),
         onMutate: async (tag) => {
             setComponentTags((old) => old?.filter((t) => t !== tag) || [])
         },
@@ -70,7 +76,9 @@ export const Tags = ({ feedback }: { feedback: Feedback }): JSX.Element => {
             queryClient.invalidateQueries()
         },
         onSuccess: () => {
-            queryClient.invalidateQueries(['allTags'])
+            queryClient.invalidateQueries({
+                queryKey: ['allTags'],
+            })
         },
     })
 

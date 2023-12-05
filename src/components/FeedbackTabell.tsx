@@ -10,7 +10,7 @@ import {
     PaginationState,
     useReactTable,
 } from '@tanstack/react-table'
-import { useQuery } from '@tanstack/react-query'
+import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import { parseAsBoolean, parseAsString, useQueryState } from 'next-usequerystate'
 
 import { Feedback } from '../queryhooks/useFeedback'
@@ -43,7 +43,7 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
             const fetchet: PageResponse = await fetchJsonMedRequestId(url)
             return fetchet
         },
-        keepPreviousData: true,
+        placeholderData: keepPreviousData,
     })
     const defaultData = React.useMemo(() => [], [])
 

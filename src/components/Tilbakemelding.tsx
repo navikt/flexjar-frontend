@@ -40,7 +40,9 @@ export const Tilbakemelding = (): JSX.Element | null => {
             method: 'POST',
             body: JSON.stringify(body),
         })
-        await queryClient.invalidateQueries(['feedback'])
+        await queryClient.invalidateQueries({
+            queryKey: ['feedback'],
+        })
     }
 
     const FeedbackButton = (props: FeedbackButtonProps): JSX.Element => {
