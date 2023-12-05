@@ -2,6 +2,7 @@ import { randomUUID } from 'crypto'
 
 import dayjs from 'dayjs'
 import { faker } from '@faker-js/faker'
+import { nextleton } from 'nextleton'
 
 import { Feedback, FeedbackInput } from '../queryhooks/useFeedback'
 import { reqToBody } from '../utils/reqToBody'
@@ -9,7 +10,9 @@ import { BackendProxyOpts, validerKall } from '../proxy/backendproxy'
 
 faker.seed(123)
 
-let testdata: Feedback[] = []
+export const testdata = nextleton('sessionStore', () => {
+    return [] as Feedback[]
+})
 
 const antallFeedback = 11200
 for (let i = 0; i < antallFeedback; i++) {
@@ -41,7 +44,11 @@ testdata.push({
 })
 
 function deleteFeedbackById(idToDelete: string): void {
-    testdata = testdata.filter((feedback) => feedback.id !== idToDelete)
+    const find = testdata.find((feedback) => feedback.id !== idToDelete)
+    if (find) {
+        // TODO denne er litt flaky rar?
+        find.feedback.feedback = ''
+    }
 }
 
 function sleep(ms: number): Promise<void> {
@@ -53,8 +60,8 @@ export async function mockApi(opts: BackendProxyOpts): Promise<void> {
     if (!validert) return
     const { req, res } = opts
 
+    await sleep(200)
     if (validert.api == 'GET /api/v1/intern/feedback') {
-        await sleep(500)
         const team = validert.query.get('team') || 'flex'
         const page = parseInt(validert.query.get('page') || '0', 10)
         const size = parseInt(validert.query.get('size') || '10', 10)
@@ -128,6 +135,42 @@ export async function mockApi(opts: BackendProxyOpts): Promise<void> {
         // tags som array
         const tagsArray = Array.from(tags)
         res.status(200).json(tagsArray)
+        return
+    }
+    if (validert.api == 'POST /api/v1/intern/feedback/[uuid]/tags') {
+        const id = req.url?.split('/')![7]
+
+        interface AddTag {
+            tag: string
+        }
+
+        const body = await reqToBody<AddTag>(req)
+
+        const feedback = testdata.find((feedback) => feedback.id === id)
+        if (feedback) {
+            const tagsSomSet = new Set(feedback.tags)
+            tagsSomSet.add(body.tag)
+            feedback.tags = Array.from(tagsSomSet)
+        }
+
+        res.status(201)
+        res.end()
+        return
+    }
+
+    if (validert.api == 'DELETE /api/v1/intern/feedback/[uuid]/tags') {
+        const id = req.url?.split('/')![7]
+        const tag = validert.query.get('tag')
+
+        const feedback = testdata.find((feedback) => feedback.id === id)
+        if (feedback && tag) {
+            const tagsSomSet = new Set(feedback.tags)
+            tagsSomSet.delete(tag)
+            feedback.tags = Array.from(tagsSomSet)
+        }
+
+        res.status(204)
+        res.end()
         return
     }
 
