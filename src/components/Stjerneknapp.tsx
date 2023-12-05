@@ -17,16 +17,18 @@ export const Stjerneknapp = ({ feedback }: { feedback: Feedback }): JSX.Element 
         },
         {
             onSuccess: () => {
-                setErStjerne(!erStjerne)
                 queryClient.invalidateQueries()
             },
             onError: (error) => {
+                setErStjerne(!erStjerne)
                 alert('Det har skjedd en feil, dine siste endringer ble ikke lagret' + error)
             },
         },
     )
 
     const toggleStjerne = (): void => {
+        setErStjerne(!erStjerne)
+
         mutation.mutate('stjerne')
     }
 
