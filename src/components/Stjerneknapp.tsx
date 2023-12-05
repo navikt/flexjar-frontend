@@ -17,11 +17,9 @@ export const Stjerneknapp = ({ feedback }: { feedback: Feedback }): JSX.Element 
         },
         {
             onSuccess: () => {},
-            onError: (error) => {
+            onError: () => {
                 setErStjerne(!erStjerne)
                 queryClient.invalidateQueries()
-
-                alert('Det har skjedd en feil, dine siste endringer ble ikke lagret' + error)
             },
         },
     )
@@ -31,6 +29,7 @@ export const Stjerneknapp = ({ feedback }: { feedback: Feedback }): JSX.Element 
         mutation.mutate('stjerne')
     }
 
+    if (mutation.isError) return <div>Det har skjedd en feil</div>
     return (
         <Button size="small" onClick={toggleStjerne} variant={erStjerne ? 'primary' : 'secondary'}>
             <StarIcon title="a11y-stjerne" fontSize="1.5rem" className={erStjerne ? 'text-white' : ''} />
