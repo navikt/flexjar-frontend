@@ -84,7 +84,7 @@ export const Tags = ({ feedback }: { feedback: Feedback }): JSX.Element => {
 
     useEffect(() => {
         setFilteredTags(getFilteredTags(allTags, componentTags))
-        setComponentTags( [...componentTags.filter((tag) => tag !== 'stjerne')])
+        setComponentTags([...componentTags.filter((tag) => tag !== 'stjerne')])
     }, [allTags, componentTags])
 
     if (isErrorAllTags) return <div>Det har skjedd en feil</div>
