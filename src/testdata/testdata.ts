@@ -44,9 +44,8 @@ testdata.push({
 })
 
 function deleteFeedbackById(idToDelete: string): void {
-    const find = testdata.find((feedback) => feedback.id !== idToDelete)
+    const find = testdata.find((feedback) => feedback.id == idToDelete)
     if (find) {
-        // TODO denne er litt flaky rar?
         find.feedback.feedback = ''
     }
 }
