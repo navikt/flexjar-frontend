@@ -135,7 +135,7 @@ class TrelloClient {
             return createdLabel.id
         }
 
-        return label?.id ?? null
+        return label.id
     }
 
     private async createLabel(
