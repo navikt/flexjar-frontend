@@ -62,13 +62,12 @@ export async function mockApi(opts: BackendProxyOpts): Promise<void> {
     await sleep(200)
     if (validert.api == 'GET /api/v1/intern/feedback') {
         const team = validert.query.get('team') || 'flex'
-        const page = parseInt(validert.query.get('page') || '0', 10)
         const size = parseInt(validert.query.get('size') || '10', 10)
         const fritekst = validert.query.get('fritekst')
         const medTekst = (validert.query.get('medTekst') || 'false') == 'true'
 
         testdata.sort((a, b) => {
-            return new Date(b.opprettet).getTime() - new Date(a.opprettet).getTime()
+            return new Date(a.opprettet).getTime() - new Date(b.opprettet).getTime()
         })
         // Filter data based on 'feedback' query parameter if it's provided
         const filteredData = testdata
@@ -89,15 +88,27 @@ export async function mockApi(opts: BackendProxyOpts): Promise<void> {
             })
 
         // Implement pagination logic
-        const paginatedData = filteredData.slice(page * size, (page + 1) * size)
+        // Beregn totalt antall sider
+        const totalPages = Math.ceil(filteredData.length / size)
+
+        // Endre standard sideverdi til den siste siden hvis ikke spesifisert
+        // 'page' vil nå være 0-basert, så den siste siden er 'totalPages - 1'
+        const defaultPage = totalPages > 0 ? totalPages - 1 : 0
+        const page = parseInt(validert.query.get('page') || `${defaultPage}`, 10)
+
+        // Sjekk for negativ sideverdi og korrigér til første eller siste side
+        const validPage = page < 0 ? 0 : page >= totalPages ? defaultPage : page
+
+        // Oppdatert pagineringslogikk
+        const paginatedData = filteredData.slice(validPage * size, (validPage + 1) * size)
 
         // Create a response object that includes pagination information
         const response: PageResponse = {
             content: paginatedData,
-            totalPages: Math.ceil(filteredData.length / size),
+            totalPages: totalPages,
             totalElements: filteredData.length,
             size: size,
-            number: page,
+            number: validPage,
         }
 
         res.status(200).json(response)

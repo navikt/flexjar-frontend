@@ -27,15 +27,18 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
     const [fritekstInput, setFritekstInput] = useQueryState('fritekst', parseAsString.withDefault(''))
     const [fritekst, setFritekst] = useState(fritekstInput)
 
-    const [page, setPage] = useQueryState('page', parseAsInteger.withDefault(0))
+    const [page, setPage] = useQueryState('page', parseAsString.withDefault('nyeste'))
     const [size, setSize] = useQueryState('size', parseAsInteger.withDefault(10))
 
     const { data, error } = useQuery<PageResponse, Error>({
         queryKey: [`feedback`, team, page, size, medTekst, fritekst],
         queryFn: async () => {
-            let url = `/api/flexjar-backend/api/v1/intern/feedback?team=${team}&page=${page}&size=${size}&medTekst=${medTekst}`
+            let url = `/api/flexjar-backend/api/v1/intern/feedback?team=${team}&size=${size}&medTekst=${medTekst}`
             if (fritekst) {
                 url += `&fritekst=${fritekst}`
+            }
+            if (page != 'nyeste') {
+                url += `&page=${page}`
             }
             const fetchet: PageResponse = await fetchJsonMedRequestId(url)
             return fetchet
@@ -272,10 +275,10 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
                 </Table>
                 <Pagination
                     className="mt-4"
-                    page={page + 1}
+                    page={data.number + 1}
                     onPageChange={(p) => {
                         // do nothing
-                        setPage(p - 1)
+                        setPage(p - 1 + '')
                     }}
                     count={data.totalPages}
                     size="small"
