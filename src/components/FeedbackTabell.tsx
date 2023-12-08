@@ -7,11 +7,10 @@ import {
     getCoreRowModel,
     getFilteredRowModel,
     getPaginationRowModel,
-    PaginationState,
     useReactTable,
 } from '@tanstack/react-table'
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
-import { parseAsBoolean, parseAsString, useQueryState } from 'next-usequerystate'
+import { parseAsBoolean, parseAsInteger, parseAsString, useQueryState } from 'next-usequerystate'
 
 import { Feedback } from '../queryhooks/useFeedback'
 import { fetchJsonMedRequestId } from '../utils/fetch'
@@ -28,15 +27,13 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
     const [fritekstInput, setFritekstInput] = useQueryState('fritekst', parseAsString.withDefault(''))
     const [fritekst, setFritekst] = useState(fritekstInput)
 
-    const [{ pageIndex, pageSize }, setPagination] = React.useState<PaginationState>({
-        pageIndex: 0,
-        pageSize: 10,
-    })
+    const [page, setPage] = useQueryState('page', parseAsInteger.withDefault(0))
+    const [size, setSize] = useQueryState('size', parseAsInteger.withDefault(10))
 
     const { data, error } = useQuery<PageResponse, Error>({
-        queryKey: [`feedback`, team, pageIndex, pageSize, medTekst, fritekst],
+        queryKey: [`feedback`, team, page, size, medTekst, fritekst],
         queryFn: async () => {
-            let url = `/api/flexjar-backend/api/v1/intern/feedback?team=${team}&page=${pageIndex}&size=${pageSize}&medTekst=${medTekst}`
+            let url = `/api/flexjar-backend/api/v1/intern/feedback?team=${team}&page=${page}&size=${size}&medTekst=${medTekst}`
             if (fritekst) {
                 url += `&fritekst=${fritekst}`
             }
@@ -48,14 +45,6 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
     const defaultData = React.useMemo(() => [], [])
 
     const columnHelper = createColumnHelper<Feedback>()
-
-    const pagination = React.useMemo(
-        () => ({
-            pageIndex,
-            pageSize,
-        }),
-        [pageIndex, pageSize],
-    )
 
     const columns = [
         columnHelper.accessor('opprettet', {
@@ -179,14 +168,8 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
         getCoreRowModel: getCoreRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
-        onPaginationChange: setPagination,
         pageCount: data?.totalPages ?? -1,
         manualPagination: true,
-
-        state: {
-            pagination,
-        },
-
         //
         debugTable: true,
     })
@@ -289,21 +272,21 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
                 </Table>
                 <Pagination
                     className="mt-4"
-                    page={table.getState().pagination.pageIndex + 1}
+                    page={page + 1}
                     onPageChange={(p) => {
                         // do nothing
-                        table.setPageIndex(p - 1)
+                        setPage(p - 1)
                     }}
-                    count={table.getPageCount()}
+                    count={data.totalPages}
                     size="small"
                 />
 
                 <Select
                     className="w-36"
                     label=""
-                    value={table.getState().pagination.pageSize}
+                    value={size}
                     onChange={(e) => {
-                        table.setPageSize(Number(e.target.value))
+                        setSize(Number(e.target.value))
                     }}
                 >
                     {[10, 20, 30, 40, 50].map((pageSize) => (
