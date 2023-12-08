@@ -1,4 +1,4 @@
-import { Alert, BodyShort, CopyButton, Pagination, Select, Switch, Table, TextField } from '@navikt/ds-react'
+import { Alert, BodyShort, CopyButton, Pagination, Select, Skeleton, Switch, Table, TextField } from '@navikt/ds-react'
 import React, { useState } from 'react'
 import dayjs from 'dayjs'
 import {
@@ -30,7 +30,7 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
     const [page, setPage] = useQueryState('page', parseAsString.withDefault('nyeste'))
     const [size, setSize] = useQueryState('size', parseAsInteger.withDefault(10))
 
-    const { data, error } = useQuery<PageResponse, Error>({
+    const { data, error, isFetching } = useQuery<PageResponse, Error>({
         queryKey: [`feedback`, team, page, size, medTekst, fritekst],
         queryFn: async () => {
             let url = `/api/flexjar-backend/api/v1/intern/feedback?team=${team}&size=${size}&medTekst=${medTekst}`
@@ -52,7 +52,11 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
     const columns = [
         columnHelper.accessor('opprettet', {
             cell: (info) => {
-                return <BodyShort>{dayjs(info.getValue()).format('YYYY.MM.DD')}</BodyShort>
+                return (
+                    <BodyShort as={isFetching ? Skeleton : 'p'}>
+                        {dayjs(info.getValue()).format('YYYY.MM.DD')}
+                    </BodyShort>
+                )
             },
             header: () => 'Dato',
             footer: (info) => info.column.id,
@@ -90,7 +94,7 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
                 }
 
                 return (
-                    <BodyShort>
+                    <BodyShort as={isFetching ? Skeleton : 'p'}>
                         <span className="font-bold">{svarTilEmoji()}: </span>
                         <span className="italic">{info.getValue().feedback.feedback}</span>
                     </BodyShort>
@@ -108,7 +112,7 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
         columnHelper.accessor((row) => row, {
             id: 'app',
             cell: (info) => {
-                return <BodyShort>{info.getValue().feedback.app}</BodyShort>
+                return <BodyShort as={isFetching ? Skeleton : 'p'}>{info.getValue().feedback.app}</BodyShort>
             },
             header: () => 'App',
             footer: (info) => info.column.id,
