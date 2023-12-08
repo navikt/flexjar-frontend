@@ -1,4 +1,15 @@
-import { Alert, BodyShort, CopyButton, Pagination, Select, Skeleton, Switch, Table, TextField } from '@navikt/ds-react'
+import {
+    Alert,
+    BodyShort,
+    Button,
+    CopyButton,
+    Pagination,
+    Select,
+    Skeleton,
+    Switch,
+    Table,
+    TextField,
+} from '@navikt/ds-react'
 import React, { useState } from 'react'
 import dayjs from 'dayjs'
 import {
@@ -11,6 +22,7 @@ import {
 } from '@tanstack/react-table'
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import { parseAsBoolean, parseAsInteger, parseAsString, useQueryState } from 'next-usequerystate'
+import { StarIcon } from '@navikt/aksel-icons'
 
 import { Feedback } from '../queryhooks/useFeedback'
 import { fetchJsonMedRequestId } from '../utils/fetch'
@@ -26,12 +38,13 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
     const [medTekst, setMedTekst] = useQueryState('medTekst', parseAsBoolean.withDefault(true))
     const [fritekstInput, setFritekstInput] = useQueryState('fritekst', parseAsString.withDefault(''))
     const [fritekst, setFritekst] = useState(fritekstInput)
+    const [stjerne, setStjerne] = useQueryState('stjerne', parseAsBoolean.withDefault(false))
 
     const [page, setPage] = useQueryState('page', parseAsString.withDefault('nyeste'))
     const [size, setSize] = useQueryState('size', parseAsInteger.withDefault(10))
 
     const { data, error, isFetching } = useQuery<PageResponse, Error>({
-        queryKey: [`feedback`, team, page, size, medTekst, fritekst],
+        queryKey: [`feedback`, team, page, size, medTekst, fritekst, stjerne],
         queryFn: async () => {
             let url = `/api/flexjar-backend/api/v1/intern/feedback?team=${team}&size=${size}&medTekst=${medTekst}`
             if (fritekst) {
@@ -39,6 +52,9 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
             }
             if (page != 'nyeste') {
                 url += `&page=${Number(page) - 1}`
+            }
+            if (stjerne) {
+                url += `&stjerne=true`
             }
             const fetchet: PageResponse = await fetchJsonMedRequestId(url)
             return fetchet
@@ -228,6 +244,16 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
                             Vis bare feedback med tekst
                         </Switch>
                     </div>
+                    <Button
+                        size="small"
+                        onClick={() => {
+                            setStjerne(!stjerne)
+                            setPage('nyeste')
+                        }}
+                        variant={stjerne ? 'primary' : 'secondary'}
+                    >
+                        <StarIcon title="a11y-stjerne" fontSize="1.5rem" className={stjerne ? 'text-white' : ''} />
+                    </Button>
                 </div>
             </div>
 

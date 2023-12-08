@@ -14,7 +14,7 @@ export const testdata = nextleton('sessionStore', () => {
     return [] as Feedback[]
 })
 
-const antallFeedback = 11200
+const antallFeedback = 11208
 for (let i = 0; i < antallFeedback; i++) {
     testdata.push({
         feedback: {
@@ -65,6 +65,7 @@ export async function mockApi(opts: BackendProxyOpts): Promise<void> {
         const size = parseInt(validert.query.get('size') || '10', 10)
         const fritekst = validert.query.get('fritekst')
         const medTekst = (validert.query.get('medTekst') || 'false') == 'true'
+        const starred = (validert.query.get('stjerne') || 'false') == 'true'
 
         testdata.sort((a, b) => {
             return new Date(a.opprettet).getTime() - new Date(b.opprettet).getTime()
@@ -86,6 +87,12 @@ export async function mockApi(opts: BackendProxyOpts): Promise<void> {
                         JSON.stringify(feedback.feedback).toLowerCase().includes(fritekst.toLowerCase()) ||
                         feedback.tags.some((tag) => tag.toLowerCase().includes(fritekst.toLowerCase()))
                     )
+                }
+                return true
+            })
+            .filter((feedback) => {
+                if (starred) {
+                    return feedback.tags.some((tag) => tag.toLowerCase().includes('stjerne'))
                 }
                 return true
             })
