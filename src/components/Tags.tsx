@@ -101,7 +101,8 @@ export const Tags = ({ feedback }: { feedback: Feedback }): JSX.Element => {
             <UNSAFE_Combobox
                 allowNewValues
                 isMultiSelect
-                label="Tags:"
+                label="Tags"
+                hideLabel={true}
                 options={filteredTags || []}
                 selectedOptions={componentTags || []}
                 onToggleSelected={(option, isSelected) => {

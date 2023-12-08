@@ -164,7 +164,7 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
 
                 return <Tags feedback={feedback} />
             },
-            header: () => '',
+            header: () => 'Tags',
             footer: (info) => info.column.id,
         }),
     ]
