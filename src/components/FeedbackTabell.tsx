@@ -38,7 +38,7 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
                 url += `&fritekst=${fritekst}`
             }
             if (page != 'nyeste') {
-                url += `&page=${page}`
+                url += `&page=${Number(page) - 1}`
             }
             const fetchet: PageResponse = await fetchJsonMedRequestId(url)
             return fetchet
@@ -282,7 +282,7 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
                     page={data.number + 1}
                     onPageChange={(p) => {
                         // do nothing
-                        setPage(p - 1 + '')
+                        setPage(p + '')
                     }}
                     count={data.totalPages}
                     size="small"
