@@ -206,6 +206,7 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
                         onKeyUp={(e) => {
                             if (e.key === 'Enter') {
                                 setFritekst(fritekstInput)
+                                setPage('nyeste')
                             }
                         }}
                     />
