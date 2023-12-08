@@ -82,7 +82,10 @@ export async function mockApi(opts: BackendProxyOpts): Promise<void> {
             })
             .filter((feedback) => {
                 if (fritekst) {
-                    return JSON.stringify(feedback.feedback).toLowerCase().includes(fritekst.toLowerCase())
+                    return (
+                        JSON.stringify(feedback.feedback).toLowerCase().includes(fritekst.toLowerCase()) ||
+                        feedback.tags.some((tag) => tag.toLowerCase().includes(fritekst.toLowerCase()))
+                    )
                 }
                 return true
             })
