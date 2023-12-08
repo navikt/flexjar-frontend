@@ -10,7 +10,7 @@ import {
     Table,
     TextField,
 } from '@navikt/ds-react'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import dayjs from 'dayjs'
 import {
     createColumnHelper,
@@ -196,6 +196,25 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
         //
         debugTable: true,
     })
+
+    const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null)
+
+    useEffect(() => {
+        // Avbryt eksisterende timeout
+        if (timeoutId) clearTimeout(timeoutId)
+
+        // Opprett en ny timeout
+        const newTimeoutId = setTimeout(() => {
+            setFritekst(fritekstInput)
+            setPage('nyeste')
+        }, 500) // 2 sekunder
+
+        setTimeoutId(newTimeoutId)
+
+        // Rengjøringsfunksjon
+        return () => clearTimeout(newTimeoutId)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [fritekstInput])
 
     if (!data) {
         return null
