@@ -138,7 +138,7 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
             cell: (info) => {
                 const feedback = info.getValue()
                 if (feedback.feedback.feedback?.trim() === '') return null
-                return <DeleknappSlack feedback={feedback} />
+                return <DeleknappSlack selectedTeam={team} feedback={feedback} />
             },
             header: () => '',
             footer: (info) => info.column.id,
@@ -149,7 +149,8 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
                 const feedback = info.getValue()
                 if (feedback.feedback.feedback?.trim() === '') return null
                 if (team !== 'teamsykmelding') return null
-                return <DeleknappTrello feedback={feedback} />
+
+                return <DeleknappTrello selectedTeam={team} feedback={feedback} />
             },
             header: () => '',
             footer: (info) => info.column.id,
