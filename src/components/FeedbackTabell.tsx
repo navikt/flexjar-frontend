@@ -252,6 +252,7 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
                         defaultValue={team}
                         onChange={(event) => {
                             setTeam(event.target.value)
+                            setPage('nyeste')
                         }}
                     >
                         <option value="flex">Flex</option>
