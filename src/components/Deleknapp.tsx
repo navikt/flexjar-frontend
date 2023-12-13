@@ -1,6 +1,5 @@
 import { Button, Tooltip } from '@navikt/ds-react'
 import React, { ReactElement, useState } from 'react'
-import { useRouter } from 'next/router'
 import { CheckmarkIcon } from '@navikt/aksel-icons'
 import { logger } from '@navikt/next-logger'
 
@@ -9,11 +8,15 @@ import { Feedback } from '../queryhooks/useFeedback'
 import TrelloIcon from './icons/trello'
 import SlackIcon from './icons/slack'
 
-export const DeleknappSlack = ({ feedback }: { feedback: Feedback }): React.ReactElement | null => {
+export const DeleknappSlack = ({
+    selectedTeam,
+    feedback,
+}: {
+    selectedTeam: string
+    feedback: Feedback
+}): React.ReactElement | null => {
     const [delt, setDelt] = useState(false)
     const [deling, setDeling] = useState(false)
-    const { team } = useRouter().query
-    const valgTeam = team ?? 'flex'
     const teamsMedSlackWebHook: Array<string> = ['flex', 'teamsykmelding']
 
     function valgTeamHarSlack(selectedTeam: string | string[], slackTeams: string[]): boolean {
@@ -24,7 +27,7 @@ export const DeleknappSlack = ({ feedback }: { feedback: Feedback }): React.Reac
         }
     }
 
-    if (!valgTeamHarSlack(valgTeam, teamsMedSlackWebHook)) {
+    if (!valgTeamHarSlack(selectedTeam, teamsMedSlackWebHook)) {
         return null
     }
 
@@ -32,7 +35,7 @@ export const DeleknappSlack = ({ feedback }: { feedback: Feedback }): React.Reac
         setDeling(true)
         const res = await fetch('/api/slack', {
             method: 'POST',
-            body: JSON.stringify({ feedback, team: valgTeam }),
+            body: JSON.stringify({ feedback, team: selectedTeam }),
         })
 
         if (res.ok) {
@@ -49,7 +52,7 @@ export const DeleknappSlack = ({ feedback }: { feedback: Feedback }): React.Reac
     }
 
     return (
-        <Tooltip content={`Del til team ${valgTeam} på Slack`}>
+        <Tooltip content={`Del til ${selectedTeam} på Slack`}>
             <Button
                 variant="tertiary"
                 icon={<SlackIcon />}
@@ -60,11 +63,15 @@ export const DeleknappSlack = ({ feedback }: { feedback: Feedback }): React.Reac
     )
 }
 
-export const DeleknappTrello = ({ feedback }: { feedback: Feedback }): ReactElement => {
+export const DeleknappTrello = ({
+    selectedTeam,
+    feedback,
+}: {
+    selectedTeam: string
+    feedback: Feedback
+}): ReactElement => {
     const [delt, setDelt] = useState(false)
     const [deling, setDeling] = useState(false)
-    const { team } = useRouter().query
-    const selectedTeam = team ?? 'flex'
 
     const delTilbakemeldingTilTrello = async (): Promise<void> => {
         setDeling(true)
@@ -87,7 +94,7 @@ export const DeleknappTrello = ({ feedback }: { feedback: Feedback }): ReactElem
     }
 
     return (
-        <Tooltip content={`Del til team ${selectedTeam} på Trello`}>
+        <Tooltip content={`Del til ${selectedTeam} på Trello`}>
             <Button
                 variant="tertiary"
                 icon={<TrelloIcon />}

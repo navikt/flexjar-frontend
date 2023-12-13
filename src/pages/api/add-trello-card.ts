@@ -84,6 +84,12 @@ class TrelloClient {
             ...tags.map((tag) => this.getLabelById(labelsInBoard, tag)),
         ])
 
+        logger.info(
+            `Creating new card in trello for ${this.config.board}, has ${
+                labelIds.filter(notNull).length
+            } labels (tags: ${tags.join(', ')})`,
+        )
+
         await this.addCardToTrelloList(
             this.config.targetList,
             {
@@ -129,6 +135,7 @@ class TrelloClient {
         const label = labels.find((label) => label?.name?.toLowerCase() === labelName?.toLowerCase())
 
         if (label == null) {
+            logger.info(`Unable to find label ${labelName} in board, creating it`)
             const idBoard = labels[0].idBoard
             const createdLabel = await this.createLabel(idBoard, labelName, getRandomColor())
 
