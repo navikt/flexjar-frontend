@@ -258,6 +258,7 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
                         <option value="teamsykmelding">Team Sykmelding</option>
                         <option value="helsearbeidsgiver">Team HAG</option>
                         <option value="tbd">TBD</option>
+                        <option value="teamsykefravr">iSYFO</option>
                     </Select>
                     <div className="self-end">
                         <Switch checked={medTekst} onChange={() => setMedTekst((b) => !b)} size="small">
