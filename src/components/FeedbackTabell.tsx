@@ -320,7 +320,7 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
                         {table.getRowModel().rows.map((row) => {
                             return (
                                 <Table.ExpandableRow
-                                    key={row.id}
+                                    key={row.original.id}
                                     content={
                                         <Table size="small">
                                             <Table.Body>
