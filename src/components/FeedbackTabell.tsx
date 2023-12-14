@@ -61,6 +61,26 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
         },
         placeholderData: keepPreviousData,
     })
+
+    useEffect(() => {
+        const handleKeyDown = (event: KeyboardEvent): void => {
+            if (event.key === 'ArrowRight') {
+                // Gå til neste side
+                const nextPage = Math.min((data?.number || 0) + 2, data?.totalPages || 0)
+                setPage(nextPage.toString())
+            } else if (event.key === 'ArrowLeft') {
+                // Gå til forrige side
+                const prevPage = Math.max(1, data?.number || 0)
+                setPage(prevPage.toString())
+            }
+        }
+
+        window.addEventListener('keydown', handleKeyDown)
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown)
+        }
+    }, [data, setPage])
+
     const defaultData = React.useMemo(() => [], [])
 
     const columnHelper = createColumnHelper<Feedback>()
@@ -343,6 +363,7 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
                     value={size}
                     onChange={(e) => {
                         setSize(Number(e.target.value))
+                        setPage('nyeste')
                     }}
                 >
                     {[5, 10, 20, 30, 40, 50].map((pageSize) => (
