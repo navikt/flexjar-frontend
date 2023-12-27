@@ -9,7 +9,7 @@ Innlogging er begrenset til AD gruppen team flex.
 
 Adressen til appen er https://flexjar.intern.nav.no/ i prod og https://flexjar.intern.dev.nav.no/ i dev. Man må ha naisdevice for å nå appen.
 
-
+test
 
 ## Henvendelser
 
