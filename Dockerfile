@@ -6,6 +6,6 @@ COPY /next.config.js ./
 COPY /.next ./.next
 COPY /node_modules ./node_modules
 
-ENV PORT=8080
+ENV PORT=3000
 
 CMD ["./node_modules/next/dist/bin/next", "start"]

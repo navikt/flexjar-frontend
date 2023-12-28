@@ -29,3 +29,6 @@ yarn-error.log*
 .sentryclirc
 
 .env
+
+/playwright-report/
+/playwright/.cache/
