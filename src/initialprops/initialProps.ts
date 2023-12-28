@@ -1,5 +1,3 @@
-import { GetServerSidePropsResult } from 'next'
-
 import { beskyttetSide } from '../auth/beskyttetSide'
 
 export const initialProps = beskyttetSide<PrefetchResults>(async () => {
@@ -13,5 +11,3 @@ export const initialProps = beskyttetSide<PrefetchResults>(async () => {
 export interface PrefetchResults {
     tidspunkt: number
 }
-
-export type GetServerSidePropsPrefetchResult = GetServerSidePropsResult<PrefetchResults>
