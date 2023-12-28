@@ -42,7 +42,7 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
 
     const [page, setPage] = useQueryState('page', parseAsString.withDefault('nyeste'))
     const [size, setSize] = useQueryState('size', parseAsInteger.withDefault(10))
-
+    const [hasTyped, setHasTyped] = useState(false)
     const { data, error, isFetching } = useQuery<PageResponse, Error>({
         queryKey: [`feedback`, team, page, size, medTekst, fritekst, stjerne],
         queryFn: async () => {
@@ -56,8 +56,7 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
             if (stjerne) {
                 url += `&stjerne=true`
             }
-            const fetchet: PageResponse = await fetchJsonMedRequestId(url)
-            return fetchet
+            return await fetchJsonMedRequestId(url)
         },
         placeholderData: keepPreviousData,
     })
@@ -223,12 +222,13 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
     useEffect(() => {
         // Avbryt eksisterende timeout
         if (timeoutId) clearTimeout(timeoutId)
+        if (!hasTyped) return
 
         // Opprett en ny timeout
         const newTimeoutId = setTimeout(() => {
             setFritekst(fritekstInput)
             setPage('nyeste')
-        }, 500) // 2 sekunder
+        }, 500)
 
         setTimeoutId(newTimeoutId)
 
@@ -258,6 +258,7 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
                         value={fritekstInput}
                         onChange={(e) => {
                             setFritekstInput(e.target.value)
+                            setHasTyped(true)
                         }}
                         onKeyUp={(e) => {
                             if (e.key === 'Enter') {
