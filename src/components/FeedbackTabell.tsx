@@ -378,7 +378,7 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
                     >
                         {[5, 10, 20, 30, 40, 50].map((pageSize) => (
                             <option key={pageSize} value={pageSize}>
-                                Show {pageSize}
+                                {pageSize} per side
                             </option>
                         ))}
                     </Select>
