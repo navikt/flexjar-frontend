@@ -1,5 +1,4 @@
-// import { json } from 'stream/consumers'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { UNSAFE_Combobox } from '@navikt/ds-react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 
@@ -32,16 +31,8 @@ export const deleteTag = async (tag: string, id: string): Promise<void> => {
     })
 }
 
-const getFilteredTags = (allTags: string[] | undefined, selectedTags: string[] | undefined): string[] => {
-    if (!allTags || !selectedTags) return []
-
-    const selectedSet = new Set(selectedTags)
-    return allTags.filter((tag) => !selectedSet.has(tag) && tag !== 'stjerne')
-}
-
 export const Tags = ({ feedback }: { feedback: Feedback }): JSX.Element => {
-    const [componentTags, setComponentTags] = useState<string[]>(feedback.tags.filter((x) => x !== 'stjerne') || [])
-    const [filteredTags, setFilteredTags] = useState<string[]>([])
+    const feedbackTags = feedback.tags.filter((x) => x !== 'stjerne')
     const queryClient = useQueryClient()
     const feedbackId = feedback.id
 
@@ -49,10 +40,11 @@ export const Tags = ({ feedback }: { feedback: Feedback }): JSX.Element => {
         queryFn: fetchAllTags,
         queryKey: ['allTags'],
     })
+    const allTagsUtenStjerne = allTags?.filter((x) => x !== 'stjerne') || []
 
     const addTagMutation = useMutation({
-        onMutate: async ({ tag }) => {
-            setComponentTags([...componentTags, tag])
+        onMutate: async () => {
+            await queryClient.invalidateQueries()
         },
         mutationFn: ({ tag, id }: { tag: string; id: string }) => addTag(tag, id),
         onError: () => {
@@ -63,13 +55,14 @@ export const Tags = ({ feedback }: { feedback: Feedback }): JSX.Element => {
             queryClient.invalidateQueries({
                 queryKey: ['allTags'],
             })
+            queryClient.invalidateQueries()
         },
     })
 
     const deleteTagMutation = useMutation({
-        mutationFn: (tag: string) => deleteTag(tag, feedbackId),
-        onMutate: async (tag) => {
-            setComponentTags((old) => old?.filter((t) => t !== tag) || [])
+        mutationFn: async (tag: string) => await deleteTag(tag, feedbackId),
+        onMutate: async () => {
+            await queryClient.invalidateQueries()
         },
         onError: () => {
             alert('Det har skjedd en feil, dine siste endringer ble ikke lagret')
@@ -90,11 +83,6 @@ export const Tags = ({ feedback }: { feedback: Feedback }): JSX.Element => {
         }
     }
 
-    useEffect(() => {
-        setFilteredTags(getFilteredTags(allTags, componentTags))
-        setComponentTags([...componentTags.filter((tag) => tag !== 'stjerne')])
-    }, [allTags, componentTags])
-
     if (isErrorAllTags) return <div>Det har skjedd en feil</div>
     return (
         <div>
@@ -103,8 +91,8 @@ export const Tags = ({ feedback }: { feedback: Feedback }): JSX.Element => {
                 isMultiSelect
                 label="Tags"
                 hideLabel={true}
-                options={filteredTags || []}
-                selectedOptions={componentTags || []}
+                options={allTagsUtenStjerne}
+                selectedOptions={feedbackTags}
                 onToggleSelected={(option, isSelected) => {
                     handleTagToggle(option, isSelected)
                 }}

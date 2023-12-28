@@ -14,7 +14,7 @@ export const testdata = nextleton('sessionStore', () => {
     return [] as Feedback[]
 })
 
-const antallFeedback = 11208
+const antallFeedback = 342
 for (let i = 0; i < antallFeedback; i++) {
     testdata.push({
         feedback: {
