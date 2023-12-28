@@ -5,6 +5,6 @@ test.describe('generelle tester for flexjar', () => {
         await page.goto('/')
 
         await expect(page.getByText('Flexjar 💪🫙')).toBeVisible()
-        await expect(page.getByText('NEI: Enterprise-wide optimal methodology')).toBeVisible()
+        await expect(page.getByText('NEI: Compatible web-enabled superstructure')).toBeVisible()
     })
 })
