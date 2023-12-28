@@ -240,6 +240,7 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
     if (!data) {
         return null
     }
+
     if (error) {
         return (
             <Alert variant="error" className="mb-8">
@@ -299,81 +300,90 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
                     </Button>
                 </div>
             </div>
+            {data.content.length === 0 && (
+                <Alert variant="info" className="mb-8">
+                    Ingen tilbakemeldinger
+                </Alert>
+            )}
+            {data.content.length > 0 && (
+                <div className="p-2">
+                    <div className="h-2" />
+                    <Table>
+                        <Table.Header>
+                            {table.getHeaderGroups().map((headerGroup) => (
+                                <Table.Row key={headerGroup.id}>
+                                    <Table.HeaderCell />
+                                    {headerGroup.headers.map((header) => (
+                                        <Table.HeaderCell key={header.id}>
+                                            {header.isPlaceholder
+                                                ? null
+                                                : flexRender(header.column.columnDef.header, header.getContext())}
+                                        </Table.HeaderCell>
+                                    ))}
+                                </Table.Row>
+                            ))}
+                        </Table.Header>
+                        <Table.Body>
+                            {table.getRowModel().rows.map((row) => {
+                                return (
+                                    <Table.ExpandableRow
+                                        key={row.original.id}
+                                        content={
+                                            <Table size="small">
+                                                <Table.Body>
+                                                    {Object.entries(row.original.feedback).map(([key, value]) => (
+                                                        <Table.Row key={key}>
+                                                            <Table.DataCell>{key}</Table.DataCell>
+                                                            <Table.DataCell>{`${value}`}</Table.DataCell>
+                                                        </Table.Row>
+                                                    ))}
+                                                </Table.Body>
+                                            </Table>
+                                        }
+                                    >
+                                        {row.getVisibleCells().map((cell) => {
+                                            return (
+                                                <Table.DataCell key={cell.id}>
+                                                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                                </Table.DataCell>
+                                            )
+                                        })}
+                                    </Table.ExpandableRow>
+                                )
+                            })}
+                        </Table.Body>
+                    </Table>
+                    <Pagination
+                        className="mt-4"
+                        page={data.number + 1}
+                        onPageChange={(p) => {
+                            // do nothing
+                            setPage(p + '')
+                        }}
+                        count={data.totalPages}
+                        size="small"
+                    />
 
-            <div className="p-2">
-                <div className="h-2" />
-                <Table>
-                    <Table.Header>
-                        {table.getHeaderGroups().map((headerGroup) => (
-                            <Table.Row key={headerGroup.id}>
-                                <Table.HeaderCell />
-                                {headerGroup.headers.map((header) => (
-                                    <Table.HeaderCell key={header.id}>
-                                        {header.isPlaceholder
-                                            ? null
-                                            : flexRender(header.column.columnDef.header, header.getContext())}
-                                    </Table.HeaderCell>
-                                ))}
-                            </Table.Row>
+                    <BodyShort className="my-2">{`Viser ${data.number * data.size + 1} - ${
+                        data.number * data.size + data.content.length
+                    } av ${data.totalElements}`}</BodyShort>
+                    <Select
+                        className="w-36"
+                        label=""
+                        value={size}
+                        onChange={(e) => {
+                            setSize(Number(e.target.value))
+                            setPage('nyeste')
+                        }}
+                    >
+                        {[5, 10, 20, 30, 40, 50].map((pageSize) => (
+                            <option key={pageSize} value={pageSize}>
+                                Show {pageSize}
+                            </option>
                         ))}
-                    </Table.Header>
-                    <Table.Body>
-                        {table.getRowModel().rows.map((row) => {
-                            return (
-                                <Table.ExpandableRow
-                                    key={row.original.id}
-                                    content={
-                                        <Table size="small">
-                                            <Table.Body>
-                                                {Object.entries(row.original.feedback).map(([key, value]) => (
-                                                    <Table.Row key={key}>
-                                                        <Table.DataCell>{key}</Table.DataCell>
-                                                        <Table.DataCell>{`${value}`}</Table.DataCell>
-                                                    </Table.Row>
-                                                ))}
-                                            </Table.Body>
-                                        </Table>
-                                    }
-                                >
-                                    {row.getVisibleCells().map((cell) => {
-                                        return (
-                                            <Table.DataCell key={cell.id}>
-                                                {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                                            </Table.DataCell>
-                                        )
-                                    })}
-                                </Table.ExpandableRow>
-                            )
-                        })}
-                    </Table.Body>
-                </Table>
-                <Pagination
-                    className="mt-4"
-                    page={data.number + 1}
-                    onPageChange={(p) => {
-                        // do nothing
-                        setPage(p + '')
-                    }}
-                    count={data.totalPages}
-                    size="small"
-                />
-
-                <Select
-                    className="w-36"
-                    label=""
-                    value={size}
-                    onChange={(e) => {
-                        setSize(Number(e.target.value))
-                        setPage('nyeste')
-                    }}
-                >
-                    {[5, 10, 20, 30, 40, 50].map((pageSize) => (
-                        <option key={pageSize} value={pageSize}>
-                            Show {pageSize}
-                        </option>
-                    ))}
-                </Select>
-            </div>
+                    </Select>
+                </div>
+            )}
         </>
     )
 }
