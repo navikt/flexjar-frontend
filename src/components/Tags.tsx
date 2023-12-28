@@ -44,7 +44,7 @@ export const Tags = ({ feedback }: { feedback: Feedback }): JSX.Element => {
 
     const addTagMutation = useMutation({
         onMutate: async () => {
-            await queryClient.invalidateQueries()
+            //TODO optimistic
         },
         mutationFn: ({ tag, id }: { tag: string; id: string }) => addTag(tag, id),
         onError: () => {
@@ -62,13 +62,14 @@ export const Tags = ({ feedback }: { feedback: Feedback }): JSX.Element => {
     const deleteTagMutation = useMutation({
         mutationFn: async (tag: string) => await deleteTag(tag, feedbackId),
         onMutate: async () => {
-            await queryClient.invalidateQueries()
+            //TODO optimistic
         },
         onError: () => {
             alert('Det har skjedd en feil, dine siste endringer ble ikke lagret')
             queryClient.invalidateQueries()
         },
-        onSuccess: () => {
+        onSuccess: async () => {
+            await queryClient.invalidateQueries()
             queryClient.invalidateQueries({
                 queryKey: ['allTags'],
             })
