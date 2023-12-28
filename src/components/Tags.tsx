@@ -45,6 +45,7 @@ export const Tags = ({ feedback }: { feedback: Feedback }): JSX.Element => {
     const allTagsUtenStjerne = allTagsSomArray?.filter((x) => x !== 'stjerne') || []
 
     const addTagMutation = useMutation({
+        mutationFn: ({ tag, id }: { tag: string; id: string }) => addTag(tag, id),
         onMutate: async ({ tag, id }) => {
             const queriesData = queryClient.getQueriesData<PageResponse>({ queryKey: ['feedback'] })
             const querydata = queriesData.find((a) => {
@@ -64,7 +65,6 @@ export const Tags = ({ feedback }: { feedback: Feedback }): JSX.Element => {
                 queryClient.setQueryData(['allTags'], allTags)
             }
         },
-        mutationFn: ({ tag, id }: { tag: string; id: string }) => addTag(tag, id),
         onError: () => {
             alert('Det har skjedd en feil, dine siste endringer ble ikke lagret')
             queryClient.invalidateQueries()
@@ -73,8 +73,20 @@ export const Tags = ({ feedback }: { feedback: Feedback }): JSX.Element => {
 
     const deleteTagMutation = useMutation({
         mutationFn: async (tag: string) => await deleteTag(tag, feedbackId),
-        onMutate: async () => {
-            //TODO optimistic
+        onMutate: async (tag) => {
+            const queriesData = queryClient.getQueriesData<PageResponse>({ queryKey: ['feedback'] })
+            const querydata = queriesData.find((a) => {
+                return a[1]?.content.find((b) => {
+                    if (b.id === feedbackId) {
+                        b.tags = b.tags.filter((x) => x !== tag)
+                        return true
+                    }
+                    return false
+                })
+            })
+            if (querydata) {
+                queryClient.setQueryData<PageResponse>(querydata[0], querydata[1])
+            }
         },
         onError: () => {
             alert('Det har skjedd en feil, dine siste endringer ble ikke lagret')
