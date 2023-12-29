@@ -2,6 +2,9 @@
     "name": "flexjar-frontend",
     "version": "0.1.0",
     "private": true,
+    "engines": {
+        "node": "20"
+    },
     "dependencies": {
         "@faker-js/faker": "^8.3.1",
         "@navikt/ds-css": "^5.12.1",
