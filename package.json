@@ -14,7 +14,7 @@
         "@navikt/next-api-proxy": "^3.4.0",
         "@navikt/next-logger": "^1.21.0",
         "@tanstack/react-query": "^5.12.2",
-        "@tanstack/react-table": "^8.11.3",
+        "@tanstack/react-table": "^8.11.6",
         "classnames": "^2.5.1",
         "dayjs": "^1.11.10",
         "next-usequerystate": "^1.14.0",
