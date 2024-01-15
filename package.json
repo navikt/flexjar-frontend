@@ -34,7 +34,7 @@
         "@types/react-dom": "^18.2.18",
         "@types/uuid": "^9.0.7",
         "autoprefixer": "^10.4.16",
-        "eslint": "^8.55.0",
+        "eslint": "^8.56.0",
         "eslint-config-next": "^14.0.4",
         "next": "^14.0.4",
         "pino-pretty": "^10.3.1",
