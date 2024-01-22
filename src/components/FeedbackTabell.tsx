@@ -249,6 +249,18 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
         )
     }
 
+    function kopierAlt(): string {
+        return table
+            .getRowModel()
+            .rows.map((row) => {
+                return row.original.feedback.feedback
+            })
+            .filter((feedback) => {
+                return feedback !== undefined && feedback
+            })
+            .join('\n')
+    }
+
     return (
         <>
             <div className="flex justify-between items-center h-16 mb-4">
@@ -298,6 +310,7 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
                     >
                         <StarIcon title="a11y-stjerne" fontSize="1.5rem" className={stjerne ? 'text-white' : ''} />
                     </Button>
+                    <CopyButton copyText={kopierAlt()} text="Kopier alle" variant="action" />
                 </div>
             </div>
             {data.content.length === 0 && (
