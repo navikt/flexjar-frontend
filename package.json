@@ -29,7 +29,7 @@
         "@axe-core/playwright": "^4.8.3",
         "@navikt/eslint-config-teamsykmelding": "^5.1.0",
         "@playwright/test": "^1.40.1",
-        "@types/node": "^20.10.4",
+        "@types/node": "^20.11.6",
         "@types/react": "^18.2.48",
         "@types/react-dom": "^18.2.18",
         "@types/uuid": "^9.0.7",
