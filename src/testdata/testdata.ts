@@ -64,12 +64,12 @@ export async function mockApi(opts: BackendProxyOpts): Promise<void> {
     const { req, res } = opts
 
     await sleep(200)
-    if (validert.api == 'GET /api/v1/intern/feedback') {
+    if (validert.api === 'GET /api/v1/intern/feedback') {
         const team = validert.query.get('team') || 'flex'
         const size = parseInt(validert.query.get('size') || '10', 10)
         const fritekst = validert.query.get('fritekst')
-        const medTekst = (validert.query.get('medTekst') || 'false') == 'true'
-        const starred = (validert.query.get('stjerne') || 'false') == 'true'
+        const medTekst = (validert.query.get('medTekst') || 'false') === 'true'
+        const starred = (validert.query.get('stjerne') || 'false') === 'true'
 
         const testdataSomArray = Object.values(testdata).sort((a, b) => {
             return new Date(a.opprettet).getTime() - new Date(b.opprettet).getTime()
@@ -130,14 +130,14 @@ export async function mockApi(opts: BackendProxyOpts): Promise<void> {
         return
     }
 
-    if (validert.api == 'DELETE /api/v1/intern/feedback/[uuid]') {
+    if (validert.api === 'DELETE /api/v1/intern/feedback/[uuid]') {
         const id = req.url?.split('/').pop()
         deleteFeedbackById(id || '')
         res.status(204)
         res.end()
         return
     }
-    if (validert.api == 'POST /api/v1/feedback/azure') {
+    if (validert.api === 'POST /api/v1/feedback/azure') {
         const body = <FeedbackInput>await reqToBody(req)
         const id = randomUUID()
         testdata[id] = {
@@ -150,7 +150,14 @@ export async function mockApi(opts: BackendProxyOpts): Promise<void> {
         res.end()
         return
     }
-    if (validert.api == 'GET /api/v1/intern/feedback/tags') {
+    if (validert.api === 'GET /api/v1/intern/feedback/teams') {
+        res.status(200).json({
+            teamsykmelding: ['dinesykmeldte'],
+            flex: ['sykepengesoknad', 'spinnsyn-frontend'],
+        })
+        return
+    }
+    if (validert.api === 'GET /api/v1/intern/feedback/tags') {
         const tags = new Set<string>()
         Object.values(testdata).forEach((feedback) => {
             feedback.tags.forEach((tag) => {
@@ -163,7 +170,7 @@ export async function mockApi(opts: BackendProxyOpts): Promise<void> {
         res.status(200).json(tagsArray)
         return
     }
-    if (validert.api == 'POST /api/v1/intern/feedback/[uuid]/tags') {
+    if (validert.api === 'POST /api/v1/intern/feedback/[uuid]/tags') {
         const id = req.url?.split('/')![7]
 
         interface AddTag {
@@ -190,7 +197,7 @@ export async function mockApi(opts: BackendProxyOpts): Promise<void> {
         return
     }
 
-    if (validert.api == 'DELETE /api/v1/intern/feedback/[uuid]/tags') {
+    if (validert.api === 'DELETE /api/v1/intern/feedback/[uuid]/tags') {
         const id = req.url?.split('/')![7]
         const tag = validert.query.get('tag')
         if (!id) {

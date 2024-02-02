@@ -32,9 +32,11 @@ import { DeleknappSlack, DeleknappTrello } from './Deleknapp'
 import { Sletteknapp } from './Sletteknapp'
 import { Tags } from './Tags'
 import { Stjerneknapp } from './Stjerneknapp'
+import Teamvelger from './Teamvelger'
 
 export const FeedbackTabell = (): React.JSX.Element | null => {
-    const [team, setTeam] = useQueryState('team', parseAsString.withDefault('flex'))
+    const [team] = useQueryState('team', parseAsString.withDefault('flex'))
+    const [app] = useQueryState('app', parseAsString.withDefault('alle'))
     const [medTekst, setMedTekst] = useQueryState('medTekst', parseAsBoolean.withDefault(true))
     const [fritekstInput, setFritekstInput] = useQueryState('fritekst', parseAsString.withDefault(''))
     const [fritekst, setFritekst] = useState(fritekstInput)
@@ -44,7 +46,7 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
     const [size, setSize] = useQueryState('size', parseAsInteger.withDefault(10))
     const [hasTyped, setHasTyped] = useState(false)
     const { data, error, isFetching } = useQuery<PageResponse, Error>({
-        queryKey: [`feedback`, team, page, size, medTekst, fritekst, stjerne],
+        queryKey: [`feedback`, team, page, size, medTekst, fritekst, stjerne, app],
         queryFn: async () => {
             let url = `/api/flexjar-backend/api/v1/intern/feedback?team=${team}&size=${size}&medTekst=${medTekst}`
             if (fritekst) {
@@ -55,6 +57,9 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
             }
             if (stjerne) {
                 url += `&stjerne=true`
+            }
+            if (app) {
+                url += `&app=${app}`
             }
             return await fetchJsonMedRequestId(url)
         },
@@ -280,21 +285,14 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
                             }
                         }}
                     />
-                    <Select
-                        label="Velg team"
-                        size="small"
-                        defaultValue={team}
-                        onChange={(event) => {
-                            setTeam(event.target.value)
+                    <Teamvelger
+                        onTeamChanged={() => {
                             setPage('nyeste')
                         }}
-                    >
-                        <option value="flex">Flex</option>
-                        <option value="teamsykmelding">Team Sykmelding</option>
-                        <option value="helsearbeidsgiver">Team HAG</option>
-                        <option value="tbd">TBD</option>
-                        <option value="teamsykefravr">iSYFO</option>
-                    </Select>
+                        onAppChanged={() => {
+                            setPage('nyeste')
+                        }}
+                    />
                     <div className="self-end">
                         <Switch checked={medTekst} onChange={() => setMedTekst((b) => !b)} size="small">
                             Vis bare feedback med tekst
