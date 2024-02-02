@@ -32,7 +32,7 @@ function Teamvelger({ onTeamChanged, onAppChanged }: Props): ReactElement {
                     onTeamChanged(event.target.value)
                 }}
             >
-                <option value={selectedApp}>{selectedTeam}</option>
+                <option value={selectedApp}>{pentTeamNavn(selectedTeam)}</option>
                 {teamOgApper.data &&
                     Object.keys(teamOgApper.data)
                         .filter((it) => it !== selectedTeam)
