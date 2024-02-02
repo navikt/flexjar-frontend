@@ -58,7 +58,7 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
             if (stjerne) {
                 url += `&stjerne=true`
             }
-            if (app) {
+            if (app && app !== 'alle') {
                 url += `&app=${app}`
             }
             return await fetchJsonMedRequestId(url)
