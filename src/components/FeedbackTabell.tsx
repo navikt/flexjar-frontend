@@ -107,7 +107,8 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
                 function svarTilEmoji(): string | undefined {
                     const feedback = info.getValue().feedback
                     const svar = feedback.svar
-                    if (feedback.feedbackId !== 'sykepengesoknad-kvittering') {
+                    const feedbackIdsMedEmoji = ['sykepengesoknad-kvittering', 'spinnsyn-pohelse-helsemetrikk']
+                    if (!feedbackIdsMedEmoji.includes(feedback.feedbackId)) {
                         return svar
                     }
                     if (svar == '1') {
