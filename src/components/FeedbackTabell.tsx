@@ -310,7 +310,7 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
                     >
                         <StarIcon title="a11y-stjerne" fontSize="1.5rem" className={stjerne ? 'text-white' : ''} />
                     </Button>
-                    <CopyButton copyText={kopierAlt()} text="Kopier alle" variant="action" />
+                    <CopyButton copyText={kopierAlt()} text="Kopier alle" variant="action" size="small" />
                 </div>
             </div>
             {data.content.length === 0 && (
