@@ -286,14 +286,7 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
                             }
                         }}
                     />
-                    <Teamvelger
-                        onTeamChanged={() => {
-                            setPage('nyeste')
-                        }}
-                        onAppChanged={() => {
-                            setPage('nyeste')
-                        }}
-                    />
+                    <Teamvelger onChange={() => setPage(null)} />
                     <div className="self-end">
                         <Switch checked={medTekst} onChange={() => setMedTekst((b) => !b)} size="small">
                             Vis bare feedback med tekst
