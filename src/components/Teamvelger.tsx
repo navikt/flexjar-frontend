@@ -6,13 +6,12 @@ import { parseAsString, useQueryState } from 'next-usequerystate'
 import { fetchJsonMedRequestId } from '../utils/fetch'
 
 type Props = {
-    onTeamChanged: (team: string) => void
-    onAppChanged: (app: string) => void
+    onChange: (team: string) => void
 }
 
 type TeamResponse = Record<string, string[]>
 
-function Teamvelger({ onTeamChanged, onAppChanged }: Props): ReactElement {
+function Teamvelger({ onChange }: Props): ReactElement {
     const [selectedApp, setSelectedApp] = useQueryState('app', parseAsString.withDefault('alle'))
     const [selectedTeam, setSelecedTeam] = useQueryState('team', parseAsString.withDefault('flex'))
     const teamOgApper = useQuery<TeamResponse, Error>({
@@ -27,9 +26,12 @@ function Teamvelger({ onTeamChanged, onAppChanged }: Props): ReactElement {
                 label="Velg team"
                 size="small"
                 defaultValue={selectedTeam}
-                onChange={(event) => {
+                onChange={async (event) => {
                     setSelecedTeam(event.target.value)
-                    onTeamChanged(event.target.value)
+                    if (selectedTeam !== event.target.value) {
+                        setSelectedApp(null)
+                    }
+                    onChange(event.target.value)
                 }}
             >
                 <option value={selectedApp}>{pentTeamNavn(selectedTeam)}</option>
@@ -46,9 +48,9 @@ function Teamvelger({ onTeamChanged, onAppChanged }: Props): ReactElement {
                 label="App"
                 size="small"
                 defaultValue={selectedTeam}
-                onChange={(event) => {
+                onChange={async (event) => {
                     setSelectedApp(event.target.value)
-                    onAppChanged(event.target.value)
+                    onChange(event.target.value)
                 }}
             >
                 <option value="alle">Alle apper</option>
