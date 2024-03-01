@@ -13,7 +13,7 @@ export const Sletteknapp = ({ feedback }: { feedback: Feedback }): JSX.Element =
             <Button size="small" variant="secondary" onClick={() => setOpen(true)}>
                 Slett
             </Button>
-            <Modal className="w-4/12" open={open} aria-label="Modal demo" aria-labelledby="modal-heading">
+            <Modal onClose={() => {}} className="w-4/12" open={open} aria-label="Modal demo">
                 <Modal.Body>
                     <BodyLong spacing>Er du sikker på at du vil slette denne feedbacken?</BodyLong>
                     <BodyLong className="italic">{feedback.feedback.feedback}</BodyLong>
