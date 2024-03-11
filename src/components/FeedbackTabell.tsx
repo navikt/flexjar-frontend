@@ -6,6 +6,7 @@ import {
     Pagination,
     Select,
     Skeleton,
+    Link as AkselLink,
     Switch,
     Table,
     TextField,
@@ -334,16 +335,31 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
                                     <Table.ExpandableRow
                                         key={row.original.id}
                                         content={
-                                            <Table size="small">
-                                                <Table.Body>
-                                                    {Object.entries(row.original.feedback).map(([key, value]) => (
-                                                        <Table.Row key={key}>
-                                                            <Table.DataCell>{key}</Table.DataCell>
-                                                            <Table.DataCell>{`${value}`}</Table.DataCell>
-                                                        </Table.Row>
-                                                    ))}
-                                                </Table.Body>
-                                            </Table>
+                                            <>
+                                                {row.original.feedback.amplitudeDeviceId && (
+                                                    <AkselLink
+                                                        className="mb-2 text-medium"
+                                                        href={
+                                                            'https://app.eu.amplitude.com/analytics/nav/project/100000009/search/device_id%3D' +
+                                                            row.original.feedback.amplitudeDeviceId
+                                                        }
+                                                        target="_blank"
+                                                    >
+                                                        Åpne i Amplitude
+                                                    </AkselLink>
+                                                )}
+
+                                                <Table size="small">
+                                                    <Table.Body>
+                                                        {Object.entries(row.original.feedback).map(([key, value]) => (
+                                                            <Table.Row key={key}>
+                                                                <Table.DataCell>{key}</Table.DataCell>
+                                                                <Table.DataCell>{`${value}`}</Table.DataCell>
+                                                            </Table.Row>
+                                                        ))}
+                                                    </Table.Body>
+                                                </Table>
+                                            </>
                                         }
                                     >
                                         {row.getVisibleCells().map((cell) => {
