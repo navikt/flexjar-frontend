@@ -47,6 +47,21 @@ for (let i = 1; i <= 5; i++) {
     }
 }
 
+const id = faker.string.uuid()
+testdata[id] = {
+    feedback: {
+        feedback: faker.datatype.boolean() ? faker.company.catchPhrase() : '',
+        svar: `Jeg har amplitudeId`,
+        app: 'sykepengesoknad',
+        team: 'flex',
+        feedbackId: 'sykepengesoknad-kvittering',
+        amplitudeDeviceId: 'G7VIgpTXMSO5LFQ6-vQDB2',
+    },
+    id: id,
+    opprettet: faker.date.future().toISOString(),
+    tags: [],
+}
+
 function deleteFeedbackById(idToDelete: string): void {
     const find = testdata[idToDelete]
     if (find) {
