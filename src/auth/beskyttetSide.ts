@@ -1,8 +1,8 @@
 import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
+import { getToken, validateAzureToken } from '@navikt/oasis'
+import { logger } from '@navikt/next-logger'
 
 import { isMockBackend } from '../utils/environment'
-
-import { verifyAzureAccessToken } from './azureVerifisering'
 
 type PageHandler<InitialPageProps> = (
     context: GetServerSidePropsContext,
@@ -28,16 +28,26 @@ export function beskyttetSide<InitialPageProps>(handler: PageHandler<InitialPage
             },
         }
 
-        const bearerToken: string | null | undefined = request.headers['authorization']
-        if (!bearerToken) {
-            return wonderwallRedirect
-        }
-        try {
-            await verifyAzureAccessToken(bearerToken)
-        } catch (e) {
+        const token = getToken(context.req)
+        if (token == null) {
             return wonderwallRedirect
         }
 
+        const validationResult = await validateAzureToken(token)
+
+        if (!validationResult.ok) {
+            const error = new Error(
+                `Invalid JWT token found (cause: ${validationResult.error.message}, redirecting to login.`,
+                { cause: validationResult.error },
+            )
+
+            if (validationResult.errorType === 'token expired') {
+                logger.warn(error)
+            } else {
+                logger.error(error)
+            }
+            return wonderwallRedirect
+        }
         return handler(context)
     }
 }
