@@ -42,7 +42,7 @@ export const Tags = ({ feedback }: { feedback: Feedback }): JSX.Element => {
         queryKey: ['allTags'],
     })
     const allTagsSomArray = Array.from(allTags || [])
-    const allTagsUtenStjerne = allTagsSomArray?.filter((x) => x !== 'stjerne') || []
+    const allTagsUtenStjerne = (allTagsSomArray?.filter((x) => x !== 'stjerne') || []).sort()
 
     const addTagMutation = useMutation({
         mutationFn: ({ tag, id }: { tag: string; id: string }) => addTag(tag, id),
