@@ -1,4 +1,4 @@
-ingress: https://flexjar.intern.dev.nav.no
+ingress: https://flexjar.ansatt.dev.nav.no
 memory: 250Mi
 env:
   FLEXJAR_BACKEND_CLIENT_ID: api://dev-gcp.flex.flexjar-backend/.default
