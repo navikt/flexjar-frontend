@@ -46,6 +46,7 @@ spec:
           - id: "6b8065ba-98e2-4e2d-98d4-f9768c7fbb38" #helsearbeidsgiver
           - id: "c0227409-2085-4eb2-b487-c4ba270986a3" #tbd
           - id: "5066bb56-7f19-4b49-ae48-f1ba66abf546" #isyfo
+          - id: "ef4e9824-6f3a-4933-8f40-6edf5233d4d2" #esyfo
     sidecar:
       enabled: true
       autoLogin: false
