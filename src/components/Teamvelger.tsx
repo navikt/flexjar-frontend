@@ -75,7 +75,9 @@ function pentTeamNavn(team: string): string {
         case 'tbd':
             return 'TBD'
         case 'teamsykefravr':
-            return 'iSYFO'
+            return 'iSyfo'
+        case 'team-esyfo':
+            return 'eSyfo'
         default:
             return team
     }
