@@ -5,6 +5,7 @@ import React, { useState } from 'react'
 import Head from 'next/head'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { InternalHeader } from '@navikt/ds-react'
+import Image from 'next/image'
 
 function MyApp({ Component, pageProps }: AppProps): JSX.Element {
     const [queryClient] = useState(
@@ -30,7 +31,16 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
             </Head>
             <QueryClientProvider client={queryClient}>
                 <InternalHeader>
-                    <InternalHeader.Title as="h1">Flexjar 💪🫙</InternalHeader.Title>
+                    <InternalHeader.Title as="h1">
+                        Flexjar
+                        <Image
+                            className="inline"
+                            src="/static/flexjar.png"
+                            alt="flexjarlogo"
+                            width={100}
+                            height={100}
+                        />
+                    </InternalHeader.Title>
                 </InternalHeader>
                 <div id="root" className="mx-auto p-4 pb-32">
                     <Component {...pageProps} />
