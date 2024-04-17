@@ -94,7 +94,10 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
         columnHelper.accessor('opprettet', {
             cell: (info) => {
                 return (
-                    <BodyShort as={isFetching ? Skeleton : 'p'}>
+                    <BodyShort
+                        as={isFetching ? Skeleton : 'p'}
+                        title={dayjs(info.getValue()).format('YYYY.MM.DD HH:mm:ss')}
+                    >
                         {dayjs(info.getValue()).format('YYYY.MM.DD')}
                     </BodyShort>
                 )
