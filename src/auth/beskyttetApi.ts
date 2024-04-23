@@ -2,13 +2,13 @@ import { logger } from '@navikt/next-logger'
 import { NextApiRequest, NextApiResponse } from 'next'
 import { getToken, validateAzureToken } from '@navikt/oasis'
 
-import { isMockBackend } from '../utils/environment'
+import { isLocalBackend, isMockBackend } from '../utils/environment'
 
 type ApiHandler = (req: NextApiRequest, res: NextApiResponse) => void | Promise<void>
 
 export function beskyttetApi(handler: ApiHandler): ApiHandler {
     return async function withBearerTokenHandler(req, res) {
-        if (isMockBackend()) {
+        if (isMockBackend() || isLocalBackend()) {
             return handler(req, res)
         }
 

@@ -2,7 +2,7 @@ import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
 import { getToken, validateAzureToken } from '@navikt/oasis'
 import { logger } from '@navikt/next-logger'
 
-import { isMockBackend } from '../utils/environment'
+import { isLocalBackend, isMockBackend } from '../utils/environment'
 
 type PageHandler<InitialPageProps> = (
     context: GetServerSidePropsContext,
@@ -12,7 +12,7 @@ export function beskyttetSide<InitialPageProps>(handler: PageHandler<InitialPage
     return async function withBearerTokenHandler(
         context: GetServerSidePropsContext,
     ): Promise<ReturnType<NonNullable<typeof handler>>> {
-        if (isMockBackend()) {
+        if (isMockBackend() || isLocalBackend()) {
             return handler(context)
         }
 

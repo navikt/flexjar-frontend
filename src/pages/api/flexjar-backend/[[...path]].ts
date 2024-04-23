@@ -2,8 +2,8 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import getConfig from 'next/config'
 
 import { beskyttetApi } from '../../../auth/beskyttetApi'
-import { isMockBackend } from '../../../utils/environment'
-import { proxyKallTilBackend } from '../../../proxy/backendproxy'
+import { isLocalBackend, isMockBackend } from '../../../utils/environment'
+import { BackendProxyOpts, proxyKallTilBackend } from '../../../proxy/backendproxy'
 import { mockApi } from '../../../testdata/testdata'
 
 const { serverRuntimeConfig } = getConfig()
@@ -20,18 +20,30 @@ const tillatteApier = [
 ]
 
 const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) => {
-    const opts = {
-        req,
-        res,
-        tillatteApier,
-        backend: 'flexjar-backend',
-        hostname: 'flexjar-backend',
-        backendClientId: serverRuntimeConfig.flexjarBackendClientId,
+    function getOpts(): BackendProxyOpts {
+        if (isLocalBackend()) {
+            return {
+                req,
+                res,
+                tillatteApier,
+                backend: 'flexjar-backend',
+                hostname: 'localhost',
+            }
+        }
+        return {
+            req,
+            res,
+            tillatteApier,
+            backend: 'flexjar-backend',
+            hostname: 'flexjar-backend',
+            backendClientId: serverRuntimeConfig.flexjarBackendClientId,
+        }
     }
+
     if (isMockBackend()) {
-        return mockApi(opts)
+        return mockApi(getOpts())
     }
-    await proxyKallTilBackend(opts)
+    await proxyKallTilBackend(getOpts())
 })
 
 export const config = {
