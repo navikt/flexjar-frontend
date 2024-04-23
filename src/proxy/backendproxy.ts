@@ -3,13 +3,15 @@ import { logger } from '@navikt/next-logger'
 import { NextApiRequest, NextApiResponse } from 'next'
 import { requestAzureOboToken } from '@navikt/oasis'
 
+import { isLocalBackend } from '../utils/environment'
+
 export interface BackendProxyOpts {
     req: NextApiRequest
     res: NextApiResponse
     tillatteApier: string[]
     backend: string
     hostname: string
-    backendClientId: string
+    backendClientId?: string
 }
 
 export function validerKall(
@@ -40,6 +42,9 @@ export async function proxyKallTilBackend(opts: BackendProxyOpts): Promise<void>
     if (!validert) return
 
     async function bearerToken(): Promise<string | undefined> {
+        if (isLocalBackend()) {
+            return undefined
+        }
         if (!opts.req.headers.authorization) throw new Error('Mangler authorization header')
 
         if (opts.backendClientId) {

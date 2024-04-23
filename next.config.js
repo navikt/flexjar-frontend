@@ -8,5 +8,6 @@ module.exports = {
     publicRuntimeConfig: {
         // Will be available on both server and client
         mockBackend: process.env.MOCK_BACKEND,
+        localBackend: process.env.LOCAL_BACKEND,
     },
 }
