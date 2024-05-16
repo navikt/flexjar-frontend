@@ -242,7 +242,7 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
         const newTimeoutId = setTimeout(() => {
             setFritekst(fritekstInput)
             setPage('nyeste')
-        }, 500)
+        }, 2000)
 
         setTimeoutId(newTimeoutId)
 
