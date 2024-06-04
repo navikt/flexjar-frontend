@@ -35,6 +35,13 @@ import { Tags } from './Tags'
 import { Stjerneknapp } from './Stjerneknapp'
 import Teamvelger from './Teamvelger'
 
+async function fetchAllTags(): Promise<Set<string>> {
+    const url = `/api/flexjar-backend/api/v1/intern/feedback/tags`
+
+    const fetchet: string[] = await fetchJsonMedRequestId(url)
+
+    return new Set(fetchet)
+}
 export const FeedbackTabell = (): React.JSX.Element | null => {
     const [team] = useQueryState('team', parseAsString.withDefault('flex'))
     const [app] = useQueryState('app', parseAsString.withDefault('alle'))
@@ -43,7 +50,12 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
     const [fritekst, setFritekst] = useState(fritekstInput)
     const [stjerne, setStjerne] = useQueryState('stjerne', parseAsBoolean.withDefault(false))
     const [tags, setTags] = useQueryState('tags', parseAsString.withDefault(""))
-    const [uniqueTags, setUniqueTags] = useState<string[]>(['white', 'blue', 'bronze'])
+      const { data: allTags, isError: isErrorAllTags } = useQuery({
+        queryFn: fetchAllTags,
+        queryKey: ['allTags'],
+    })
+    const [uniqueTags, setUniqueTags] = useState<string[]>(tags.split(",")) // useQueryState('team', parseAsString.withDefault('flex')) // useState<string[]>(['white', 'blue', 'bronze'])
+
     const [page, setPage] = useQueryState('page', parseAsString.withDefault('nyeste'))
     const [size, setSize] = useQueryState('size', parseAsInteger.withDefault(10))
     const [hasTyped, setHasTyped] = useState(false)
@@ -333,7 +345,9 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
                         } label="">
                         {/* Populate options based on available tags */}
                         <option value="">All</option>
-                        {uniqueTags.map((tag) => (
+                        {
+
+                            Array.from(allTags || []).map((tag) => (
                             <option key={tag} value={tag}>
                                 {tag}
                             </option>
