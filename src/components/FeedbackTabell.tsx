@@ -76,7 +76,7 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
                 url += `&app=${app}`
             }
             if (tags && tags !== "") {
-                url += `&tags=${tags}`
+                url += `&tags=${tags},lemon` // `&tags=${tags},lemon` dette virker for lemon selected og salmon, selected, så dermed ser det ut til at multiple virker
             }
             return await fetchJsonMedRequestId(url)
         },
