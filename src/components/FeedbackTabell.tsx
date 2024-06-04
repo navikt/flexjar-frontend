@@ -42,12 +42,13 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
     const [fritekstInput, setFritekstInput] = useQueryState('fritekst', parseAsString.withDefault(''))
     const [fritekst, setFritekst] = useState(fritekstInput)
     const [stjerne, setStjerne] = useQueryState('stjerne', parseAsBoolean.withDefault(false))
-
+    const [tags, setTags] = useQueryState('tags', parseAsString.withDefault(""))
+    const [uniqueTags, setUniqueTags] = useState<string[]>(['white', 'blue', 'bronze'])
     const [page, setPage] = useQueryState('page', parseAsString.withDefault('nyeste'))
     const [size, setSize] = useQueryState('size', parseAsInteger.withDefault(10))
     const [hasTyped, setHasTyped] = useState(false)
     const { data, error, isFetching } = useQuery<PageResponse, Error>({
-        queryKey: [`feedback`, team, page, size, medTekst, fritekst, stjerne, app],
+        queryKey: [`feedback`, team, page, size, medTekst, fritekst, stjerne, app, tags],
         queryFn: async () => {
             let url = `/api/flexjar-backend/api/v1/intern/feedback?team=${team}&size=${size}&medTekst=${medTekst}`
             if (fritekst) {
@@ -61,6 +62,9 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
             }
             if (app && app !== 'alle') {
                 url += `&app=${app}`
+            }
+            if (tags && tags !== "") {
+                url += `&tags=${tags}`
             }
             return await fetchJsonMedRequestId(url)
         },
@@ -94,10 +98,7 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
         columnHelper.accessor('opprettet', {
             cell: (info) => {
                 return (
-                    <BodyShort
-                        as={isFetching ? Skeleton : 'p'}
-                        title={dayjs(info.getValue()).format('YYYY.MM.DD HH:mm:ss')}
-                    >
+                    <BodyShort as={isFetching ? Skeleton : 'p'}>
                         {dayjs(info.getValue()).format('YYYY.MM.DD')}
                     </BodyShort>
                 )
@@ -227,7 +228,7 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
         getPaginationRowModel: getPaginationRowModel(),
         pageCount: data?.totalPages ?? -1,
         manualPagination: true,
-        //
+
         debugTable: true,
     })
 
@@ -242,7 +243,7 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
         const newTimeoutId = setTimeout(() => {
             setFritekst(fritekstInput)
             setPage('nyeste')
-        }, 2000)
+        }, 500)
 
         setTimeoutId(newTimeoutId)
 
@@ -300,6 +301,7 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
                             Vis bare feedback med tekst
                         </Switch>
                     </div>
+
                     <Button
                         size="small"
                         onClick={() => {
@@ -311,6 +313,32 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
                         <StarIcon title="a11y-stjerne" fontSize="1.5rem" className={stjerne ? 'text-white' : ''} />
                     </Button>
                     <CopyButton copyText={kopierAlt()} text="Kopier alle" variant="action" size="small" />
+
+                    {/*<Select*/}
+                    {/*    className="w-36"*/}
+                    {/*    label=""*/}
+                    {/*    value={size}*/}
+                    {/*    onChange={(e) => {*/}
+                    {/*        setSize(Number(e.target.value))*/}
+                    {/*        setPage('nyeste')*/}
+                    {/*    }}*/}
+                    {/*>*/}
+                    {/*<Select value={tagFilter} onChange={(e) => setTagFilter(e.target.value)} label="">*/}
+                    {tags}
+                        <Select value={tags} onChange={
+                            (e) => {
+                                setTags(e.target.value)
+                                setPage('nyeste')
+                            }
+                        } label="">
+                        {/* Populate options based on available tags */}
+                        <option value="">All</option>
+                        {uniqueTags.map((tag) => (
+                            <option key={tag} value={tag}>
+                                {tag}
+                            </option>
+                        ))}
+                    </Select>
                 </div>
             </div>
             {data.content.length === 0 && (
