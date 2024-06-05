@@ -22,7 +22,7 @@ import {
     useReactTable,
 } from '@tanstack/react-table'
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
-import { parseAsBoolean, parseAsInteger, parseAsString, useQueryState } from 'next-usequerystate'
+import { parseAsBoolean, parseAsInteger, parseAsString, parseAsArrayOf, useQueryState } from 'next-usequerystate'
 import { StarIcon } from '@navikt/aksel-icons'
 
 import { Feedback } from '../queryhooks/useFeedback'
@@ -35,7 +35,10 @@ import { Tags } from './Tags'
 import { Stjerneknapp } from './Stjerneknapp'
 import Teamvelger from './Teamvelger'
 import {TagFilter} from "./TagFilter";
-// import { parseAsArrayOf } from 'next-usequerystate/parsers';
+
+
+
+
 
 
 async function fetchAllTags(): Promise<Set<string>> {
@@ -52,9 +55,9 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
     const [fritekstInput, setFritekstInput] = useQueryState('fritekst', parseAsString.withDefault(''))
     const [fritekst, setFritekst] = useState(fritekstInput)
     const [stjerne, setStjerne] = useQueryState('stjerne', parseAsBoolean.withDefault(false))
-    const [selectedTags, setSelectedTags] = useState<string[]>([]) //  useQueryState('tags', parseAsString.withDefault(""))
+    // const [selectedTags, setSelectedTags] = useState<string[]>([]) //  useQueryState('tags', parseAsString.withDefault(""))
     // const [selectedTags, setSelectedTags] = useQueryState<string[]>('tags', parseAsArrayOf(",")) // ([]);
-    // const [selectedTags, setSelectedTags] = useQueryState('tags', parseAsArrayOf(parseAsString)) // state is number[]
+    const [selectedTags, setSelectedTags] = useQueryState('tags', parseAsArrayOf(parseAsString).withDefault([])) // state is number[]
 
 
 
