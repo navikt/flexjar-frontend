@@ -35,19 +35,13 @@ import { Tags } from './Tags'
 import { Stjerneknapp } from './Stjerneknapp'
 import Teamvelger from './Teamvelger'
 import {TagFilter} from "./TagFilter";
+import {fetchAllTags} from "../utils/apiCalls"
 
 
 
 
 
 
-async function fetchAllTags(): Promise<Set<string>> {
-    const url = `/api/flexjar-backend/api/v1/intern/feedback/tags`
-
-    const fetchet: string[] = await fetchJsonMedRequestId(url)
-
-    return new Set(fetchet)
-}
 export const FeedbackTabell = (): React.JSX.Element | null => {
     const [team] = useQueryState('team', parseAsString.withDefault('flex'))
     const [app] = useQueryState('app', parseAsString.withDefault('alle'))
