@@ -34,6 +34,7 @@ import { Sletteknapp } from './Sletteknapp'
 import { Tags } from './Tags'
 import { Stjerneknapp } from './Stjerneknapp'
 import Teamvelger from './Teamvelger'
+import {TagFilter} from "./TagFilter";
 
 async function fetchAllTags(): Promise<Set<string>> {
     const url = `/api/flexjar-backend/api/v1/intern/feedback/tags`
@@ -354,6 +355,7 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
                         ))}
                     </Select>
                 </div>
+                <TagFilter initialOptions={Array.from(allTags || [])}/>
             </div>
             {data.content.length === 0 && (
                 <Alert variant="info" className="mb-8">
