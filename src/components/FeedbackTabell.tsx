@@ -35,6 +35,8 @@ import { Tags } from './Tags'
 import { Stjerneknapp } from './Stjerneknapp'
 import Teamvelger from './Teamvelger'
 import {TagFilter} from "./TagFilter";
+// import { parseAsArrayOf } from 'next-usequerystate/parsers';
+
 
 async function fetchAllTags(): Promise<Set<string>> {
     const url = `/api/flexjar-backend/api/v1/intern/feedback/tags`
@@ -51,10 +53,12 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
     const [fritekst, setFritekst] = useState(fritekstInput)
     const [stjerne, setStjerne] = useQueryState('stjerne', parseAsBoolean.withDefault(false))
     const [selectedTags, setSelectedTags] = useState<string[]>([]) //  useQueryState('tags', parseAsString.withDefault(""))
+    // const [selectedTags, setSelectedTags] = useQueryState<string[]>('tags', parseAsArrayOf(",")) // ([]);
+    // const [selectedTags, setSelectedTags] = useQueryState('tags', parseAsArrayOf(parseAsString)) // state is number[]
 
 
 
-      const { data: allTags, isError: isErrorAllTags } = useQuery({
+      const { data: allTags } = useQuery({
         queryFn: fetchAllTags,
         queryKey: ['allTags'],
     })
@@ -79,7 +83,7 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
             if (app && app !== 'alle') {
                 url += `&app=${app}`
             }
-            if (selectedTags.length > 0) {
+            if (selectedTags && selectedTags.length > 0) {
                 url += `&tags=${selectedTags.join(",")}` // `&tags=${tags},lemon` dette virker for lemon selected og salmon, selected, så dermed ser det ut til at multiple virker
             }
             return await fetchJsonMedRequestId(url)
