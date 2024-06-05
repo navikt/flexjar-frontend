@@ -50,18 +50,21 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
     const [fritekstInput, setFritekstInput] = useQueryState('fritekst', parseAsString.withDefault(''))
     const [fritekst, setFritekst] = useState(fritekstInput)
     const [stjerne, setStjerne] = useQueryState('stjerne', parseAsBoolean.withDefault(false))
-    const [tags, setTags] = useQueryState('tags', parseAsString.withDefault(""))
+    const [selectedTags, setSelectedTags] = useState<string[]>([]) //  useQueryState('tags', parseAsString.withDefault(""))
+
+
+
       const { data: allTags, isError: isErrorAllTags } = useQuery({
         queryFn: fetchAllTags,
         queryKey: ['allTags'],
     })
-    const [uniqueTags, setUniqueTags] = useState<string[]>(tags.split(",")) // useQueryState('team', parseAsString.withDefault('flex')) // useState<string[]>(['white', 'blue', 'bronze'])
+    // const [uniqueTags, setUniqueTags] = useState<string[]>(tags.split(",")) // useQueryState('team', parseAsString.withDefault('flex')) // useState<string[]>(['white', 'blue', 'bronze'])
 
     const [page, setPage] = useQueryState('page', parseAsString.withDefault('nyeste'))
     const [size, setSize] = useQueryState('size', parseAsInteger.withDefault(10))
     const [hasTyped, setHasTyped] = useState(false)
     const { data, error, isFetching } = useQuery<PageResponse, Error>({
-        queryKey: [`feedback`, team, page, size, medTekst, fritekst, stjerne, app, tags],
+        queryKey: [`feedback`, team, page, size, medTekst, fritekst, stjerne, app, selectedTags],
         queryFn: async () => {
             let url = `/api/flexjar-backend/api/v1/intern/feedback?team=${team}&size=${size}&medTekst=${medTekst}`
             if (fritekst) {
@@ -76,8 +79,8 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
             if (app && app !== 'alle') {
                 url += `&app=${app}`
             }
-            if (tags && tags !== "") {
-                url += `&tags=${tags},lemon` // `&tags=${tags},lemon` dette virker for lemon selected og salmon, selected, så dermed ser det ut til at multiple virker
+            if (selectedTags.length > 0) {
+                url += `&tags=${selectedTags.join(",")}` // `&tags=${tags},lemon` dette virker for lemon selected og salmon, selected, så dermed ser det ut til at multiple virker
             }
             return await fetchJsonMedRequestId(url)
         },
@@ -337,10 +340,10 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
                     {/*    }}*/}
                     {/*>*/}
                     {/*<Select value={tagFilter} onChange={(e) => setTagFilter(e.target.value)} label="">*/}
-                    {tags}
-                        <Select value={tags} onChange={
+                    {selectedTags}
+                        <Select value={selectedTags} onChange={
                             (e) => {
-                                setTags(e.target.value)
+                                setSelectedTags([e.target.value])
                                 setPage('nyeste')
                             }
                         } label="">
@@ -355,7 +358,7 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
                         ))}
                     </Select>
                 </div>
-                <TagFilter initialOptions={Array.from(allTags || [])}/>
+                <TagFilter initialOptions={Array.from(allTags || [])} setSelectedTags={setSelectedTags} selectedTags={selectedTags} />
             </div>
             {data.content.length === 0 && (
                 <Alert variant="info" className="mb-8">
