@@ -28,17 +28,14 @@ import { StarIcon } from '@navikt/aksel-icons'
 import { Feedback } from '../queryhooks/useFeedback'
 import { fetchJsonMedRequestId } from '../utils/fetch'
 import { PageResponse } from '../testdata/testdata'
+import { fetchAllTags } from '../utils/apiCalls'
 
 import { DeleknappSlack, DeleknappTrello } from './Deleknapp'
 import { Sletteknapp } from './Sletteknapp'
 import { Tags } from './Tags'
 import { Stjerneknapp } from './Stjerneknapp'
 import Teamvelger from './Teamvelger'
-import {TagFilter} from "./TagFilter";
-import {fetchAllTags} from "../utils/apiCalls"
-
-
-
+import { TagFilter } from './TagFilter'
 
 export const FeedbackTabell = (): React.JSX.Element | null => {
     const [team] = useQueryState('team', parseAsString.withDefault('flex'))
@@ -49,9 +46,7 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
     const [stjerne, setStjerne] = useQueryState('stjerne', parseAsBoolean.withDefault(false))
     const [selectedTags, setSelectedTags] = useQueryState('tags', parseAsArrayOf(parseAsString).withDefault([])) // state is number[]
 
-
-
-      const { data: allTags } = useQuery({
+    const { data: allTags } = useQuery({
         queryFn: fetchAllTags,
         queryKey: ['allTags'],
     })
@@ -77,7 +72,7 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
                 url += `&app=${app}`
             }
             if (selectedTags && selectedTags.length > 0) {
-                url += `&tags=${selectedTags.join(",")}` // `&tags=${tags},lemon` dette virker for lemon selected og salmon, selected, så dermed ser det ut til at multiple virker
+                url += `&tags=${selectedTags.join(',')}` // `&tags=${tags},lemon` dette virker for lemon selected og salmon, selected, så dermed ser det ut til at multiple virker
             }
             return await fetchJsonMedRequestId(url)
         },
@@ -327,8 +322,11 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
                     </Button>
                     <CopyButton copyText={kopierAlt()} text="Kopier alle" variant="action" size="small" />
 
-                    <TagFilter initialOptions={Array.from(allTags || [])} setSelectedTags={setSelectedTags} selectedTags={selectedTags}/>
-
+                    <TagFilter
+                        initialOptions={Array.from(allTags || [])}
+                        setSelectedTags={setSelectedTags}
+                        selectedTags={selectedTags}
+                    />
                 </div>
             </div>
             {data.content.length === 0 && (
