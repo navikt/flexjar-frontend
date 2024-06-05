@@ -50,7 +50,7 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
         queryFn: fetchAllTags,
         queryKey: ['allTags'],
     })
-    // const [uniqueTags, setUniqueTags] = useState<string[]>(tags.split(",")) // useQueryState('team', parseAsString.withDefault('flex')) // useState<string[]>(['white', 'blue', 'bronze'])
+    
 
     const [page, setPage] = useQueryState('page', parseAsString.withDefault('nyeste'))
     const [size, setSize] = useQueryState('size', parseAsInteger.withDefault(10))
