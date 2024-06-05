@@ -330,35 +330,9 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
                     </Button>
                     <CopyButton copyText={kopierAlt()} text="Kopier alle" variant="action" size="small" />
 
-                    {/*<Select*/}
-                    {/*    className="w-36"*/}
-                    {/*    label=""*/}
-                    {/*    value={size}*/}
-                    {/*    onChange={(e) => {*/}
-                    {/*        setSize(Number(e.target.value))*/}
-                    {/*        setPage('nyeste')*/}
-                    {/*    }}*/}
-                    {/*>*/}
-                    {/*<Select value={tagFilter} onChange={(e) => setTagFilter(e.target.value)} label="">*/}
-                    {selectedTags}
-                        <Select value={selectedTags} onChange={
-                            (e) => {
-                                setSelectedTags([e.target.value])
-                                setPage('nyeste')
-                            }
-                        } label="">
-                        {/* Populate options based on available tags */}
-                        <option value="">All</option>
-                        {
+                    <TagFilter initialOptions={Array.from(allTags || [])} setSelectedTags={setSelectedTags} selectedTags={selectedTags}/>
 
-                            Array.from(allTags || []).map((tag) => (
-                            <option key={tag} value={tag}>
-                                {tag}
-                            </option>
-                        ))}
-                    </Select>
                 </div>
-                <TagFilter initialOptions={Array.from(allTags || [])} setSelectedTags={setSelectedTags} selectedTags={selectedTags} />
             </div>
             {data.content.length === 0 && (
                 <Alert variant="info" className="mb-8">
