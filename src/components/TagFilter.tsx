@@ -9,22 +9,19 @@ interface TagFilterProps {
 export const TagFilter = ({ initialOptions, selectedTags, setSelectedTags }: TagFilterProps): JSX.Element => {
 
     const handleToggleSelected = (option: string | undefined, isSelected: boolean) : void => {
-    if (!option) return;
+        if (!option) return;
 
-    let newSelectedTags;
-    if (isSelected) {
-      if (!selectedTags.includes(option)) {
-        newSelectedTags = [...selectedTags, option];
-      } else {
-        return;
+      if (isSelected && !selectedTags.includes(option)) {
+          const newSelectedTags = [...selectedTags, option];
+          setSelectedTags(newSelectedTags);
       }
-    } else {
-      newSelectedTags = selectedTags.filter(tag => tag !== option);
-    }
 
-    if (newSelectedTags && newSelectedTags.length !== selectedTags.length) {
-      setSelectedTags(newSelectedTags);
-    }
+      if (!isSelected && selectedTags.includes(option)) {
+        const newSelectedTags = selectedTags.filter(tag => tag !== option);
+        setSelectedTags(newSelectedTags);
+      }
+
+
   };
 
   return (

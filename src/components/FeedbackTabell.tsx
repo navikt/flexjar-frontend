@@ -40,8 +40,6 @@ import {fetchAllTags} from "../utils/apiCalls"
 
 
 
-
-
 export const FeedbackTabell = (): React.JSX.Element | null => {
     const [team] = useQueryState('team', parseAsString.withDefault('flex'))
     const [app] = useQueryState('app', parseAsString.withDefault('alle'))
@@ -49,8 +47,6 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
     const [fritekstInput, setFritekstInput] = useQueryState('fritekst', parseAsString.withDefault(''))
     const [fritekst, setFritekst] = useState(fritekstInput)
     const [stjerne, setStjerne] = useQueryState('stjerne', parseAsBoolean.withDefault(false))
-    // const [selectedTags, setSelectedTags] = useState<string[]>([]) //  useQueryState('tags', parseAsString.withDefault(""))
-    // const [selectedTags, setSelectedTags] = useQueryState<string[]>('tags', parseAsArrayOf(",")) // ([]);
     const [selectedTags, setSelectedTags] = useQueryState('tags', parseAsArrayOf(parseAsString).withDefault([])) // state is number[]
 
 
