@@ -15,7 +15,7 @@ export const TagFilter = ({ initialOptions, selectedTags, setSelectedTags }: Tag
         } else {
             setSelectedTags(selectedTags.filter((tag) => tag !== option))
         }
-    }   
+    }
 
     return (
         <div>
