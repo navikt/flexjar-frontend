@@ -44,13 +44,12 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
     const [fritekstInput, setFritekstInput] = useQueryState('fritekst', parseAsString.withDefault(''))
     const [fritekst, setFritekst] = useState(fritekstInput)
     const [stjerne, setStjerne] = useQueryState('stjerne', parseAsBoolean.withDefault(false))
-    const [selectedTags, setSelectedTags] = useQueryState('tags', parseAsArrayOf(parseAsString).withDefault([])) // state is number[]
+    const [selectedTags, setSelectedTags] = useQueryState('tags', parseAsArrayOf(parseAsString).withDefault([]))
 
     const { data: allTags } = useQuery({
         queryFn: fetchAllTags,
         queryKey: ['allTags'],
     })
-    
 
     const [page, setPage] = useQueryState('page', parseAsString.withDefault('nyeste'))
     const [size, setSize] = useQueryState('size', parseAsInteger.withDefault(10))
@@ -72,7 +71,7 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
                 url += `&app=${app}`
             }
             if (selectedTags && selectedTags.length > 0) {
-                url += `&tags=${selectedTags.join(',')}` // `&tags=${tags},lemon` dette virker for lemon selected og salmon, selected, så dermed ser det ut til at multiple virker
+                url += `&tags=${selectedTags.join(',')}`
             }
             return await fetchJsonMedRequestId(url)
         },
@@ -251,7 +250,7 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
         const newTimeoutId = setTimeout(() => {
             setFritekst(fritekstInput)
             setPage('nyeste')
-        }, 500)
+        }, 2000)
 
         setTimeoutId(newTimeoutId)
 

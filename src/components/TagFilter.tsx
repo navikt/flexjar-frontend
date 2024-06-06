@@ -11,15 +11,11 @@ export const TagFilter = ({ initialOptions, selectedTags, setSelectedTags }: Tag
         if (!option) return
 
         if (isSelected && !selectedTags.includes(option)) {
-            const newSelectedTags = [...selectedTags, option]
-            setSelectedTags(newSelectedTags)
+            setSelectedTags([...selectedTags, option])
+        } else {
+            setSelectedTags(selectedTags.filter((tag) => tag !== option))
         }
-
-        if (!isSelected && selectedTags.includes(option)) {
-            const newSelectedTags = selectedTags.filter((tag) => tag !== option)
-            setSelectedTags(newSelectedTags)
-        }
-    }
+    }   
 
     return (
         <div>
