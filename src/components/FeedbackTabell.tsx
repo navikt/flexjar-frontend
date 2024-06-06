@@ -22,18 +22,20 @@ import {
     useReactTable,
 } from '@tanstack/react-table'
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
-import { parseAsBoolean, parseAsInteger, parseAsString, useQueryState } from 'next-usequerystate'
+import { parseAsBoolean, parseAsInteger, parseAsString, parseAsArrayOf, useQueryState } from 'next-usequerystate'
 import { StarIcon } from '@navikt/aksel-icons'
 
 import { Feedback } from '../queryhooks/useFeedback'
 import { fetchJsonMedRequestId } from '../utils/fetch'
 import { PageResponse } from '../testdata/testdata'
+import { fetchAllTags } from '../utils/apiCalls'
 
 import { DeleknappSlack, DeleknappTrello } from './Deleknapp'
 import { Sletteknapp } from './Sletteknapp'
 import { Tags } from './Tags'
 import { Stjerneknapp } from './Stjerneknapp'
 import Teamvelger from './Teamvelger'
+import { TagFilter } from './TagFilter'
 
 export const FeedbackTabell = (): React.JSX.Element | null => {
     const [team] = useQueryState('team', parseAsString.withDefault('flex'))
@@ -42,12 +44,18 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
     const [fritekstInput, setFritekstInput] = useQueryState('fritekst', parseAsString.withDefault(''))
     const [fritekst, setFritekst] = useState(fritekstInput)
     const [stjerne, setStjerne] = useQueryState('stjerne', parseAsBoolean.withDefault(false))
+    const [selectedTags, setSelectedTags] = useQueryState('tags', parseAsArrayOf(parseAsString).withDefault([]))
+
+    const { data: allTags } = useQuery({
+        queryFn: fetchAllTags,
+        queryKey: ['allTags'],
+    })
 
     const [page, setPage] = useQueryState('page', parseAsString.withDefault('nyeste'))
     const [size, setSize] = useQueryState('size', parseAsInteger.withDefault(10))
     const [hasTyped, setHasTyped] = useState(false)
     const { data, error, isFetching } = useQuery<PageResponse, Error>({
-        queryKey: [`feedback`, team, page, size, medTekst, fritekst, stjerne, app],
+        queryKey: [`feedback`, team, page, size, medTekst, fritekst, stjerne, app, selectedTags],
         queryFn: async () => {
             let url = `/api/flexjar-backend/api/v1/intern/feedback?team=${team}&size=${size}&medTekst=${medTekst}`
             if (fritekst) {
@@ -61,6 +69,9 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
             }
             if (app && app !== 'alle') {
                 url += `&app=${app}`
+            }
+            if (selectedTags && selectedTags.length > 0) {
+                url += `&tags=${selectedTags.join(',')}`
             }
             return await fetchJsonMedRequestId(url)
         },
@@ -227,7 +238,7 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
         getPaginationRowModel: getPaginationRowModel(),
         pageCount: data?.totalPages ?? -1,
         manualPagination: true,
-        //
+
         debugTable: true,
     })
 
@@ -300,6 +311,7 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
                             Vis bare feedback med tekst
                         </Switch>
                     </div>
+
                     <Button
                         size="small"
                         onClick={() => {
@@ -311,6 +323,12 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
                         <StarIcon title="a11y-stjerne" fontSize="1.5rem" className={stjerne ? 'text-white' : ''} />
                     </Button>
                     <CopyButton copyText={kopierAlt()} text="Kopier alle" variant="action" size="small" />
+
+                    <TagFilter
+                        initialOptions={Array.from(allTags || [])}
+                        setSelectedTags={setSelectedTags}
+                        selectedTags={selectedTags}
+                    />
                 </div>
             </div>
             {data.content.length === 0 && (

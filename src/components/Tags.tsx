@@ -3,16 +3,9 @@ import { UNSAFE_Combobox } from '@navikt/ds-react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 
 import { Feedback } from '../queryhooks/useFeedback'
-import { fetchJsonMedRequestId, fetchMedRequestId } from '../utils/fetch'
+import { fetchMedRequestId } from '../utils/fetch'
 import { PageResponse } from '../testdata/testdata'
-
-async function fetchAllTags(): Promise<Set<string>> {
-    const url = `/api/flexjar-backend/api/v1/intern/feedback/tags`
-
-    const fetchet: string[] = await fetchJsonMedRequestId(url)
-
-    return new Set(fetchet)
-}
+import { fetchAllTags } from '../utils/apiCalls'
 
 export async function addTag(tag: string, id: string): Promise<void> {
     const url = `/api/flexjar-backend/api/v1/intern/feedback/${id}/tags`
