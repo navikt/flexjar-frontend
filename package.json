@@ -44,7 +44,7 @@
         "typescript": "^5.4.5"
     },
     "scripts": {
-        "dev": "MOCK_BACKEND=true next dev -p 3000 | pino-pretty",
+        "dev": "MOCK_BACKEND=true next dev -p 3001 | pino-pretty",
         "local": "LOCAL_BACKEND=true next dev -p 3001 | pino-pretty",
         "e2e": "playwright test",
         "e2e:dev": "yarn e2e --ui",
