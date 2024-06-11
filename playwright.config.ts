@@ -1,7 +1,7 @@
 import { defineConfig, devices } from '@playwright/test'
 import { PlaywrightTestConfig } from 'playwright/types/test'
 
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT || 3001
 
 type OptionsType = { baseURL: string; timeout: number; server: PlaywrightTestConfig['webServer'] }
 const opts: OptionsType =

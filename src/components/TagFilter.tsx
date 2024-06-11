@@ -1,12 +1,14 @@
 import { UNSAFE_Combobox } from '@navikt/ds-react'
+import page from "@navikt/ds-react/src/layout/page/Page";
 
 interface TagFilterProps {
     initialOptions: string[]
     selectedTags: string[]
     setSelectedTags: (newTags: string[]) => void
+    setPage: (page: number) => void
 }
 
-export const TagFilter = ({ initialOptions, selectedTags, setSelectedTags }: TagFilterProps): JSX.Element => {
+export const TagFilter = ({ initialOptions, selectedTags, setSelectedTags, setPage }: TagFilterProps): JSX.Element => {
     const handleToggleSelected = (option: string | undefined, isSelected: boolean): void => {
         if (!option) return
 
@@ -15,6 +17,7 @@ export const TagFilter = ({ initialOptions, selectedTags, setSelectedTags }: Tag
         } else {
             setSelectedTags(selectedTags.filter((tag) => tag !== option))
         }
+        setPage(1)
     }
 
     return (
@@ -23,6 +26,7 @@ export const TagFilter = ({ initialOptions, selectedTags, setSelectedTags }: Tag
                 label="Filter?"
                 options={initialOptions}
                 isMultiSelect
+                selectedOptions={selectedTags}
                 onToggleSelected={handleToggleSelected}
             />
         </div>

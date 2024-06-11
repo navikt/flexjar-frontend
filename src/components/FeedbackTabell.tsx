@@ -328,6 +328,7 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
                         initialOptions={Array.from(allTags || [])}
                         setSelectedTags={setSelectedTags}
                         selectedTags={selectedTags}
+                        setPage={setPage}
                     />
                 </div>
             </div>
