@@ -1,15 +1,15 @@
 import { UNSAFE_Combobox } from '@navikt/ds-react'
-import page from "@navikt/ds-react/src/layout/page/Page";
+import { logger } from '@navikt/next-logger'
 
 interface TagFilterProps {
     initialOptions: string[]
     selectedTags: string[]
     setSelectedTags: (newTags: string[]) => void
-    setPage: (page: number) => void
+    setPage: (value: string | ((old: string) => string | null) | null) => Promise<URLSearchParams>
 }
 
 export const TagFilter = ({ initialOptions, selectedTags, setSelectedTags, setPage }: TagFilterProps): JSX.Element => {
-    const handleToggleSelected = (option: string | undefined, isSelected: boolean): void => {
+    const handleToggleSelected = async (option: string | undefined, isSelected: boolean): Promise<void> => {
         if (!option) return
 
         if (isSelected && !selectedTags.includes(option)) {
@@ -17,14 +17,19 @@ export const TagFilter = ({ initialOptions, selectedTags, setSelectedTags, setPa
         } else {
             setSelectedTags(selectedTags.filter((tag) => tag !== option))
         }
-        setPage(1)
+
+        try {
+            await setPage('1')
+        } catch (error) {
+            logger.warn('Failed to set page:', error)
+        }
     }
 
     return (
         <div>
             <UNSAFE_Combobox
                 label="Filter?"
-                options={initialOptions}
+                options={initialOptions.sort()}
                 isMultiSelect
                 selectedOptions={selectedTags}
                 onToggleSelected={handleToggleSelected}
@@ -32,3 +37,5 @@ export const TagFilter = ({ initialOptions, selectedTags, setSelectedTags, setPa
         </div>
     )
 }
+
+export default TagFilter
