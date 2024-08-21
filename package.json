@@ -7,6 +7,7 @@
     },
     "dependencies": {
         "@faker-js/faker": "^8.4.1",
+        "@navikt/aksel-icons": "^6.16.1",
         "@navikt/ds-css": "^6.16.0",
         "@navikt/ds-react": "^6.16.0",
         "@navikt/ds-tailwind": "^6.16.0",
@@ -27,8 +28,8 @@
     },
     "devDependencies": {
         "@axe-core/playwright": "^4.9.1",
-        "@navikt/eslint-config-teamsykmelding": "^5.2.0",
-        "@playwright/test": "^1.42.1",
+        "@navikt/eslint-config-teamsykmelding": "^6.5.0",
+        "@playwright/test": "^1.46.1",
         "@types/node": "^20.14.10",
         "@types/react": "^18.3.3",
         "@types/react-dom": "^18.3.0",
