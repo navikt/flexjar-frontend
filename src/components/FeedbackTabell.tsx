@@ -126,7 +126,7 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
                         'sykepengesoknad-kvittering',
                         'spinnsyn-pohelse-helsemetrikk',
                         'speil-generell',
-                        'syk-dig',
+                        'syk-dig-header',
                     ]
                     if (!feedbackIdsMedEmoji.includes(feedback.feedbackId)) {
                         return svar
