@@ -37,7 +37,7 @@
         "autoprefixer": "^10.4.20",
         "eslint": "^8.57.0",
         "eslint-config-next": "^14.2.7",
-        "next": "^14.2.7",
+        "next": "^14.2.9",
         "pino-pretty": "^11.2.2",
         "playwright-core": "^1.46.0",
         "prettier": "^3.3.3",
