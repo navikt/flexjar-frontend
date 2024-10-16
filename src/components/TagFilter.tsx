@@ -28,7 +28,8 @@ export const TagFilter = ({ initialOptions, selectedTags, setSelectedTags, setPa
     return (
         <div>
             <UNSAFE_Combobox
-                label="Filter?"
+                size="small"
+                label="Tag"
                 options={initialOptions.sort()}
                 isMultiSelect
                 selectedOptions={selectedTags}
