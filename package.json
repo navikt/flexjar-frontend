@@ -28,7 +28,7 @@
     },
     "devDependencies": {
         "@axe-core/playwright": "^4.9.1",
-        "@navikt/eslint-config-teamsykmelding": "^6.6.0",
+        "@navikt/eslint-config-teamsykmelding": "^7.0.0",
         "@playwright/test": "^1.46.1",
         "@types/node": "^22.7.5",
         "@types/react": "^18.3.11",
