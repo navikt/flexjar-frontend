@@ -3,12 +3,13 @@ import React from 'react'
 import { initialProps } from '../initialprops/initialProps'
 import { Tilbakemelding } from '../components/Tilbakemelding'
 import { FeedbackTabell } from '../components/FeedbackTabell'
+import { isMockBackend } from '../utils/environment'
 
 const Index = (): JSX.Element => {
     return (
         <>
             <FeedbackTabell />
-            <Tilbakemelding />
+            {!isMockBackend() && <Tilbakemelding />}
         </>
     )
 }

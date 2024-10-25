@@ -1,6 +1,6 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
+import { NextConfig } from 'next'
 
-module.exports = {
+export default {
     serverRuntimeConfig: {
         // Will only be available on the server side
         flexjarBackendClientId: process.env.FLEXJAR_BACKEND_CLIENT_ID,
@@ -10,4 +10,4 @@ module.exports = {
         mockBackend: process.env.MOCK_BACKEND,
         localBackend: process.env.LOCAL_BACKEND,
     },
-}
+} satisfies NextConfig
