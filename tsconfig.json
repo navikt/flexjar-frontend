@@ -16,8 +16,9 @@
         "jsx": "preserve",
         "strictNullChecks": true,
         "noFallthroughCasesInSwitch": true,
-        "incremental": true
+        "incremental": true,
+        "plugins": [{ "name": "next" }]
     },
-    "include": ["src", "next-env.d.ts", "**/*.ts", "**/*.tsx"],
+    "include": ["**/*.ts", "**/*.tsx", "next-env.d.ts", "src", ".next/types/**/*.ts"],
     "exclude": ["node_modules"]
 }
