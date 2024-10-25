@@ -22,7 +22,7 @@ import {
     useReactTable,
 } from '@tanstack/react-table'
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
-import { parseAsBoolean, parseAsInteger, parseAsString, parseAsArrayOf, useQueryState } from 'next-usequerystate'
+import { parseAsBoolean, parseAsInteger, parseAsString, parseAsArrayOf, useQueryState } from 'nuqs'
 import { StarIcon } from '@navikt/aksel-icons'
 
 import { Feedback } from '../queryhooks/useFeedback'

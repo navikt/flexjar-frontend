@@ -33,3 +33,5 @@ yarn-error.log*
 /playwright-report/
 /playwright/.cache/
 /test-results
+
+tsconfig.tsbuildinfo

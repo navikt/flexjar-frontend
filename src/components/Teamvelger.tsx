@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react'
 import { Select } from '@navikt/ds-react'
 import { useQuery } from '@tanstack/react-query'
-import { parseAsString, useQueryState } from 'next-usequerystate'
+import { parseAsString, useQueryState } from 'nuqs'
 
 import { fetchJsonMedRequestId } from '../utils/fetch'
 

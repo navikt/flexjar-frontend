@@ -5,6 +5,7 @@ import React, { useState } from 'react'
 import Head from 'next/head'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { InternalHeader } from '@navikt/ds-react'
+import { NuqsAdapter } from 'nuqs/adapters/next/pages'
 
 function MyApp({ Component, pageProps }: AppProps): JSX.Element {
     const [queryClient] = useState(
@@ -31,18 +32,26 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
                 <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png" />
                 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
             </Head>
-            <QueryClientProvider client={queryClient}>
-                <InternalHeader>
-                    <InternalHeader.Title as="h1">
-                        Flexjar
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img className="inline" src="/static/flexjar.png" alt="flexjarlogo" width={100} height={100} />
-                    </InternalHeader.Title>
-                </InternalHeader>
-                <div id="root" className="mx-auto p-4 pb-32">
-                    <Component {...pageProps} />
-                </div>
-            </QueryClientProvider>
+            <NuqsAdapter>
+                <QueryClientProvider client={queryClient}>
+                    <InternalHeader>
+                        <InternalHeader.Title as="h1">
+                            Flexjar
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img
+                                className="inline"
+                                src="/static/flexjar.png"
+                                alt="flexjarlogo"
+                                width={100}
+                                height={100}
+                            />
+                        </InternalHeader.Title>
+                    </InternalHeader>
+                    <div id="root" className="mx-auto p-4 pb-32">
+                        <Component {...pageProps} />
+                    </div>
+                </QueryClientProvider>
+            </NuqsAdapter>
         </>
     )
 }
