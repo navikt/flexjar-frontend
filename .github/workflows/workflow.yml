@@ -16,7 +16,7 @@ jobs:
   playwright:
     runs-on: ubuntu-latest
     container:
-      image: mcr.microsoft.com/playwright:v1.46.1-jammy
+      image: mcr.microsoft.com/playwright:v1.48.1-jammy
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
