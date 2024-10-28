@@ -6,7 +6,7 @@
         "node": ">=20"
     },
     "dependencies": {
-        "@faker-js/faker": "^9.0.3",
+        "@faker-js/faker": "^9.1.0",
         "@navikt/aksel-icons": "^7.4.0",
         "@navikt/ds-css": "^7.4.0",
         "@navikt/ds-react": "^7.4.0",
