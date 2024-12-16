@@ -16,7 +16,7 @@
         "@navikt/next-logger": "^1.35.0",
         "@navikt/oasis": "^3.6.0",
         "@tanstack/react-query": "^5.59.20",
-        "@tanstack/react-table": "^8.20.5",
+        "@tanstack/react-table": "^8.20.6",
         "classnames": "^2.5.1",
         "dayjs": "^1.11.12",
         "nextleton": "^0.6.1",
