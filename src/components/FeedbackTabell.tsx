@@ -129,6 +129,7 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
                         'spinnsyn-pohelse-helsemetrikk',
                         'speil-generell',
                         'syk-dig-header',
+                        'oppfolgingsplan-arbeidsgiver',
                     ]
                     if (!feedbackIdsMedEmoji.includes(feedback.feedbackId)) {
                         return svar
