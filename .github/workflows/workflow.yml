@@ -19,7 +19,7 @@ jobs:
       image: mcr.microsoft.com/playwright:v1.48.1-jammy
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Install npm dependencies
         run: npm ci
         env:
