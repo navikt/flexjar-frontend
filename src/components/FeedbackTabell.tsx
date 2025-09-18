@@ -160,7 +160,7 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
                 return (
                     <BodyShort as={isFetching ? Skeleton : 'p'}>
                         <span className="font-bold">{svarTilEmoji()}: </span>
-                        <span className="italic">{info.getValue().feedback.feedback}</span>
+                        <span>{info.getValue().feedback.feedback}</span>
                     </BodyShort>
                 )
             },
