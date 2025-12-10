@@ -62,6 +62,20 @@ testdata[id] = {
     tags: [],
 }
 
+const feedbackMedHovedvalgOgUndervalg: Feedback = {
+    feedback: {
+        feedback: 'Hvor er ting?',
+        svar: '"{\\"hovedvalg\\":\\"Litt vanskelig\\",\\"undervalg\\":\\"Svaret manglet viktig informasjon\\"}"',
+        app: 'spinnsyn-frontend',
+        team: 'flex',
+        feedbackId: 'spinnsyn-vedtak',
+    },
+    id: faker.string.uuid(),
+    opprettet: faker.date.past().toISOString(),
+    tags: [],
+}
+testdata[feedbackMedHovedvalgOgUndervalg.id] = feedbackMedHovedvalgOgUndervalg
+
 function deleteFeedbackById(idToDelete: string): void {
     const find = testdata[idToDelete]
     if (find) {

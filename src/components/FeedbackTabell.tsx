@@ -31,6 +31,7 @@ import { Feedback } from '../queryhooks/useFeedback'
 import { fetchJsonMedRequestId } from '../utils/fetch'
 import { PageResponse } from '../testdata/testdata'
 import { fetchAllTags } from '../utils/apiCalls'
+import { flervalgSvar } from '../utils/tekst-util'
 
 import { DeleknappSlack, DeleknappTrello } from './Deleknapp'
 import { Sletteknapp } from './Sletteknapp'
@@ -121,48 +122,52 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
         columnHelper.accessor((row) => row, {
             id: 'feedback',
             cell: (info) => {
-                function svarTilEmoji(): string | undefined {
-                    const feedback = info.getValue().feedback
-                    const svar = feedback.svar
-                    const feedbackIdsMedEmoji = [
-                        'sykepengesoknad-kvittering',
-                        'spinnsyn-pohelse-helsemetrikk',
-                        'speil-generell',
-                        'syk-dig-header',
-                        'oppfolgingsplan-arbeidsgiver',
-                    ]
-                    if (!feedbackIdsMedEmoji.includes(feedback.feedbackId)) {
-                        return svar
-                    }
-                    if (svar == '1') {
-                        // sinna
-                        return '😡'
-                    }
-                    if (svar == '2') {
-                        // lei
-                        return '🙁'
-                    }
-                    if (svar == '3') {
-                        // nøytral
-                        return '😐'
-                    }
-                    if (svar == '4') {
-                        // glad
-                        return '😀'
-                    }
-                    if (svar == '5') {
-                        // hjerteøye
-                        return '😍'
-                    }
-                    return svar
+                const feedback = info.getValue().feedback
+                const svar = feedback.svar
+                const feedbackIdsMedEmoji = [
+                    'sykepengesoknad-kvittering',
+                    'spinnsyn-pohelse-helsemetrikk',
+                    'speil-generell',
+                    'syk-dig-header',
+                    'oppfolgingsplan-arbeidsgiver',
+                ]
+                if (!feedbackIdsMedEmoji.includes(feedback.feedbackId)) {
+                    return (
+                        <BodyShort>
+                            {flervalgSvar(svar) ? (
+                                flervalgSvar(svar)
+                            ) : (
+                                <span>
+                                    {svar}
+                                    {': '}
+                                </span>
+                            )}
+                            <span>{info.getValue().feedback.feedback}</span>
+                        </BodyShort>
+                    )
                 }
 
-                return (
-                    <BodyShort as={isFetching ? Skeleton : 'p'}>
-                        <span className="font-bold">{svarTilEmoji()}: </span>
-                        <span>{info.getValue().feedback.feedback}</span>
-                    </BodyShort>
-                )
+                if (svar == '1') {
+                    // sinna
+                    return '😡'
+                }
+                if (svar == '2') {
+                    // lei
+                    return '🙁'
+                }
+                if (svar == '3') {
+                    // nøytral
+                    return '😐'
+                }
+                if (svar == '4') {
+                    // glad
+                    return '😀'
+                }
+                if (svar == '5') {
+                    // hjerteøye
+                    return '😍'
+                }
+                return svar
             },
             header: () => 'Feedback',
             footer: (info) => info.column.id,
@@ -384,7 +389,9 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
                                                         {Object.entries(row.original.feedback).map(([key, value]) => (
                                                             <Table.Row key={key}>
                                                                 <Table.DataCell>{key}</Table.DataCell>
-                                                                <Table.DataCell>{`${value}`}</Table.DataCell>
+                                                                <Table.DataCell>
+                                                                    {flervalgSvar(value) ?? value}
+                                                                </Table.DataCell>
                                                             </Table.Row>
                                                         ))}
                                                     </Table.Body>
