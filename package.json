@@ -27,7 +27,7 @@
         "uuid": "^13.0.0"
     },
     "devDependencies": {
-        "@axe-core/playwright": "^4.11.1",
+        "@axe-core/playwright": "^4.11.2",
         "@navikt/eslint-config-teamsykmelding": "^7.1.0",
         "@playwright/test": "^1.57.0",
         "@types/node": "^22.7.5",
