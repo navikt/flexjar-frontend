@@ -21,8 +21,8 @@
         "dayjs": "^1.11.20",
         "nextleton": "^0.6.1",
         "nuqs": "^2.8.9",
-        "react": "18.3.1",
-        "react-dom": "18.3.1",
+        "react": "19.2.5",
+        "react-dom": "19.2.5",
         "tailwind-merge": "^2.6.0",
         "uuid": "^13.0.0"
     },
@@ -31,8 +31,8 @@
         "@navikt/eslint-config-teamsykmelding": "^7.1.0",
         "@playwright/test": "^1.57.0",
         "@types/node": "^22.7.5",
-        "@types/react": "18.3.12",
-        "@types/react-dom": "18.3.1",
+        "@types/react": "19.2.14",
+        "@types/react-dom": "19.2.3",
         "@types/uuid": "^10.0.0",
         "autoprefixer": "^10.5.0",
         "eslint": "^8.57.1",
@@ -69,7 +69,7 @@
     },
     "prettier": "@navikt/eslint-config-teamsykmelding/prettier",
     "overrides": {
-        "@types/react": "18.3.12",
-        "@types/react-dom": "18.3.1"
+        "@types/react": "19.2.14",
+        "@types/react-dom": "19.2.3"
     }
 }
