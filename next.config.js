@@ -1,5 +1,3 @@
-import { NextConfig } from 'next'
-
 export default {
     serverRuntimeConfig: {
         // Will only be available on the server side
@@ -10,4 +8,4 @@ export default {
         mockBackend: process.env.MOCK_BACKEND,
         localBackend: process.env.LOCAL_BACKEND,
     },
-} satisfies NextConfig
+}
