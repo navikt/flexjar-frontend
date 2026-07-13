@@ -405,6 +405,7 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
                         </Table.Body>
                     </Table>
                     <Pagination
+                        data-color="accent"
                         className="mt-4"
                         page={data.number + 1}
                         onPageChange={(p) => {
