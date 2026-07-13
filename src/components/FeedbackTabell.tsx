@@ -233,6 +233,7 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
             footer: (info) => info.column.id,
         }),
     ]
+    // eslint-disable-next-line react-hooks/incompatible-library
     const table = useReactTable({
         data: data?.content ?? defaultData,
         columns,
