@@ -29,7 +29,7 @@ export const Stjerneknapp = ({ feedback }: { feedback: Feedback }): JSX.Element 
     if (mutation.isError) return <div>Det har skjedd en feil</div>
     return (
         <Button size="small" onClick={toggleStjerne} variant={erStjerne ? 'primary' : 'secondary'}>
-            <StarIcon title="a11y-stjerne" fontSize="1.5rem" className={erStjerne ? 'text-white' : ''} />
+            <StarIcon title="a11y-stjerne" fontSize="1.5rem" className={erStjerne ? 'white' : ''} />
         </Button>
     )
 }

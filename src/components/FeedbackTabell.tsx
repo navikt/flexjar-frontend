@@ -159,7 +159,7 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
 
                 return (
                     <BodyShort as={isFetching ? Skeleton : 'p'}>
-                        <span className="font-bold">{svarTilEmoji()}: </span>
+                        <span className="font-ax-bold">{svarTilEmoji()}: </span>
                         <span>{info.getValue().feedback.feedback}</span>
                     </BodyShort>
                 )
@@ -324,7 +324,7 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
                         }}
                         variant={stjerne ? 'primary' : 'secondary'}
                     >
-                        <StarIcon title="a11y-stjerne" fontSize="1.5rem" className={stjerne ? 'text-white' : ''} />
+                        <StarIcon title="a11y-stjerne" fontSize="1.5rem" className={stjerne ? 'white' : ''} />
                     </Button>
                     <CopyButton copyText={kopierAlt()} text="Kopier alle" variant="action" size="small" />
 
@@ -368,7 +368,7 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
                                             <>
                                                 {row.original.feedback.amplitudeDeviceId && (
                                                     <AkselLink
-                                                        className="mb-2 text-medium"
+                                                        className="mb-2 text-ax-medium"
                                                         href={
                                                             'https://app.eu.amplitude.com/analytics/nav/project/100000009/search/device_id%3D' +
                                                             row.original.feedback.amplitudeDeviceId

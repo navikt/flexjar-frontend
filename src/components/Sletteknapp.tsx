@@ -19,6 +19,7 @@ export const Sletteknapp = ({ feedback }: { feedback: Feedback }): JSX.Element =
                     <BodyLong className="italic">{feedback.feedback.feedback}</BodyLong>
                     <div className="flex justify-between pt-8">
                         <Button
+                            data-color="danger"
                             onClick={async () => {
                                 await fetch('/api/flexjar-backend/api/v1/intern/feedback/' + feedback.id, {
                                     method: 'DELETE',
@@ -27,7 +28,7 @@ export const Sletteknapp = ({ feedback }: { feedback: Feedback }): JSX.Element =
 
                                 setOpen(false)
                             }}
-                            variant="danger"
+                            variant="primary"
                         >
                             JA
                         </Button>
