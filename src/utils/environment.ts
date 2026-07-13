@@ -1,10 +1,6 @@
-import getConfig from 'next/config'
-
-const { publicRuntimeConfig } = getConfig()
-
 export function isMockBackend(): boolean {
-    return publicRuntimeConfig.mockBackend === 'true'
+    return process.env.MOCK_BACKEND === 'true'
 }
 export function isLocalBackend(): boolean {
-    return publicRuntimeConfig.localBackend === 'true'
+    return process.env.LOCAL_BACKEND === 'true'
 }

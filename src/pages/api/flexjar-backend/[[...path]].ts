@@ -1,12 +1,9 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import getConfig from 'next/config'
 
 import { beskyttetApi } from '../../../auth/beskyttetApi'
 import { isLocalBackend, isMockBackend } from '../../../utils/environment'
 import { BackendProxyOpts, proxyKallTilBackend } from '../../../proxy/backendproxy'
 import { mockApi } from '../../../testdata/testdata'
-
-const { serverRuntimeConfig } = getConfig()
 
 const tillatteApier = [
     'GET /api/v1/intern/feedback',
@@ -36,7 +33,7 @@ const handler = beskyttetApi(async (req: NextApiRequest, res: NextApiResponse) =
             tillatteApier,
             backend: 'flexjar-backend',
             hostname: 'flexjar-backend',
-            backendClientId: serverRuntimeConfig.flexjarBackendClientId,
+            backendClientId: process.env.FLEXJAR_BACKEND_CLIENT_ID,
         }
     }
 

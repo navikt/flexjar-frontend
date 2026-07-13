@@ -27,7 +27,7 @@ export const TagFilter = ({
         try {
             await setPage('1')
         } catch (error) {
-            logger.warn('Failed to set page:', error)
+            logger.warn({ error }, 'Failed to set page:')
         }
     }
 
