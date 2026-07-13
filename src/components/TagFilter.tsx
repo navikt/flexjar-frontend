@@ -1,3 +1,4 @@
+import React from 'react'
 import { UNSAFE_Combobox } from '@navikt/ds-react'
 import { logger } from '@navikt/next-logger'
 
@@ -8,7 +9,12 @@ interface TagFilterProps {
     setPage: (value: string | ((old: string) => string | null) | null) => Promise<URLSearchParams>
 }
 
-export const TagFilter = ({ initialOptions, selectedTags, setSelectedTags, setPage }: TagFilterProps): JSX.Element => {
+export const TagFilter = ({
+    initialOptions,
+    selectedTags,
+    setSelectedTags,
+    setPage,
+}: TagFilterProps): React.JSX.Element => {
     const handleToggleSelected = async (option: string | undefined, isSelected: boolean): Promise<void> => {
         if (!option) return
 

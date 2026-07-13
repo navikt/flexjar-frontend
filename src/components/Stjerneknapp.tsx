@@ -7,7 +7,7 @@ import { Feedback } from '../queryhooks/useFeedback'
 
 import { addTag, deleteTag } from './Tags'
 
-export const Stjerneknapp = ({ feedback }: { feedback: Feedback }): JSX.Element => {
+export const Stjerneknapp = ({ feedback }: { feedback: Feedback }): React.JSX.Element => {
     const [erStjerne, setErStjerne] = React.useState<boolean>(feedback.tags.includes('stjerne'))
     const queryClient = useQueryClient()
 
