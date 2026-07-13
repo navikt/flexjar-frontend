@@ -4,7 +4,7 @@ import { useQueryClient } from '@tanstack/react-query'
 
 import { Feedback } from '../queryhooks/useFeedback'
 
-export const Sletteknapp = ({ feedback }: { feedback: Feedback }): JSX.Element => {
+export const Sletteknapp = ({ feedback }: { feedback: Feedback }): React.JSX.Element => {
     const [open, setOpen] = useState(false)
     const queryClient = useQueryClient()
 

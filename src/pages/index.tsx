@@ -3,7 +3,7 @@ import React from 'react'
 import { initialProps } from '../initialprops/initialProps'
 import { FeedbackTabell } from '../components/FeedbackTabell'
 
-const Index = (): JSX.Element => {
+const Index = (): React.JSX.Element => {
     return (
         <>
             <FeedbackTabell />

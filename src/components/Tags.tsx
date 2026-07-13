@@ -25,7 +25,7 @@ export const deleteTag = async (tag: string, id: string): Promise<void> => {
     })
 }
 
-export const Tags = ({ feedback }: { feedback: Feedback }): JSX.Element => {
+export const Tags = ({ feedback }: { feedback: Feedback }): React.JSX.Element => {
     const feedbackTags = feedback.tags.filter((x) => x !== 'stjerne')
     const queryClient = useQueryClient()
     const feedbackId = feedback.id

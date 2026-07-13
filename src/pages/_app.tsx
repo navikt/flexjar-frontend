@@ -7,7 +7,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { InternalHeader } from '@navikt/ds-react'
 import { NuqsAdapter } from 'nuqs/adapters/next/pages'
 
-function MyApp({ Component, pageProps }: AppProps): JSX.Element {
+function MyApp({ Component, pageProps }: AppProps): React.JSX.Element {
     const [queryClient] = useState(
         () =>
             new QueryClient({
