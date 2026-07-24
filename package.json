@@ -21,8 +21,8 @@
         "dayjs": "^1.11.21",
         "nextleton": "^0.6.1",
         "nuqs": "^2.9.0",
-        "react": "19.2.7",
-        "react-dom": "19.2.7",
+        "react": "19.2.8",
+        "react-dom": "19.2.8",
         "tailwind-merge": "^3.0.0",
         "uuid": "^14.0.1"
     },
