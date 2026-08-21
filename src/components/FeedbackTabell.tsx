@@ -13,15 +13,18 @@ import {
     Table,
     TextField,
 } from '@navikt/ds-react'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import dayjs from 'dayjs'
 import {
+    columnVisibilityFeature,
+    columnFilteringFeature,
     createColumnHelper,
+    createFilteredRowModel,
+    createPaginatedRowModel,
     flexRender,
-    getCoreRowModel,
-    getFilteredRowModel,
-    getPaginationRowModel,
-    useReactTable,
+    rowPaginationFeature,
+    tableFeatures,
+    useTable,
 } from '@tanstack/react-table'
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import { parseAsBoolean, parseAsInteger, parseAsString, parseAsArrayOf, useQueryState } from 'nuqs'
@@ -38,6 +41,14 @@ import { Tags } from './Tags'
 import { Stjerneknapp } from './Stjerneknapp'
 import Teamvelger from './Teamvelger'
 import { TagFilter } from './TagFilter'
+
+const features = tableFeatures({
+    columnFilteringFeature,
+    columnVisibilityFeature,
+    rowPaginationFeature,
+    filteredRowModel: createFilteredRowModel(),
+    paginatedRowModel: createPaginatedRowModel(),
+})
 
 export const FeedbackTabell = (): React.JSX.Element | null => {
     const [team] = useQueryState('team', parseAsString.withDefault('flex'))
@@ -101,9 +112,9 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
 
     const defaultData = React.useMemo(() => [], [])
 
-    const columnHelper = createColumnHelper<Feedback>()
+    const columnHelper = createColumnHelper<typeof features, Feedback>()
 
-    const columns = [
+    const columns = columnHelper.columns([
         columnHelper.accessor('opprettet', {
             cell: (info) => {
                 return (
@@ -118,11 +129,11 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
             header: () => 'Dato',
             footer: (info) => info.column.id,
         }),
-        columnHelper.accessor((row) => row, {
+        columnHelper.display({
             id: 'feedback',
             cell: (info) => {
                 function svarTilEmoji(): string | undefined {
-                    const feedback = info.getValue().feedback
+                    const feedback = info.row.original.feedback
                     const svar = feedback.svar
                     const feedbackIdsMedEmoji = [
                         'sykepengesoknad-kvittering',
@@ -160,41 +171,41 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
                 return (
                     <BodyShort as={isFetching ? Skeleton : 'p'}>
                         <span className="font-ax-bold">{svarTilEmoji()}: </span>
-                        <span>{info.getValue().feedback.feedback}</span>
+                        <span>{info.row.original.feedback.feedback}</span>
                     </BodyShort>
                 )
             },
             header: () => 'Feedback',
             footer: (info) => info.column.id,
         }),
-        columnHelper.accessor((row) => row, {
+        columnHelper.display({
             id: 'kopier',
-            cell: (info) => <CopyButton copyText={info.getValue().feedback.feedback ?? ''} variant="action" />,
+            cell: (info) => <CopyButton copyText={info.row.original.feedback.feedback ?? ''} variant="action" />,
             header: () => '',
             footer: (info) => info.column.id,
         }),
-        columnHelper.accessor((row) => row, {
+        columnHelper.display({
             id: 'app',
             cell: (info) => {
-                return <BodyShort as={isFetching ? Skeleton : 'p'}>{info.getValue().feedback.app}</BodyShort>
+                return <BodyShort as={isFetching ? Skeleton : 'p'}>{info.row.original.feedback.app}</BodyShort>
             },
             header: () => 'App',
             footer: (info) => info.column.id,
         }),
-        columnHelper.accessor((row) => row, {
+        columnHelper.display({
             id: 'slack',
             cell: (info) => {
-                const feedback = info.getValue()
+                const feedback = info.row.original
                 if (feedback.feedback.feedback?.trim() === '') return null
                 return <DeleknappSlack selectedTeam={team} feedback={feedback} />
             },
             header: () => '',
             footer: (info) => info.column.id,
         }),
-        columnHelper.accessor((row) => row, {
+        columnHelper.display({
             id: 'trello',
             cell: (info) => {
-                const feedback = info.getValue()
+                const feedback = info.row.original
                 if (feedback.feedback.feedback?.trim() === '') return null
                 if (team !== 'teamsykmelding') return null
 
@@ -203,55 +214,52 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
             header: () => '',
             footer: (info) => info.column.id,
         }),
-        columnHelper.accessor((row) => row, {
+        columnHelper.display({
             id: 'slett',
             cell: (info) => {
-                const feedback = info.getValue()
+                const feedback = info.row.original
                 return <Sletteknapp feedback={feedback} />
             },
             header: () => '',
             footer: (info) => info.column.id,
         }),
-        columnHelper.accessor((row) => row, {
+        columnHelper.display({
             id: 'star',
             cell: (info) => {
-                const feedback = info.getValue()
+                const feedback = info.row.original
 
                 return <Stjerneknapp feedback={feedback} />
             },
             header: () => '',
             footer: (info) => info.column.id,
         }),
-        columnHelper.accessor((row) => row, {
+        columnHelper.display({
             id: 'tags',
             cell: (info) => {
-                const feedback = info.getValue()
+                const feedback = info.row.original
 
                 return <Tags feedback={feedback} />
             },
             header: () => 'Tags',
             footer: (info) => info.column.id,
         }),
-    ]
-    // eslint-disable-next-line react-hooks/incompatible-library
-    const table = useReactTable({
+    ])
+
+    const table = useTable({
+        features,
         data: data?.content ?? defaultData,
         columns,
-        // Pipeline
-        getCoreRowModel: getCoreRowModel(),
-        getFilteredRowModel: getFilteredRowModel(),
-        getPaginationRowModel: getPaginationRowModel(),
         pageCount: data?.totalPages ?? -1,
         manualPagination: true,
 
         debugTable: true,
     })
 
-    const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null)
+    const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
     useEffect(() => {
         // Avbryt eksisterende timeout
-        if (timeoutId) clearTimeout(timeoutId)
+        if (timeoutRef.current) clearTimeout(timeoutRef.current)
         if (!hasTyped) return
 
         // Opprett en ny timeout
@@ -260,7 +268,7 @@ export const FeedbackTabell = (): React.JSX.Element | null => {
             setPage('nyeste')
         }, 2000)
 
-        setTimeoutId(newTimeoutId)
+        timeoutRef.current = newTimeoutId
 
         // Rengjøringsfunksjon
         return () => clearTimeout(newTimeoutId)
