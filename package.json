@@ -20,7 +20,7 @@
         "classnames": "^2.5.1",
         "dayjs": "^1.11.23",
         "nextleton": "^0.6.1",
-        "nuqs": "^2.9.5",
+        "nuqs": "^2.10.0",
         "react": "19.2.8",
         "react-dom": "19.2.8",
         "tailwind-merge": "^3.0.0",
