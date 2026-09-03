@@ -33,7 +33,7 @@
         "@tailwindcss/postcss": "^4.3.3",
         "@types/node": "^22.7.5",
         "@types/react": "19.2.18",
-        "@types/react-dom": "19.2.4",
+        "@types/react-dom": "19.2.5",
         "@types/uuid": "^11.0.0",
         "eslint": "9.39.4",
         "eslint-config-next": "16.3.0",
@@ -61,6 +61,6 @@
     "prettier": "@navikt/tsm-prettier",
     "overrides": {
         "@types/react": "19.2.18",
-        "@types/react-dom": "19.2.4"
+        "@types/react-dom": "19.2.5"
     }
 }
