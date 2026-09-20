@@ -29,7 +29,7 @@
     "devDependencies": {
         "@axe-core/playwright": "^4.13.0",
         "@navikt/tsm-prettier": "^2.0.1",
-        "@playwright/test": "^1.62.1",
+        "@playwright/test": "^1.63.0",
         "@tailwindcss/postcss": "^4.3.3",
         "@types/node": "^22.7.5",
         "@types/react": "19.2.18",
