@@ -13,10 +13,23 @@ jobs:
       security-events: write
       actions: read
     secrets: inherit
+
+  playwright_versjon:
+    runs-on: ubuntu-latest
+    outputs:
+      playwright-version: ${{ steps.playwright-version.outputs.version }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+      - name: Hent Playwright-versjon
+        id: playwright-version
+        run: echo "version=$(node -p "require('./package-lock.json').packages['node_modules/@playwright/test'].version")" >> $GITHUB_OUTPUT
+
   playwright:
+    needs: playwright_versjon
     runs-on: ubuntu-latest
     container:
-      image: mcr.microsoft.com/playwright:v1.62.1-jammy
+      image: mcr.microsoft.com/playwright:v${{ needs.playwright_versjon.outputs.playwright-version }}-noble
     steps:
       - name: Checkout code
         uses: actions/checkout@v7
