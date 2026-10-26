@@ -1,7 +1,6 @@
 'use client'
 
 import {
-    Alert,
     BodyShort,
     Button,
     CopyButton,
@@ -41,6 +40,7 @@ import { Tags } from './Tags'
 import { Stjerneknapp } from './Stjerneknapp'
 import Teamvelger from './Teamvelger'
 import { TagFilter } from './TagFilter'
+import Alert from './alert/Alert'
 
 const features = tableFeatures({
     columnFilteringFeature,
