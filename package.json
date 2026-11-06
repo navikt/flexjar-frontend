@@ -30,7 +30,7 @@
         "@axe-core/playwright": "^4.14.0",
         "@navikt/tsm-prettier": "^2.0.1",
         "@playwright/test": "^1.64.1",
-        "@tailwindcss/postcss": "^4.3.3",
+        "@tailwindcss/postcss": "^4.3.4",
         "@types/node": "^22.7.5",
         "@types/react": "19.3.0",
         "@types/react-dom": "19.3.0",
