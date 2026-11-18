@@ -1,10 +1,12 @@
-FROM gcr.io/distroless/nodejs24-debian13@sha256:24bc0fe0225c7518f202a822587dad74fe143b96326b81fe5cc08c1df8bed03e
+FROM europe-north1-docker.pkg.dev/cgr-nav/pull-through/nav.no/node:24-slim
+
+WORKDIR /app
 
 ENV NODE_ENV=production
 
-COPY /.next ./.next
-COPY /public ./public
-COPY /node_modules ./node_modules
+COPY --chown=node:node /.next ./.next
+COPY --chown=node:node /public ./public
+COPY --chown=node:node /node_modules ./node_modules
 
 ENV PORT=3000
 
